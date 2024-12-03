@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
 
 @Entity
 @Data
@@ -18,6 +19,9 @@ public class Institution {
     String name;
     String phone;
     String email;
+
+    @Enumerated(EnumType.STRING)
+    private InstitutionsType institutionsType;
 
     @OneToOne
     private Location location;
