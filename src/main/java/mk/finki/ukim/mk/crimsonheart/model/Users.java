@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Data

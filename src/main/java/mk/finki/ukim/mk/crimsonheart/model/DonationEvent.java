@@ -1,12 +1,12 @@
 package mk.finki.ukim.mk.crimsonheart.model;
 
+import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+ import java.util.Date;
 
 @Entity
 @Data

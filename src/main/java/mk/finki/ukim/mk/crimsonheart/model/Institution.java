@@ -3,7 +3,7 @@ package mk.finki.ukim.mk.crimsonheart.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Data
