@@ -1,7 +1,10 @@
 package mk.finki.ukim.mk.crimsonheart.enums;
 
 public enum Roles {
-    ADMIN,
+    SUPERADMIN,
+    HOSPITALADMIN,
+    REDCROSSADMIN,
+    BLOODBANKADMIN,
     NURSE,
     DOCTOR,
     LABORATORY_ASSISTANT,
