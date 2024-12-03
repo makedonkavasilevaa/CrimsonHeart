@@ -1,0 +1,16 @@
+insert into location (address, city, country, state, zip) VALUES ('Marsal Tito br.44', 'Strumica', 'Makedonija', 'Strumica', 2400),
+                                                                 ('Marsal Tito br.4', 'Strumica', 'Makedonija', 'Strumica', 2400),
+                                                                 ('Mladinska br.5', 'Strumica', 'Makedonija', 'Strumica', 2400),
+                                                                 ('Leninova br.34', 'Strumica', 'Makedonija', 'Strumica', 2400),
+                                                                 ('Marsal Tito br.4', 'Skopje', 'Makedonija', 'Skopje', 1000),
+                                                                 ('Teodosij Gologanov br.109', 'Skopje', 'Makedonija', 'Skopje', 1000);
+
+insert into donation_event (date_and_time, location_id) VALUES ('2024-12-03 15:45:30', 1),
+                                                               ('2024-12-03 15:45:30', 2);
+
+insert into institution (email, name, phone, location_id, institutions_type) values ('test@test.com', 'Bolnica', '034322322', 1, 'HOSPITAL'),
+                                                                                    ('test@test.com', 'Banka za krv', '034322322',3, 'BLOOD_BANK'),
+                                                                                    ('test@test.com', 'Crven Krst', '034322322',2, 'RED_CROSS');
+select * from institution;
+select * from location;
+select * from donation_event;
