@@ -35,4 +35,7 @@ public class Institution {
 
     @OneToMany(mappedBy = "institution")
     private List<Donation> donationEvents;
+
+    @OneToMany(mappedBy = "worksAt")
+    private List<Users> employees;
 }

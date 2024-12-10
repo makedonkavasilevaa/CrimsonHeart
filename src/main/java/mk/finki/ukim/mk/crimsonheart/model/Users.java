@@ -6,7 +6,10 @@ import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 
 import jakarta.persistence.*;
+import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,10 +26,19 @@ public class Users {
     private Roles role;
 
     String name;
+
     String surname;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_of_birth")
+    Date birthday;
+
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
     String email;
+
     String phone;
-    String address;
 
     @Column(length = 13)
     String embg;
@@ -46,9 +58,32 @@ public class Users {
     @OneToMany(mappedBy = "nurse")
     private List<Exam> nurseExams;
 
-    boolean hasBeenRejected;
+    boolean hasBeenRejected = false;
 
     Integer timesRejected = 0;
 
-//    String password;
+    boolean isDonor = false;
+
+    @DateTimeFormat
+    Date lastDonation;
+
+    @ManyToOne
+    @JoinColumn(name = "works_at")
+    private Institution worksAt;
+
+    public Users(Roles role, String name, String surname,Date birthday, Sex sex, String email, String phone, String embg, Location location, BloodType bloodType, boolean isDonor, Date lastDonation, Institution worksAt) {
+        this.role = role;
+        this.name = name;
+        this.surname = surname;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.email = email;
+        this.phone = phone;
+        this.embg = embg;
+        this.location = location;
+        this.bloodType = bloodType;
+        this.isDonor = isDonor;
+        this.lastDonation = lastDonation;
+        this.worksAt = worksAt;
+    }
 }

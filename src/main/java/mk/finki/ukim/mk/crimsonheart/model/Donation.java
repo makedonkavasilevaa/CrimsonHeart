@@ -40,7 +40,7 @@ public class Donation {
     @JoinColumn(name = "location")
     private Location location;
 
-    @DateTimeFormat
+    @Temporal(TemporalType.DATE)
     private Date dateAndTime;
 
     @OneToMany(mappedBy = "donation")
