@@ -16,7 +16,7 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     List<Users> findAll();
     Optional<Users> findById(Long id);
-    Optional<Users> findByNameContainingIgnoreCase(String username);
+    Optional<Users> findByNameContainingIgnoreCase(String name);
     Optional<Users> findAllByRole(Roles role);
     Optional<Users> findAllByBloodType(BloodType bloodType);
     Optional<Users> findAllByTimesRejectedLessThan(Integer timesRejected);

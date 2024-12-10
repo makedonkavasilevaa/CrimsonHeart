@@ -20,5 +20,7 @@ public interface UsersService {
     Optional<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation);
     Optional<Users> findAllByLastDonationBeforeAndIsDonorAndBloodType(Sex sex, Date lastDonation, BloodType bloodType);
     Optional<Users> findAllByBloodType(BloodType bloodType);
+    Optional<Users> findAllByName(String name);
+    Optional<Users> findAllByTimesRejected(Integer timesRejected);
 
 }

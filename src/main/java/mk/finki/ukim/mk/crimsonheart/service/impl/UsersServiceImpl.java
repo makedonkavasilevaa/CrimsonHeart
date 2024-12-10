@@ -100,4 +100,14 @@ public class UsersServiceImpl implements UsersService {
     public Optional<Users> findAllByBloodType(BloodType bloodType) {
         return this.usersRepository.findAllByBloodType(bloodType);
     }
+
+    @Override
+    public Optional<Users> findAllByName(String name) {
+        return this.usersRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    @Override
+    public Optional<Users> findAllByTimesRejected(Integer timesRejected) {
+        return this.usersRepository.findAllByTimesRejectedLessThan(timesRejected);
+    }
 }
