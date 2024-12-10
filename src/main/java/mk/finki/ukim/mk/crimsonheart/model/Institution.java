@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,8 +18,13 @@ public class Institution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false)
     String name;
+
+    @Column(nullable = false)
     String phone;
+
+    @Column(nullable = false)
     String email;
 
     @Enumerated(EnumType.STRING)
@@ -25,4 +32,7 @@ public class Institution {
 
     @OneToOne
     private Location location;
+
+    @OneToMany(mappedBy = "institution")
+    private List<Donation> donationEvents;
 }

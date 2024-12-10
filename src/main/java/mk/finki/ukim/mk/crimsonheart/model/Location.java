@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -15,9 +18,21 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false)
     String address;
-    String city;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    CityEnum city;
+
     String state;
+
+    @Column(nullable = false)
     String zip;
-    String country;
+
+    @Column(nullable = false)
+    String country = "North Macedonia";
+
+    @OneToMany(mappedBy = "location")
+    List<Donation> donations;
 }
