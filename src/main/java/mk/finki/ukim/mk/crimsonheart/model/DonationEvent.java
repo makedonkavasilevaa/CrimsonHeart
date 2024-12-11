@@ -32,7 +32,7 @@ public class DonationEvent {
     DonationType donationType;
 
     @ManyToOne
-    @JoinColumn(name = "organzied_by")
+    @JoinColumn(name = "organsied_by")
     private Institution institution;
 
     @ManyToOne
