@@ -1,24 +1,89 @@
--- Insert sample data into `location`
 INSERT INTO location (id, address, city, state, zip, country)
 VALUES
     (1, '123 Main St', 'SKOPJE', 'Skopje', '1000', 'North Macedonia'),
-    (2, '456 Elm St', 'BITOLA', 'Bitola', '7000', 'North Macedonia');
+    (2, '456 Elm St', 'BITOLA', 'Bitola', '7000', 'North Macedonia'),
+    (3, '789 Oak Ave', 'OHRID', 'Ohrid', '6000', 'North Macedonia'),
+    (4, '101 Pine Rd', 'PRILEP', 'Prilep', '7500', 'North Macedonia'),
+    (5, '202 Maple Blvd', 'TETOVO', 'Tetovo', '1200', 'North Macedonia'),
+    (6, '303 Birch Dr', 'VELES', 'Veles', '1400', 'North Macedonia'),
+    (7, '404 Cedar Ln', 'KUMANOVO', 'Kumanovo', '1300', 'North Macedonia'),
+    (8, '505 Walnut St', 'STRUMICA', 'Strumica', '2400', 'North Macedonia'),
+    (9, '606 Cherry Ln', 'GEVGELIJA', 'Gevegelija', '1480', 'North Macedonia'),
+    (10, '707 Redwood St', 'STIP', 'Stip', '2000', 'North Macedonia'),
+    (11, '808 Ash Ave', 'KAVADARCI', 'Kavadarci', '1400', 'North Macedonia'),
+    (12, '909 Pine St', 'GOSTIVAR', 'Gostivar', '1250', 'North Macedonia'),
+    (13, '1010 Cedar Blvd', 'KOCHANI', 'Kochani', '2300', 'North Macedonia'),
+    (14, '1111 Oak St', 'KICEVO', 'Kicevo', '1250', 'North Macedonia'),
+    (15, '1212 Maple Dr', 'KRATOVO', 'Kratoovo', '1300', 'North Macedonia'),
+    (16, '1313 Willow Ln', 'KRIVA_PALANKA', 'Kriva Palanka', '1300', 'North Macedonia'),
+    (17, '1414 Pine St', 'MAKEDONSKA_KAMENICA', 'Macedonska Kamenica', '2300', 'North Macedonia'),
+    (18, '1515 Cedar Blvd', 'DEMIR_HISAR', 'Demir Hisar', '1400', 'North Macedonia'),
+    (19, '1616 Oak St', 'PROBISTIP', 'Probistip', '2210', 'North Macedonia'),
+    (20, '1717 Maple Dr', 'BEROVO', 'Berovo', '2300', 'North Macedonia'),
+    (21, '1818 Willow Ln', 'DELCEVO', 'Delcevo', '2300', 'North Macedonia'),
+    (22, '1919 Pine St', 'VINICA', 'Vinica', '2300', 'North Macedonia'),
+    (23, '2020 Cedar Blvd', 'RADOVIS', 'Radovish', '2400', 'North Macedonia'),
+    (24, '2121 Oak Ave', 'RESEN', 'Resen', '7300', 'North Macedonia'),
+    (25, '2222 Maple Blvd', 'DEBAR', 'Debar', '1250', 'North Macedonia'),
+    (26, '2323 Birch Dr', 'VALANDOVO', 'Valandovo', '2400', 'North Macedonia'),
+    (27, '2424 Cedar Ln', 'BOGDANCI', 'Bogdanci', '2400', 'North Macedonia'),
+    (28, '2525 Walnut St', 'KRUSEVO', 'Krusevo', '7550', 'North Macedonia'),
+    (29, '2626 Pine St', 'NEGOTINO', 'Negotino', '1480', 'North Macedonia'),
+    (30, '2727 Cedar Blvd', 'SVETI_NIKOLE', 'Sveti Nikole', '1330', 'North Macedonia'),
+    (31, '2828 Oak Ave', 'MAVROVO_ROSTUSHE', 'Mavrovo and Rostuse', '1250', 'North Macedonia'),
+    (32, '2929 Maple Blvd', 'STAR_DOJRAN', 'Star Dojran', '1480', 'North Macedonia');
+
+
 
 -- Insert sample data into `institution`
 INSERT INTO institution (id, name, phone, email, institutions_type, location_id)
 VALUES
     (1, 'Red Cross', '070123456', 'contact@redcross.mk', 'HOSPITAL', 1),
-    (2, 'Blood Bank', '071987654', 'info@bloodbank.mk', 'BLOOD_BANK', 2);
+    (2, 'Blood Bank', '071987654', 'info@bloodbank.mk', 'BLOOD_BANK', 2),
+    (3, 'University Clinic', '072345678', 'info@univclinic.mk', 'HOSPITAL', 3),
+    (4, 'Health Center Bitola', '073456789', 'contact@healthcenterbitola.mk', 'HOSPITAL', 4),
+    (5, 'City Blood Bank', '074567890', 'citybloodbank@bitola.mk', 'BLOOD_BANK', 5),
+    (6, 'Clinic Prilep', '075678901', 'clinicprilep@prilep.mk', 'HOSPITAL', 6),
+    (7, 'Kumanovo Health Institute', '076789012', 'info@kumanovohealth.mk', 'HOSPITAL', 7),
+    (8, 'Strumica Medical Center', '077890123', 'info@strumicamedical.mk', 'HOSPITAL', 8),
+    (9, 'Gevegelija Blood Donation Center', '078901234', 'gevegelijablood@gevegelija.mk', 'BLOOD_BANK', 9),
+    (10, 'Tetovo Hospital', '079012345', 'tetovohospital@tetovo.mk', 'HOSPITAL', 10),
+    (11, 'Kicevo Medical Clinic', '080123456', 'clinic@kicevo.mk', 'HOSPITAL', 11),
+    (12, 'Gostivar Blood Bank', '081234567', 'info@gostivarbloodbank.mk', 'BLOOD_BANK', 12),
+    (13, 'Veles Health Center', '082345678', 'healthcenter@veles.mk', 'HOSPITAL', 13),
+    (14, 'Struga Blood Donation Center', '083456789', 'strugablooddonation@struga.mk', 'BLOOD_BANK', 14),
+    (15, 'Sveti Nikole Clinic', '084567890', 'info@svetinikoleclinic.mk', 'HOSPITAL', 15),
+    (16, 'Prilep Blood Bank', '085678901', 'prilepbloodbank@prilep.mk', 'BLOOD_BANK', 16),
+    (17, 'Debar Health Institution', '086789012', 'debarmedical@debar.mk', 'HOSPITAL', 17),
+    (18, 'Negotino Clinic', '087890123', 'negotinoclinic@negotino.mk', 'HOSPITAL', 18),
+    (19, 'Valandovo Blood Donation Center', '088901234', 'valandovoblood@valandovo.mk', 'BLOOD_BANK', 19),
+    (20, 'Radovish Medical Center', '089012345', 'medicalcenter@radovish.mk', 'HOSPITAL', 20);
+
 
 -- Insert sample data into `users`
 INSERT INTO users (id, role, name, surname, date_of_birth, sex, email, phone, embg, location_id, blood_type, has_been_rejected, times_rejected, is_donor, last_donation, works_at)
 VALUES
     (1, 'DOCTOR', 'John', 'Doe', '1980-05-15', 'MALE', 'john.doe@example.com', '075123456', '1234567890123', 1, 'Oneg', false, 0, false, NULL, 1),
-    (2, 'NURSE', 'Jane', 'Smith', '1990-07-20', 'FEMALE', 'jane.smith@example.com', '076987654', '9876543210987', 2, 'Apos', false, 0, true, '2023-09-01', 2);
+    (2, 'NURSE', 'Jane', 'Smith', '1990-07-20', 'FEMALE', 'jane.smith@example.com', '076987654', '9876543210987', 2, 'Apos', false, 0, true, '2023-09-01', 2),
+    (3, 'SUPERADMIN', 'Alice', 'Johnson', '1985-08-25', 'FEMALE', 'alice.johnson@example.com', '077123456', '1112233445566', 1, 'Apos', false, 0, true, '2023-11-10', 1),
+    (4, 'HOSPITALADMIN', 'Bob', 'Williams', '1975-04-18', 'MALE', 'bob.williams@example.com', '078987654', '2233445566778', 2, 'Bpos', false, 0, true, '2024-01-01', 2),
+    (5, 'REDCROSSADMIN', 'Clara', 'Brown', '1990-02-03', 'FEMALE', 'clara.brown@example.com', '079112233', '3344556677889', 3, 'Opos', false, 0, true, NULL, 3),
+    (6, 'BLOODBANKADMIN', 'David', 'Davis', '1980-06-12', 'MALE', 'david.davis@example.com', '070123456', '4455667788990', 4, 'ABpos', false, 0, true, '2023-10-15', 4),
+    (7, 'LABORATORY_ASSISTANT', 'Emma', 'Miller', '1995-09-10', 'FEMALE', 'emma.miller@example.com', '071234567', '5566778899001', 5, 'Aneg', false, 0, false, NULL, 5),
+    (8, 'MANAGER', 'Frank', 'Moore', '1982-12-19', 'MALE', 'frank.moore@example.com', '072345678', '6677889900112', 6, 'Bneg', false, 0, false, NULL, 6),
+    (9, 'PATIENT', 'Grace', 'Taylor', '1992-07-23', 'FEMALE', 'grace.taylor@example.com', '073456789', '7788990011223', 7, 'Oneg', true, 2, false, NULL, 7),
+    (10, 'VOLUNTEER', 'Henry', 'Jackson', '1988-03-11', 'MALE', 'henry.jackson@example.com', '074567890', '8899001122334', 8, 'ABneg', false, 0, true, NULL, 8),
+    (11, 'ORGANIZER', 'Isla', 'White', '1991-11-05', 'FEMALE', 'isla.white@example.com', '075678901', '9900112233445', 9, 'Apos', false, 0, true, NULL, 9);
 
 -- Insert sample data into `donation_event`
-INSERT INTO donation_event (id, name, description, donation_type, location, date_and_time, organised_by, managed_by)
+INSERT INTO donation_event (id, name, description, donation_type, location, date_and_time, organsied_by, managed_by)
 VALUES
     (1, 'Blood Donation Drive', 'A community blood donation event', 'HUMANITARIAN_EVENT', 1, '2024-01-15', 1, 1),
     (2, 'Plasma Donation', 'Plasma donation for research purposes', 'HOSPITAL', 2, '2024-02-10', 2, 2);
 
+-- Insert sample data into `exam` table
+INSERT INTO exam (performed_on, donated, doctor, patient, nurse, successful_exam)
+VALUES
+    ('2024-01-16', 1, 1, 3, 2, true),
+    ('2024-02-11', 2, 1, 4, 2, false),
+    ('2024-02-12', 2, 2, 5, 2, true);
