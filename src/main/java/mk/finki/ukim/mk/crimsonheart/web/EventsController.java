@@ -63,7 +63,7 @@ public class EventsController {
 
 
     @PostMapping("/add")
-    public String saveEvent(@RequestParam Long id,
+    public String saveEvent(@RequestParam(required = false) Long id,
                             @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam DonationType donationType,
