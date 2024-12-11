@@ -1,7 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.service;
 
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
-import mk.finki.ukim.mk.crimsonheart.model.Donation;
 import mk.finki.ukim.mk.crimsonheart.model.Exam;
 
 import java.util.Date;

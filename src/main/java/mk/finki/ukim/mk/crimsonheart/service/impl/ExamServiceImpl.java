@@ -2,7 +2,7 @@ package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
-import mk.finki.ukim.mk.crimsonheart.model.Donation;
+import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Exam;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.repository.DonationEventRepository;
@@ -43,8 +43,8 @@ public class ExamServiceImpl implements ExamService {
         Users doctor = usersRepository.findById(doctorId).orElseThrow();
         Users patient = usersRepository.findById(patientId).orElseThrow();
         Users nurse = usersRepository.findById(nurseId).orElseThrow();
-        Donation donation = eventRepository.findById(donationId).orElseThrow();
-        Exam exam = new Exam(performedOn, donation, doctor, patient, nurse, successfulExam);
+        DonationEvent donationEvent = eventRepository.findById(donationId).orElseThrow();
+        Exam exam = new Exam(performedOn, donationEvent, doctor, patient, nurse, successfulExam);
 
         if (!successfulExam){
             patient.setTimesRejected(patient.getTimesRejected() + 1);
