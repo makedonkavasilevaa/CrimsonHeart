@@ -34,7 +34,7 @@ public class Institution {
     private Location location;
 
     @OneToMany(mappedBy = "institution")
-    private List<Donation> donationEvents;
+    private List<DonationEvent> donationEventEvents;
 
     @OneToMany(mappedBy = "worksAt")
     private List<Users> employees;

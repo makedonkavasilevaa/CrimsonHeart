@@ -22,7 +22,7 @@ public class Exam {
 
     @ManyToOne
     @JoinColumn(name = "donated")
-    private Donation donation;
+    private DonationEvent donationEvent;
 
     @ManyToOne
     @JoinColumn(name = "doctor")
@@ -38,9 +38,9 @@ public class Exam {
 
     boolean successfulExam;
 
-    public Exam(Date performedOn, Donation donation, Users doctor, Users patient, Users nurse, boolean successfulExam) {
+    public Exam(Date performedOn, DonationEvent donationEvent, Users doctor, Users patient, Users nurse, boolean successfulExam) {
         this.performedOn = performedOn;
-        this.donation = donation;
+        this.donationEvent = donationEvent;
         this.doctor = doctor;
         this.patient = patient;
         this.nurse = nurse;

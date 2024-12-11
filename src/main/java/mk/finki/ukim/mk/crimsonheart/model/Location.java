@@ -34,5 +34,9 @@ public class Location {
     String country = "North Macedonia";
 
     @OneToMany(mappedBy = "location")
-    List<Donation> donations;
+    List<DonationEvent> donationEvents;
+
+    public String getAddress() {
+        return address + " " + city + " " + state + " " + zip + " " + country;
+    }
 }

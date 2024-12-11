@@ -2,9 +2,10 @@ package mk.finki.ukim.mk.crimsonheart.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -12,8 +13,10 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "donation_event")
-public class Donation {
+public class DonationEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +32,7 @@ public class Donation {
     DonationType donationType;
 
     @ManyToOne
-    @JoinColumn(name = "organised_by")
+    @JoinColumn(name = "organzied_by")
     private Institution institution;
 
     @ManyToOne
@@ -43,10 +46,10 @@ public class Donation {
     @Temporal(TemporalType.DATE)
     private Date dateAndTime;
 
-    @OneToMany(mappedBy = "donation")
+    @OneToMany(mappedBy = "donationEvent")
     private List<Exam> examList;
 
-    public Donation(String name, String description, DonationType donationType, Location location, Date dateAndTime, Institution institution, Users user) {
+    public DonationEvent(String name, String description, DonationType donationType, Location location, Date dateAndTime, Institution institution, Users user) {
         this.name = name;
         this.description = description;
         this.donationType = donationType;
