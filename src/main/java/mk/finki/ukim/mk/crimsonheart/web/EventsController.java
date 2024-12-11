@@ -63,14 +63,19 @@ public class EventsController {
 
 
     @PostMapping("/add")
-    public String saveEvent(@RequestParam String name,
+    public String saveEvent(@RequestParam Long id,
+                            @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam DonationType donationType,
                             @RequestParam Long location,
-                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateAndTime,
+                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfEvent,
+                            @RequestParam String timeOfEvent,
                             @RequestParam Long institution,
                             @RequestParam Long user){
-        this.eventService.save(name, description, donationType, location, dateAndTime, institution, user);
+        if (id != null) {
+            this.eventService.updateEvent(id, name, description, donationType, location, dateOfEvent, timeOfEvent, institution, user);
+        }else
+            this.eventService.createEvent(name, description, donationType, location, dateOfEvent, timeOfEvent, institution, user);
         return "redirect:/events";
     }
 
@@ -83,8 +88,8 @@ public class EventsController {
 
     @GetMapping("/edit/{eventId}")
     public String editEvent(@PathVariable Long eventId, Model model) {
-        if (this.eventService.findById(eventId).isPresent()) {
-            DonationEvent event = this.eventService.findById(eventId).get();
+        if (this.eventService.findById(eventId) != null) {
+            DonationEvent event = this.eventService.findById(eventId);
             List<Location> locations = this.locationService.listAll();
             List<DonationType> donationTypes = List.of(DonationType.values());
             List<Institution> institutions = this.institutionService.listAll();

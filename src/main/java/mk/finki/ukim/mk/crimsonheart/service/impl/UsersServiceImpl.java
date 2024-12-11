@@ -3,6 +3,9 @@ package mk.finki.ukim.mk.crimsonheart.service.impl;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import mk.finki.ukim.mk.crimsonheart.exceptions.InstitutionNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.LocationNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
@@ -34,12 +37,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findById(Long id) {
-        return this.usersRepository.findById(id);
+    public Users findById(Long id) {
+        return this.usersRepository.findById(id).orElseThrow(() -> new UsersNotFoundException(id));
     }
 
     @Override
-    public Users save(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt) {
+    public void create(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt) {
         Location location = this.locationRepository.findById(locationId).orElseThrow();
         Institution institution = this.institutionRepository.findById(worksAt).orElseThrow();
         if (embg.length() !=  13){
@@ -48,7 +51,35 @@ public class UsersServiceImpl implements UsersService {
 
         Users user = new Users(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation,institution);
 
-        return this.usersRepository.save(user);
+        this.usersRepository.save(user);
+    }
+
+    @Override
+    public void update(Long userId, Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt) {
+        Location location = this.locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        Institution institution = this.institutionRepository.findById(worksAt).orElseThrow( () -> new InstitutionNotFoundException(worksAt));
+        if (embg.length() !=  13){
+            throw new IllegalArgumentException("EMBG isn't in the correct format");
+        }
+
+        Users user = this.usersRepository.findById(userId).orElseThrow(() -> new UsersNotFoundException(userId));
+
+        user.setRole(role);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setBirthday(birthday);
+        user.setSex(sex);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setEmbg(embg);
+        user.setLocation(location);
+        user.setBloodType(bloodType);
+        user.setDonor(isDonor);
+        user.setLastDonation(lastDonation);
+        user.setWorksAt(institution);
+
+        this.usersRepository.save(user);
+
     }
 
     @Override

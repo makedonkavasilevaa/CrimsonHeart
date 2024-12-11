@@ -2,6 +2,9 @@ package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
+import mk.finki.ukim.mk.crimsonheart.exceptions.DonationEventNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.ExamNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Exam;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
@@ -29,29 +32,51 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<Exam> listAll() {
-        return examRepository.findAll();
-    }
-
-    @Override
-    public Optional<Exam> findById(Long id) {
-        return examRepository.findById(id);
-    }
-
-    @Override
-    public Exam save(Date performedOn, Long donationId, Long doctorId, Long patientId, Long nurseId, boolean successfulExam) {
-        Users doctor = usersRepository.findById(doctorId).orElseThrow();
-        Users patient = usersRepository.findById(patientId).orElseThrow();
-        Users nurse = usersRepository.findById(nurseId).orElseThrow();
-        DonationEvent donationEvent = eventRepository.findById(donationId).orElseThrow();
-        Exam exam = new Exam(performedOn, donationEvent, doctor, patient, nurse, successfulExam);
+    public void create(Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam) {
+        Users doctor = this.usersRepository.findById(doctorId).orElseThrow( () -> new UsersNotFoundException(doctorId));
+        Users patient = this.usersRepository.findById(patientId).orElseThrow(() -> new UsersNotFoundException(patientId));
+        Users nurse = this.usersRepository.findById(nurseID).orElseThrow( () -> new UsersNotFoundException(nurseID));
+        DonationEvent donationEvent = this.eventRepository.findById(donationEventId).orElseThrow(() -> new DonationEventNotFoundException(donationEventId));
+        Exam exam = new Exam(performedOn, bloodPressure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
 
         if (!successfulExam){
             patient.setTimesRejected(patient.getTimesRejected() + 1);
             patient.setHasBeenRejected(true);
         }
 
-        return null;
+        this.examRepository.save(exam);
+    }
+
+    @Override
+    public void update(Long examId, Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam) {
+        Users doctor = this.usersRepository.findById(doctorId).orElseThrow( () -> new UsersNotFoundException(doctorId));
+        Users patient = this.usersRepository.findById(patientId).orElseThrow(() -> new UsersNotFoundException(patientId));
+        Users nurse = this.usersRepository.findById(nurseID).orElseThrow( () -> new UsersNotFoundException(nurseID));
+        DonationEvent donationEvent = this.eventRepository.findById(donationEventId).orElseThrow(() -> new DonationEventNotFoundException(donationEventId));
+        Exam exam = this.examRepository.findById(examId).orElseThrow( () -> new ExamNotFoundException(examId));
+
+        exam.setPerformedOn(performedOn);
+        exam.setBloodPressure(bloodPressure);
+        exam.setHemoglobin(hemoglobin);
+        exam.setDonationEvent(donationEvent);
+        exam.setDoctor(doctor);
+        exam.setPatient(patient);
+        exam.setNurse(nurse);
+        if (!successfulExam){
+            patient.setTimesRejected(patient.getTimesRejected() + 1);
+            patient.setHasBeenRejected(true);
+        }
+        this.examRepository.save(exam);
+    }
+
+    @Override
+    public List<Exam> listAll() {
+        return this.examRepository.findAll();
+    }
+
+    @Override
+    public Exam findById(Long id) {
+        return this.examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException(id));
     }
 
     @Override

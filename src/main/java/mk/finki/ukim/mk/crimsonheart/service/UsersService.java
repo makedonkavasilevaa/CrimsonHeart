@@ -12,8 +12,9 @@ import java.util.Optional;
 public interface UsersService {
 
     List<Users> listAll();
-    Optional<Users> findById(Long id);
-    Users save(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
+    Users findById(Long id);
+    void create(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
+    void update(Long userId, Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
     List<Users> findByRole(Roles role);
     Optional<Users> findByEmbg(String embg);
     Optional<Users> findAllByIsDonor();

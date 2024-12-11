@@ -1,6 +1,10 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
+import mk.finki.ukim.mk.crimsonheart.exceptions.DonationEventNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.InstitutionNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.LocationNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
@@ -33,24 +37,43 @@ public class DonationEventServiceImpl implements DonationEventService {
 
 
     @Override
+    public void createEvent(String name, String description, DonationType donationType, Long locationId, Date dateOfEvent, String timeOfEvent, Long institutionId, Long manager) {
+        Location location = locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        Institution institution = institutionRepository.findById(institutionId).orElseThrow( () -> new InstitutionNotFoundException(institutionId));
+        Users user = usersRepository.findById(manager).orElseThrow(() -> new UsersNotFoundException(manager));
+        DonationEvent donationEvent = new DonationEvent(name, description, donationType, location, dateOfEvent, timeOfEvent, institution, user);
+        this.donationEventRepository.save(donationEvent);
+    }
+
+    @Override
+    public void updateEvent(Long eventId,String name, String description, DonationType donationType, Long locationId, Date dateOfEvent, String timeOfEvent, Long institutionId, Long manager) {
+        DonationEvent donationEvent = donationEventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+        Location location = locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        Institution institution = institutionRepository.findById(institutionId).orElseThrow( () -> new InstitutionNotFoundException(institutionId));
+        Users user = usersRepository.findById(manager).orElseThrow(() -> new UsersNotFoundException(manager));
+
+        donationEvent.setName(name);
+        donationEvent.setDescription(description);
+        donationEvent.setDonationType(donationType);
+        donationEvent.setLocation(location);
+        donationEvent.setDateOfEvent(dateOfEvent);
+        donationEvent.setTimeOfEvent(timeOfEvent);
+        donationEvent.setInstitution(institution);
+        donationEvent.setUser(user);
+
+        this.donationEventRepository.save(donationEvent);
+
+    }
+
+    @Override
     public List<DonationEvent> listAll() {
         return this.donationEventRepository.findAll();
     }
 
     @Override
-    public Optional<DonationEvent> findById(Long id) {
-        Optional<DonationEvent> event = this.donationEventRepository.findById(id);
+    public DonationEvent findById(Long id) {
+        DonationEvent event = this.donationEventRepository.findById(id).orElseThrow( () -> new DonationEventNotFoundException(id));
         return event;
-    }
-
-    @Override
-    public DonationEvent save(String name, String description, DonationType donationType, Long locationId, Date dateAndTime, Long institutionId, Long userId) {
-        Location location = locationRepository.findById(locationId).orElseThrow();
-        Institution institution = institutionRepository.findById(institutionId).orElseThrow();
-        Users user = usersRepository.findById(userId).orElseThrow();
-        DonationEvent donationEvent = new DonationEvent(name, description, donationType, location, dateAndTime, institution, user);
-
-        return this.donationEventRepository.save(donationEvent);
     }
 
     @Override

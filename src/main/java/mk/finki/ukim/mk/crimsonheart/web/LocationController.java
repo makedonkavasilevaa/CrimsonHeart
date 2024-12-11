@@ -42,12 +42,16 @@ public class LocationController {
 
 
     @PostMapping("/add")
-    public String saveLocation(@RequestParam String address,
-                            @RequestParam CityEnum city,
-                            @RequestParam String state,
-                            @RequestParam String zip,
-                            @RequestParam String country){
-        this.locationService.save(address, city, state, zip, country);
+    public String saveLocation(@RequestParam Long id,
+                               @RequestParam String address,
+                               @RequestParam CityEnum city,
+                               @RequestParam String state,
+                               @RequestParam String zip,
+                               @RequestParam String country) {
+        if (id != null && id > 0) {
+            this.locationService.update(id, address, city, state, zip, country);
+        }else
+            this.locationService.create(address, city, state, zip, country);
         return "redirect:/locations";
     }
 

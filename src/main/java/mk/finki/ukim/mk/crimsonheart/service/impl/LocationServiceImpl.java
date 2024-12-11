@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
+import mk.finki.ukim.mk.crimsonheart.exceptions.LocationNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.repository.LocationRepository;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
@@ -19,15 +20,28 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Location save(String address, CityEnum city, String state, String zip, String country) {
+    public void create(String address, CityEnum city, String state, String zip, String country) {
         Location location = new Location(address, city, state, zip, country);
-        return this.locationRepository.save(location);
+        this.locationRepository.save(location);
+    }
+
+    @Override
+    public void update(Long locationId, String address, CityEnum city, String state, String zip, String country) {
+        Location location = this.locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        location.setAddress(address);
+        location.setCity(city);
+        location.setState(state);
+        location.setZip(zip);
+        location.setCountry(country);
+        this.locationRepository.save(location);
     }
 
     @Override
     public void delete(Long id) {
-        Location location = this.locationRepository.findById(id).orElse(null);
-        this.locationRepository.delete(location);
+        Location location = this.locationRepository.findById(id).orElseThrow( () -> new LocationNotFoundException(id));
+        if (location != null){
+            this.locationRepository.delete(location);
+        }
     }
 
     @Override
