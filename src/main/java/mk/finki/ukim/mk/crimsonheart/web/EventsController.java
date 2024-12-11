@@ -32,7 +32,7 @@ public class EventsController {
         this.usersService = usersService;
     }
 
-    @GetMapping()
+    @GetMapping("/listEvents")
     public String getEventsPage(@RequestParam(required = false) String error, Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
@@ -41,7 +41,7 @@ public class EventsController {
         List<DonationEvent> events = this.eventService.listAll();
         model.addAttribute("bodyContent", "events");
         model.addAttribute("events", events);
-        return "events";
+        return "events.html";
     }
 
     @GetMapping("/add-form")
