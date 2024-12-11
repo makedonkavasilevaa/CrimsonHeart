@@ -39,7 +39,8 @@ public class DonationEventServiceImpl implements DonationEventService {
 
     @Override
     public Optional<DonationEvent> findById(Long id) {
-        return donationEventRepository.findById(id);
+        Optional<DonationEvent> event = this.donationEventRepository.findById(id);
+        return event;
     }
 
     @Override
@@ -47,7 +48,6 @@ public class DonationEventServiceImpl implements DonationEventService {
         Location location = locationRepository.findById(locationId).orElseThrow();
         Institution institution = institutionRepository.findById(institutionId).orElseThrow();
         Users user = usersRepository.findById(userId).orElseThrow();
-
         DonationEvent donationEvent = new DonationEvent(name, description, donationType, location, dateAndTime, institution, user);
 
         return this.donationEventRepository.save(donationEvent);

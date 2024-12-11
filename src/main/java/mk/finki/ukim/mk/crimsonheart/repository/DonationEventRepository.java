@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface DonationEventRepository extends JpaRepository<DonationEvent, Long> {
 
-    Optional<DonationEvent> findById(Long id);
     Optional<DonationEvent> findAllByNameContainsIgnoreCase(String name);
     Optional<DonationEvent> findAllByDonationType(DonationType donationType);
+    Optional<DonationEvent> findDonationEventById(Long id);
 }

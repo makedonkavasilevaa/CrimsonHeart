@@ -53,7 +53,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<Users> findByRole(Roles role) {
-        return (List<Users>) this.usersRepository.findAllByRoleEquals(role).orElseThrow();
+        return this.usersRepository.findAllByRoleEquals(role);
     }
 
     @Override
