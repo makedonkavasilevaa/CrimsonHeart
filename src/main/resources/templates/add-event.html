@@ -116,10 +116,10 @@
 
                     <div class="form-group">
                         <label>Manager</label>
-                        <select name="donationType" class="form-control">
+                        <select name="user" class="form-control">
                             <option th:if="${event} != null"
                                     th:selected="${event.getUser().getName() != null &&
-                                event.getUser().getId() == dt.name()}"
+                                event.getUser().getId() == manager.getId()}"
                                     th:each="manager : ${managers}"
                                     th:value="${manager.getId()}"
                                     th:text="${manager.getName()}">

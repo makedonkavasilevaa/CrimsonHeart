@@ -69,17 +69,6 @@
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-trash">Edit</i>
                                     </a>
-
-                                </th:block>
-                                <th:block>
-                                    <form th:action="@{'/events/like/{id}' (id=${event.getId()})}" th:method="post">
-                                        <button type="submit"
-                                                id="likeButton"
-                                                class="btn btn-sm btn-danger like-event"
-                                                onclick="this.disabled=true; this.form.submit();">
-                                            <i class="fa fa-thumbs-up">Like</i>
-                                        </button>
-                                    </form>
                                 </th:block>
                             </td>
                         </tr>
