@@ -39,4 +39,12 @@ public class Location {
     public String getAddress() {
         return address + " " + city + " " + state + " " + zip + " " + country;
     }
+
+    public Location(String address, CityEnum city, String state, String zip, String country) {
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.country = country;
+    }
 }

@@ -88,4 +88,9 @@ public class Users {
         this.lastDonation = lastDonation;
         this.worksAt = worksAt;
     }
+
+    public String getName() {
+        return name + " " + surname + " - " + role.name();
+    }
+
 }
