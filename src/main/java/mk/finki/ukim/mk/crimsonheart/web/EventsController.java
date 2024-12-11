@@ -10,13 +10,13 @@ import mk.finki.ukim.mk.crimsonheart.service.DonationEventService;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/events")
@@ -48,14 +48,12 @@ public class EventsController {
 
     @GetMapping("/add-form")
     public String getAddEventPage(Model model) {
-        List<DonationEvent> events = this.eventService.listAll();
         List<Location> locations = this.locationService.listAll();
         List<DonationType> donationTypes = List.of(DonationType.values());
         List<Institution> institutions = this.institutionService.listAll();
         List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
 
         model.addAttribute("locations", locations);
-        model.addAttribute("events", events);
         model.addAttribute("donationTypes", donationTypes);
         model.addAttribute("institutions", institutions);
         model.addAttribute("managers", managers);
@@ -69,7 +67,7 @@ public class EventsController {
                             @RequestParam String description,
                             @RequestParam DonationType donationType,
                             @RequestParam Long location,
-                            @RequestParam Date dateAndTime,
+                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateAndTime,
                             @RequestParam Long institution,
                             @RequestParam Long user){
         this.eventService.save(name, description, donationType, location, dateAndTime, institution, user);
@@ -80,20 +78,20 @@ public class EventsController {
     @PostMapping("/delete/{id}")
     public String deleteEvent(@PathVariable Long id){
         this.eventService.delete(id);
-        return "redirect:/";
+        return "redirect:/events";
     }
 
     @GetMapping("/edit/{eventId}")
     public String editEvent(@PathVariable Long eventId, Model model) {
         if (this.eventService.findById(eventId).isPresent()) {
-            List<DonationEvent> events = this.eventService.listAll();
+            DonationEvent event = this.eventService.findById(eventId).get();
             List<Location> locations = this.locationService.listAll();
             List<DonationType> donationTypes = List.of(DonationType.values());
             List<Institution> institutions = this.institutionService.listAll();
             List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
 
             model.addAttribute("locations", locations);
-            model.addAttribute("events", events);
+            model.addAttribute("event", event);
             model.addAttribute("donationTypes", donationTypes);
             model.addAttribute("institutions", institutions);
             model.addAttribute("managers", managers);
