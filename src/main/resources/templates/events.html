@@ -16,5 +16,88 @@
     <script src="https://kit.fontawesome.com/e59232f0a1.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">CRIMSON HEART</h1>
+            <h3 class="jumbotron-heading">All events</h3>
+        </div>
+    </section>
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12" th:if="${events.size() > 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Event name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Donation Type</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Date and Time</th>
+                            <th scope="col">Organized by</th>
+                            <th scope="col">Managed by</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="event : ${events}" class="event">
+                            <td th:text="${event.getName()}"></td>
+                            <td th:text="${event.getDescription()}"></td>
+                            <td th:text="${event.getDonationType()}"></td>
+                            <td th:text="${event.getLocation() != null}
+                            ? ${event.getLocation().getAddress()} : 'No Location'"></td>
+                            <td th:text="${event.getDateAndTime() != null}
+                            ? ${event.getCategory().getName()} : 'No Date and Time'"></td>
+                            <td th:text="${event.getInstution() != null}
+                            ? ${event.getInstution().getName()} : 'No Institution'"></td>
+                            <td th:text="${event.getUser() != null}
+                            ? ${event.getUser().getUser()} : 'No Manager'"></td>
+                            <td class="text-right">
+                                <th:block>
+                                    <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
+                                          th:method="DELETE">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger delete-event">
+                                            <i class="fa fa-trash">Delete</i>
+                                        </button>
+                                    </form>
+                                </th:block>
+                                <th:block>
+                                    <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
+                                       class="btn btn-sm btn-info edit-event">
+                                        <i class="fa fa-trash">Edit</i>
+                                    </a>
+
+                                </th:block>
+                                <th:block>
+                                    <form th:action="@{'/events/like/{id}' (id=${event.getId()})}" th:method="post">
+                                        <button type="submit"
+                                                id="likeButton"
+                                                class="btn btn-sm btn-danger like-event"
+                                                onclick="this.disabled=true; this.form.submit();">
+                                            <i class="fa fa-thumbs-up">Like</i>
+                                        </button>
+                                    </form>
+                                </th:block>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="events/add-form" class="btn btn-block btn-dark add-event-btn">
+                            Add new event
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

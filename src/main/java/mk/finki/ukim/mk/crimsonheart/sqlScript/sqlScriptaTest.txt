@@ -1,16 +1,24 @@
-insert into location (address, city, country, state, zip) VALUES ('Marsal Tito br.44', 'Strumica', 'Makedonija', 'Strumica', 2400),
-                                                                 ('Marsal Tito br.4', 'Strumica', 'Makedonija', 'Strumica', 2400),
-                                                                 ('Mladinska br.5', 'Strumica', 'Makedonija', 'Strumica', 2400),
-                                                                 ('Leninova br.34', 'Strumica', 'Makedonija', 'Strumica', 2400),
-                                                                 ('Marsal Tito br.4', 'Skopje', 'Makedonija', 'Skopje', 1000),
-                                                                 ('Teodosij Gologanov br.109', 'Skopje', 'Makedonija', 'Skopje', 1000);
+-- Insert sample data into `location`
+INSERT INTO location (id, address, city, state, zip, country)
+VALUES
+    (1, '123 Main St', 'SKOPJE', 'Skopje', '1000', 'North Macedonia'),
+    (2, '456 Elm St', 'BITOLA', 'Bitola', '7000', 'North Macedonia');
 
-insert into donation_event (date_and_time, location_id) VALUES ('2024-12-03 15:45:30', 1),
-                                                               ('2024-12-03 15:45:30', 2);
+-- Insert sample data into `institution`
+INSERT INTO institution (id, name, phone, email, institutions_type, location_id)
+VALUES
+    (1, 'Red Cross', '070123456', 'contact@redcross.mk', 'HOSPITAL', 1),
+    (2, 'Blood Bank', '071987654', 'info@bloodbank.mk', 'BLOOD_BANK', 2);
 
-insert into institution (email, name, phone, location_id, institutions_type) values ('test@test.com', 'Bolnica', '034322322', 1, 'HOSPITAL'),
-                                                                                    ('test@test.com', 'Banka za krv', '034322322',3, 'BLOOD_BANK'),
-                                                                                    ('test@test.com', 'Crven Krst', '034322322',2, 'RED_CROSS');
-select * from institution;
-select * from location;
-select * from donation_event;
+-- Insert sample data into `users`
+INSERT INTO users (id, role, name, surname, date_of_birth, sex, email, phone, embg, location_id, blood_type, has_been_rejected, times_rejected, is_donor, last_donation, works_at)
+VALUES
+    (1, 'DOCTOR', 'John', 'Doe', '1980-05-15', 'MALE', 'john.doe@example.com', '075123456', '1234567890123', 1, 'Oneg', false, 0, false, NULL, 1),
+    (2, 'NURSE', 'Jane', 'Smith', '1990-07-20', 'FEMALE', 'jane.smith@example.com', '076987654', '9876543210987', 2, 'Apos', false, 0, true, '2023-09-01', 2);
+
+-- Insert sample data into `donation_event`
+INSERT INTO donation_event (id, name, description, donation_type, location, date_and_time, organised_by, managed_by)
+VALUES
+    (1, 'Blood Donation Drive', 'A community blood donation event', 'HUMANITARIAN_EVENT', 1, '2024-01-15', 1, 1),
+    (2, 'Plasma Donation', 'Plasma donation for research purposes', 'HOSPITAL', 2, '2024-02-10', 2, 2);
+
