@@ -1,11 +1,13 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.repository.LocationRepository;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -18,6 +20,21 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<Location> listAll() {
-        return List.of();
+        return this.locationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Location> findById(Long id) {
+        return this.locationRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Location> findByCity(CityEnum city) {
+        return this.locationRepository.findAllByCity(city);
+    }
+
+    @Override
+    public Optional<Location> findByAddress(String address) {
+        return this.locationRepository.findAllByAddressContainsIgnoreCase(address);
     }
 }

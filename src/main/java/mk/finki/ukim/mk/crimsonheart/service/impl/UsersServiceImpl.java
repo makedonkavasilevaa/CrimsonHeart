@@ -52,8 +52,8 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findByRole(Roles role) {
-        return this.usersRepository.findAllByRole(role);
+    public List<Users> findByRole(Roles role) {
+        return (List<Users>) this.usersRepository.findAllByRoleEquals(role).orElseThrow();
     }
 
     @Override

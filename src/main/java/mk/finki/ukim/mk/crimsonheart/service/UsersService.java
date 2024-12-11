@@ -14,7 +14,7 @@ public interface UsersService {
     List<Users> listAll();
     Optional<Users> findById(Long id);
     Users save(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
-    Optional<Users> findByRole(Roles role);
+    List<Users> findByRole(Roles role);
     Optional<Users> findByEmbg(String embg);
     Optional<Users> findAllByIsDonor();
     Optional<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation);

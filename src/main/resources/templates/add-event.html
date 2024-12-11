@@ -50,28 +50,19 @@
                                placeholder="Description">
                     </div>
                     <div class="form-group">
-                        <label for="popularityScore">Popularity Score</label>
-                        <input type="number"
-                               class="form-control"
-                               id="popularityScore"
-                               name="popularityScore"
-                               th:value="(${event} != null ? ${event.getPopularityScore()} : '')"
-                               placeholder="Popularity Score">
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select name="category" class="form-control">
+                        <label>Donation Type</label>
+                        <select name="donationType" class="form-control">
                             <option th:if="${event} != null"
-                                    th:selected="${event.getCategory() != null &&
-                                event.getCategory().getId() == cat.getId()}"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
+                                    th:selected="${event.getDonationType().name() != null &&
+                                event.getDonationType().name() == dt.name()}"
+                                    th:each="dt : ${donationTypes}"
+                                    th:value="${dt.name()}"
+                                    th:text="${dt.name()}">
                             </option>
                             <option th:if="${event} == null"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
+                                    th:each="dt : ${donationTypes}"
+                                    th:value="${dt.name()}"
+                                    th:text="${dt.name()}">
                             </option>
                         </select>
                     </div>
@@ -84,12 +75,59 @@
                                 event.getLocation().getId() == loc.getId()}"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
                             </option>
                             <option th:if="${event} == null"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateAndTime">Date</label>
+                        <input type="date"
+                               class="form-control"
+                               id="dateAndTime"
+                               name="dateAndTime"
+                               th:value="(${event} != null ? ${#dates.format(event.dateAndTime, 'yyyy-MM-dd')} : '')"
+                               required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Organized by</label>
+                        <select name="institution" class="form-control">
+                            <option th:if="${event} != null"
+                                    th:selected="${event.getInstitution().getName() != null &&
+                                event.getInstitution().getId() == inst.getId()}"
+                                    th:each="inst : ${institutions}"
+                                    th:value="${inst.getId()}"
+                                    th:text="${inst.getName()}">
+                            </option>
+                            <option th:if="${event} == null"
+                                    th:each="inst : ${institutions}"
+                                    th:value="${inst.getId()}"
+                                    th:text="${inst.getName()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Manager</label>
+                        <select name="donationType" class="form-control">
+                            <option th:if="${event} != null"
+                                    th:selected="${event.getUser().getName() != null &&
+                                event.getUser().getId() == dt.name()}"
+                                    th:each="manager : ${managers}"
+                                    th:value="${manager.getId()}"
+                                    th:text="${manager.getName()}">
+                            </option>
+                            <option th:if="${event} == null"
+                                    th:each="manager : ${managers}"
+                                    th:value="${manager.getId()}"
+                                    th:text="${manager.getName()}">
                             </option>
                         </select>
                     </div>

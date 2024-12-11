@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.crimsonheart.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "users")
+@ToString(exclude = {"doctorExams", "patientExams", "nurseExams", "location", "worksAt"}) // Prevent recursion in toString()
 public class Users {
 
     @Id

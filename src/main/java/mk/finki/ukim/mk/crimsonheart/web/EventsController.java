@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.crimsonheart.web;
 
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
+import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/events")
@@ -32,7 +34,7 @@ public class EventsController {
         this.usersService = usersService;
     }
 
-    @GetMapping("/listEvents")
+    @GetMapping("")
     public String getEventsPage(@RequestParam(required = false) String error, Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
@@ -50,13 +52,13 @@ public class EventsController {
         List<Location> locations = this.locationService.listAll();
         List<DonationType> donationTypes = List.of(DonationType.values());
         List<Institution> institutions = this.institutionService.listAll();
-        List<Users> users = this.usersService.listAll();
+        List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
 
         model.addAttribute("locations", locations);
         model.addAttribute("events", events);
         model.addAttribute("donationTypes", donationTypes);
         model.addAttribute("institutions", institutions);
-        model.addAttribute("users", users);
+        model.addAttribute("managers", managers);
 
         return "add-event";
     }
@@ -84,17 +86,17 @@ public class EventsController {
     @GetMapping("/edit/{eventId}")
     public String editEvent(@PathVariable Long eventId, Model model) {
         if (this.eventService.findById(eventId).isPresent()) {
-            DonationEvent event = this.eventService.findById(eventId).orElseThrow();
+            List<DonationEvent> events = this.eventService.listAll();
             List<Location> locations = this.locationService.listAll();
             List<DonationType> donationTypes = List.of(DonationType.values());
             List<Institution> institutions = this.institutionService.listAll();
-            List<Users> users = this.usersService.listAll();
+            List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
 
             model.addAttribute("locations", locations);
-            model.addAttribute("event", event);
+            model.addAttribute("events", events);
             model.addAttribute("donationTypes", donationTypes);
             model.addAttribute("institutions", institutions);
-            model.addAttribute("users", users);
+            model.addAttribute("managers", managers);
             return "add-event";
         }
         return "redirect:/events?error=DonationEventNotFound";
