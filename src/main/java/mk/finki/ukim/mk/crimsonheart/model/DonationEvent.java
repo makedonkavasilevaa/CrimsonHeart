@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "donation_event")
 public class DonationEvent {
 

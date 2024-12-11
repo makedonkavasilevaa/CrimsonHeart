@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -17,7 +16,7 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @DateTimeFormat
+    @Temporal(TemporalType.DATE)
     Date performedOn;
 
     @ManyToOne
