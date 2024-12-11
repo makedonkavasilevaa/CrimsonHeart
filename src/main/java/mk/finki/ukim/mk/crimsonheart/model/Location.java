@@ -36,7 +36,7 @@ public class Location {
     @OneToMany(mappedBy = "location")
     List<DonationEvent> donationEvents;
 
-    public String getAddress() {
+    public String getFullAddress() {
         return address + " " + city + " " + state + " " + zip + " " + country;
     }
 

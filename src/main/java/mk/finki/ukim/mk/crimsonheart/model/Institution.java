@@ -38,4 +38,12 @@ public class Institution {
 
     @OneToMany(mappedBy = "worksAt")
     private List<Users> employees;
+
+    public Institution(String name, String phone, String email, InstitutionsType institutionsType, Location location) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.institutionsType = institutionsType;
+        this.location = location;
+    }
 }

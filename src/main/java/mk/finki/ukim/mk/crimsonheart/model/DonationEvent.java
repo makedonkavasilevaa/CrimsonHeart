@@ -2,9 +2,7 @@ package mk.finki.ukim.mk.crimsonheart.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
 
 import java.util.Date;
@@ -42,17 +40,20 @@ public class DonationEvent {
     private Location location;
 
     @Temporal(TemporalType.DATE)
-    private Date dateAndTime;
+    private Date dateOfEvent;
+
+    String timeOfEvent;
 
     @OneToMany(mappedBy = "donationEvent")
     private List<Exam> examList;
 
-    public DonationEvent(String name, String description, DonationType donationType, Location location, Date dateAndTime, Institution institution, Users user) {
+    public DonationEvent(String name, String description, DonationType donationType, Location location, Date dateOfEvent, String timeOfEvent, Institution institution, Users user) {
         this.name = name;
         this.description = description;
         this.donationType = donationType;
         this.location = location;
-        this.dateAndTime = dateAndTime;
+        this.dateOfEvent = dateOfEvent;
+        this.timeOfEvent = timeOfEvent;
         this.institution = institution;
         this.user = user;
     }

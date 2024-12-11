@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import lombok.NonNull;
 
 import java.util.Date;
 
@@ -18,6 +19,12 @@ public class Exam {
 
     @Temporal(TemporalType.DATE)
     Date performedOn;
+
+    @NonNull
+    String bloodPressure;
+
+    @NonNull
+    Float hemoglobin;
 
     @ManyToOne
     @JoinColumn(name = "donated")
@@ -37,8 +44,10 @@ public class Exam {
 
     boolean successfulExam;
 
-    public Exam(Date performedOn, DonationEvent donationEvent, Users doctor, Users patient, Users nurse, boolean successfulExam) {
+    public Exam(Date performedOn, String bloodPressure, Float hemoglobin, DonationEvent donationEvent, Users doctor, Users patient, Users nurse, boolean successfulExam) {
         this.performedOn = performedOn;
+        this.bloodPressure = bloodPressure;
+        this.hemoglobin = hemoglobin;
         this.donationEvent = donationEvent;
         this.doctor = doctor;
         this.patient = patient;
