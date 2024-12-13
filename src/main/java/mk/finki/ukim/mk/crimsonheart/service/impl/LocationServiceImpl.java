@@ -50,8 +50,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<Location> findById(Long id) {
-        return this.locationRepository.findById(id);
+    public Location findById(Long id) {
+        return this.locationRepository.findById(id).orElseThrow((() -> new LocationNotFoundException(id)));
     }
 
     @Override

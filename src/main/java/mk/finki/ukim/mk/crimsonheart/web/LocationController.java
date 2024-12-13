@@ -42,7 +42,7 @@ public class LocationController {
 
 
     @PostMapping("/add")
-    public String saveLocation(@RequestParam Long id,
+    public String saveLocation(@RequestParam(required = false) Long id,
                                @RequestParam String address,
                                @RequestParam CityEnum city,
                                @RequestParam String state,
@@ -59,13 +59,13 @@ public class LocationController {
     @PostMapping("/delete/{id}")
     public String deleteLocation(@PathVariable Long id){
         this.locationService.delete(id);
-        return "redirect:/events";
+        return "redirect:/locations";
     }
 
-    @GetMapping("/edit/{eventId}")
-    public String editEvent(@PathVariable Long eventId, Model model) {
-        if (this.locationService.findById(eventId).isPresent()) {
-            Location location = this.locationService.findById(eventId).get();
+    @GetMapping("/edit/{locationId}")
+    public String editEvent(@PathVariable Long locationId, Model model) {
+        if (this.locationService.findById(locationId) != null) {
+            Location location = this.locationService.findById(locationId);
             List<CityEnum> cities = List.of(CityEnum.values());
 
             model.addAttribute("location", location);
