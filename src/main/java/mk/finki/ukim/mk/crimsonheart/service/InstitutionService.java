@@ -12,6 +12,7 @@ public interface InstitutionService {
 
     void create(String name, String phone, String email, InstitutionsType institutionsType, Long locationId);
     void update(Long id, String name, String phone, String email, InstitutionsType institutionsType, Long locationId);
+    void delete(Long id);
     List<Institution> listAll();
     Institution findById(Long id);
     Optional<Institution> findByName(String name);

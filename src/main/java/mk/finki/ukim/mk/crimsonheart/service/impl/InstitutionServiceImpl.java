@@ -48,6 +48,12 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
+    public void delete(Long id) {
+        Institution institution = this.institutionRepository.findById(id).orElseThrow(() -> new InstitutionNotFoundException(id));
+        this.institutionRepository.delete(institution);
+    }
+
+    @Override
     public List<Institution> listAll() {
         return this.institutionRepository.findAll();
     }

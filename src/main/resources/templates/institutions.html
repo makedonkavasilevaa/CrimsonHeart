@@ -70,30 +70,30 @@
 
     <div class="container mb-4">
         <div class="row">
-            <div class="col-12" th:if="${events.size() > 0}">
+            <div class="col-12" th:if="${institutions.size() > 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Event name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Popularity Score</th>
+                            <th scope="col">Institution name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email Address</th>
+                            <th scope="col">Institution Type</th>
                             <th scope="col">Location</th>
-                            <th scope="col">Category</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="event : ${events}" class="event">
-                            <td th:text="${event.getName()}"></td>
-                            <td th:text="${event.getDescription()}"></td>
-                            <td th:text="${event.getPopularityScore()}"></td>
-                            <td th:text="${event.getLocation() != null}
-                            ? ${event.getLocation().getName()} : 'No Location'"></td>
-                            <td th:text="${event.getCategory() != null}
-                            ? ${event.getCategory().getName()} : 'No category'"></td>
+                        <tr th:each="institution : ${institutions}" class="event">
+                            <td th:text="${institution.getName()}"></td>
+                            <td th:text="${institution.getPhone()}"></td>
+                            <td th:text="${institution.getEmail()}"></td>
+                            <td th:text="${institution.getInstitutionsType() != null}
+                            ? ${institution.getInstitutionsType().name()} : 'No Institution Type'"></td>
+                            <td th:text="${institution.getLocation() != null}
+                            ? ${institution.getLocation().getAddress()} : 'No Location'"></td>
                             <td class="text-right">
                                 <th:block>
-                                    <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
+                                    <form th:action="@{'/institutions/delete/{id}' (id=${institution.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -102,21 +102,11 @@
                                     </form>
                                 </th:block>
                                 <th:block>
-                                    <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
+                                    <a th:href="@{/institutions/edit/{institutionsId}(institutionsId=${institution.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-trash">Edit</i>
                                     </a>
 
-                                </th:block>
-                                <th:block>
-                                    <form th:action="@{'/events/like/{id}' (id=${event.getId()})}" th:method="post">
-                                        <button type="submit"
-                                                id="likeButton"
-                                                class="btn btn-sm btn-danger like-event"
-                                                onclick="this.disabled=true; this.form.submit();">
-                                            <i class="fa fa-thumbs-up">Like</i>
-                                        </button>
-                                    </form>
                                 </th:block>
                             </td>
                         </tr>
@@ -127,17 +117,8 @@
             <div class="col mb-3">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <a href="events/add-form" class="btn btn-block btn-dark add-event-btn">
-                            Add new event
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="events/add-category" class="btn btn-block btn-dark add-event-btn">
-                            Add new Category
+                        <a href="institutions/add-form" class="btn btn-block btn-dark add-event-btn">
+                            Add new Institution
                         </a>
                     </div>
                 </div>

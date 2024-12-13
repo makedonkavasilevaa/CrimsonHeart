@@ -71,69 +71,69 @@
     <div class="container">
         <div class="row">
             <div class="col-md-5">
-                <form action="/events/add" method="POST">
+                <form action="/institutions/add" method="POST">
                     <input id="id" type="hidden" name="id"
-                           th:value="(${event} != null ? ${event.getId()} : '')">
+                           th:value="(${institution} != null ? ${institution.getId()} : '')">
                     <div class="form-group">
-                        <label for="name">Event name</label>
+                        <label for="name">Institution name</label>
                         <input type="text"
                                class="form-control"
                                id="name"
                                name="name"
-                               th:value="(${event} != null ? ${event.getName()} : '')"
+                               th:value="(${institution} != null ? ${institution.getName()} : '')"
                                required
-                               placeholder="Enter event name">
+                               placeholder="Enter institution name">
                     </div>
                     <div class="form-group">
-                        <label for="description">Description</label>
+                        <label for="phone">Phone</label>
                         <input type="text"
                                class="form-control"
-                               id="description"
-                               name="description"
-                               th:value="(${event} != null ? ${event.getDescription()} : '')"
-                               placeholder="Description">
+                               id="phone"
+                               name="phone"
+                               th:value="(${institution} != null ? ${institution.getPhone()} : '')"
+                               placeholder="Phone">
                     </div>
                     <div class="form-group">
-                        <label for="popularityScore">Popularity Score</label>
-                        <input type="number"
+                        <label for="email">Email Address</label>
+                        <input type="text"
                                class="form-control"
-                               id="popularityScore"
-                               name="popularityScore"
-                               th:value="(${event} != null ? ${event.getPopularityScore()} : '')"
-                               placeholder="Popularity Score">
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select name="category" class="form-control">
-                            <option th:if="${event} != null"
-                                    th:selected="${event.getCategory() != null &&
-                                event.getCategory().getId() == cat.getId()}"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
-                            </option>
-                            <option th:if="${event} == null"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
-                            </option>
-                        </select>
+                               id="email"
+                               name="email"
+                               th:value="(${institution} != null ? ${institution.getEmail()} : '')"
+                               placeholder="Email Address">
                     </div>
 
                     <div class="form-group">
+                        <label>Institution Type</label>
+                        <select name="type" class="form-control">
+                            <option th:if="${institution} != null"
+                                    th:selected="${institution.getDonationEventEvents() != null &&
+                                institution.getInstitutionsType().name() == itype.name()}"
+                                    th:each="itype : ${types}"
+                                    th:value="${itype.name()}"
+                                    th:text="${itype.name()}">
+                            </option>
+                            <option th:if="${institution} == null"
+                                    th:each="itype : ${types}"
+                                    th:value="${itype.name()}"
+                                    th:text="${itype.name()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Location</label>
-                        <select name="location" class="form-control">
-                            <option th:if="${event} != null"
-                                    th:selected="${event.getLocation() != null &&
-                                event.getLocation().getId() == loc.getId()}"
+                        <select name="locationId" class="form-control">
+                            <option th:if="${institution} != null"
+                                    th:selected="${institution.getLocation() != null &&
+                                institution.getLocation().getId() == loc.getId()}"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
                             </option>
                             <option th:if="${event} == null"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
                             </option>
                         </select>
                     </div>
