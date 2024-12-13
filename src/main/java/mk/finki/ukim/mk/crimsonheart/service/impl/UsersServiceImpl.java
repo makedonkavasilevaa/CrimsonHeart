@@ -42,6 +42,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public void delete(Long id) {
+        this.usersRepository.deleteById(id);
+    }
+
+    @Override
     public void create(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt) {
         Location location = this.locationRepository.findById(locationId).orElseThrow();
         Institution institution = this.institutionRepository.findById(worksAt).orElseThrow();

@@ -70,30 +70,44 @@
 
     <div class="container mb-4">
         <div class="row">
-            <div class="col-12" th:if="${events.size() > 0}">
+            <div class="col-12" th:if="${users.size() > 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Event name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Popularity Score</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Category</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Date of birth</th>
+                            <th scope="col">EMBG</th>
+                            <th scope="col">Blood Type</th>
+                            <th scope="col">Is donor?</th>
+                            <th scope="col">Sex</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email Address</th>
+                            <th scope="col">Home Address</th>
+                            <th scope="col">Works At</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="event : ${events}" class="event">
-                            <td th:text="${event.getName()}"></td>
-                            <td th:text="${event.getDescription()}"></td>
-                            <td th:text="${event.getPopularityScore()}"></td>
-                            <td th:text="${event.getLocation() != null}
-                            ? ${event.getLocation().getName()} : 'No Location'"></td>
-                            <td th:text="${event.getCategory() != null}
-                            ? ${event.getCategory().getName()} : 'No category'"></td>
+                        <tr th:each="user : ${users}" class="event">
+                            <td th:text="${user.getName()}"></td>
+                            <td th:text="${user.getSurname()}"></td>
+                            <td th:text="${user.getBirthday()}"></td>
+                            <td th:text="${user.getEmbg()}"></td>
+                            <td th:text="${user.getBloodType() != null}
+                            ? ${user.getBloodType().name()} : 'No Blood Type'"></td>
+                            <td th:text="${user.isDonor()}"></td>
+                            <td th:text="${user.getSex() != null}
+                            ? ${user.getSex().name()} : 'No Sex'"></td>
+                            <td th:text="${user.getPhone()}"></td>
+                            <td th:text="${user.getEmail()}"></td>
+                            <td th:text="${user.getLocation() != null}
+                            ? ${user.getLocation().getAddress()} : 'No Address'"></td>
+                            <td th:text="${user.getWorksAt() != null}
+                            ? ${user.getWorksAt().getName()} : 'No Employer'"></td>
                             <td class="text-right">
                                 <th:block>
-                                    <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
+                                    <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -102,26 +116,25 @@
                                     </form>
                                 </th:block>
                                 <th:block>
-                                    <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
+                                    <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-trash">Edit</i>
                                     </a>
 
                                 </th:block>
-                                <th:block>
-                                    <form th:action="@{'/events/like/{id}' (id=${event.getId()})}" th:method="post">
-                                        <button type="submit"
-                                                id="likeButton"
-                                                class="btn btn-sm btn-danger like-event"
-                                                onclick="this.disabled=true; this.form.submit();">
-                                            <i class="fa fa-thumbs-up">Like</i>
-                                        </button>
-                                    </form>
-                                </th:block>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="users/add-form" class="btn btn-block btn-dark add-event-btn">
+                            Add new User
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

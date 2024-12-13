@@ -2,12 +2,14 @@ package mk.finki.ukim.mk.crimsonheart.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 
 import jakarta.persistence.*;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -27,12 +29,15 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
+    @NonNull
     String name;
 
+    @NonNull
     String surname;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth")
+    @NonNull
     Date birthday;
 
     @Enumerated(EnumType.STRING)
@@ -43,6 +48,7 @@ public class Users {
     String phone;
 
     @Column(length = 13)
+    @NonNull
     String embg;
 
     @ManyToOne

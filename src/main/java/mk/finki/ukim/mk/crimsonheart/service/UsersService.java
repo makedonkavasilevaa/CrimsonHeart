@@ -13,6 +13,7 @@ public interface UsersService {
 
     List<Users> listAll();
     Users findById(Long id);
+    void delete(Long id);
     void create(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
     void update(Long userId, Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt);
     List<Users> findByRole(Roles role);
@@ -23,5 +24,4 @@ public interface UsersService {
     Optional<Users> findAllByBloodType(BloodType bloodType);
     Optional<Users> findAllByName(String name);
     Optional<Users> findAllByTimesRejected(Integer timesRejected);
-
 }

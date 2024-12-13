@@ -70,69 +70,158 @@
     <div class="container">
         <div class="row">
             <div class="col-md-5">
-                <form action="/events/add" method="POST">
+                <form action="/users/add" method="POST">
                     <input id="id" type="hidden" name="id"
-                           th:value="(${event} != null ? ${event.getId()} : '')">
+                           th:value="(${user} != null ? ${user.getId()} : '')">
                     <div class="form-group">
-                        <label for="name">Event name</label>
+                        <label for="name">Name</label>
                         <input type="text"
                                class="form-control"
                                id="name"
                                name="name"
-                               th:value="(${event} != null ? ${event.getName()} : '')"
+                               th:value="(${user} != null ? ${user.getName()} : '')"
                                required
-                               placeholder="Enter event name">
+                               placeholder="Enter Name">
                     </div>
                     <div class="form-group">
-                        <label for="description">Description</label>
+                        <label for="surname">Surname</label>
                         <input type="text"
                                class="form-control"
-                               id="description"
-                               name="description"
-                               th:value="(${event} != null ? ${event.getDescription()} : '')"
-                               placeholder="Description">
+                               id="surname"
+                               name="surname"
+                               th:value="(${user} != null ? ${user.getSurname()} : '')"
+                               required
+                               placeholder="Enter Surname">
                     </div>
                     <div class="form-group">
-                        <label for="popularityScore">Popularity Score</label>
-                        <input type="number"
+                        <label for="birthday">Date of birth</label>
+                        <input type="date"
                                class="form-control"
-                               id="popularityScore"
-                               name="popularityScore"
-                               th:value="(${event} != null ? ${event.getPopularityScore()} : '')"
-                               placeholder="Popularity Score">
+                               id="birthday"
+                               name="birthday"
+                               th:value="(${user} != null ? ${#dates.format(user.birthday, 'yyyy-MM-dd')} : '')"
+                               required>
                     </div>
                     <div class="form-group">
-                        <label>Category</label>
-                        <select name="category" class="form-control">
-                            <option th:if="${event} != null"
-                                    th:selected="${event.getCategory() != null &&
-                                event.getCategory().getId() == cat.getId()}"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
+                        <label for="embg">EMBG</label>
+                        <input type="text"
+                               class="form-control"
+                               id="embg"
+                               name="embg"
+                               th:value="(${user} != null ? ${user.getEmbg()} : '')"
+                               placeholder="EMBG">
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Type</label>
+                        <select name="bloodType" class="form-control">
+                            <option th:if="${user} != null"
+                                    th:selected="${user.getBloodType()!= null &&
+                                user.getBloodType().name() == bt.name()}"
+                                    th:each="bt : ${bloodTypes}"
+                                    th:value="${bt.name()}"
+                                    th:text="${bt.name()}">
                             </option>
-                            <option th:if="${event} == null"
-                                    th:each="cat : ${categories}"
-                                    th:value="${cat.getId()}"
-                                    th:text="${cat.getName()}">
+                            <option th:if="${user} == null"
+                                    th:each="bt : ${bloodTypes}"
+                                    th:value="${bt.name()}"
+                                    th:text="${bt.name()}">
                             </option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="isDonor">Is Donor?</label>
+                        <input type="hidden" name="isDonor" value="false" />
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="isDonor"
+                               name="isDonor"
+                               th:checked="${user != null and user.isDonor()}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sex</label>
+                        <select name="sex" class="form-control">
+                            <option th:if="${user} != null"
+                                    th:selected="${user.getSex()!= null &&
+                                user.getSex().name() == sex.name()}"
+                                    th:each="sex : ${sexes}"
+                                    th:value="${sex.name()}"
+                                    th:text="${sex.name()}">
+                            </option>
+                            <option th:if="${user} == null"
+                                    th:each="sex : ${sexes}"
+                                    th:value="${sex.name()}"
+                                    th:text="${sex.name()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text"
+                               class="form-control"
+                               id="phone"
+                               name="phone"
+                               th:value="(${user} != null ? ${user.getPhone()} : '')"
+                               placeholder="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="text"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               th:value="(${user} != null ? ${user.getEmail()} : '')"
+                               placeholder="Email Address">
                     </div>
 
                     <div class="form-group">
                         <label>Location</label>
-                        <select name="location" class="form-control">
-                            <option th:if="${event} != null"
-                                    th:selected="${event.getLocation() != null &&
-                                event.getLocation().getId() == loc.getId()}"
+                        <select name="locationId" class="form-control">
+                            <option th:if="${user} != null"
+                                    th:selected="${user.getLocation() != null &&
+                                user.getLocation().getId() == loc.getId()}"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
                             </option>
-                            <option th:if="${event} == null"
+                            <option th:if="${user} == null"
                                     th:each="loc : ${locations}"
                                     th:value="${loc.getId()}"
-                                    th:text="${loc.getName()}">
+                                    th:text="${loc.getAddress()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Works At</label>
+                        <select name="worksAtId" class="form-control">
+                            <option th:if="${user} != null"
+                                    th:selected="${user.getWorksAt() != null &&
+                                user.getWorksAt().getId() == inst.getId()}"
+                                    th:each="inst : ${institutions}"
+                                    th:value="${inst.getId()}"
+                                    th:text="${inst.getName()}">
+                            </option>
+                            <option th:if="${user} == null"
+                                    th:each="inst : ${institutions}"
+                                    th:value="${inst.getId()}"
+                                    th:text="${inst.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Works At</label>
+                        <select name="role" class="form-control">
+                            <option th:if="${user} != null"
+                                    th:selected="${user.getRole() != null &&
+                                user.getRole().name() == role.name()}"
+                                    th:each="role : ${roles}"
+                                    th:value="${role.name()}"
+                                    th:text="${role.name()}">
+                            </option>
+                            <option th:if="${user} == null"
+                                    th:each="role : ${roles}"
+                                    th:value="${role.name()}"
+                                    th:text="${role.name()}">
                             </option>
                         </select>
                     </div>

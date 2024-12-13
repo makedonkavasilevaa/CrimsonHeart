@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     List<Users> findAll();
+    void deleteById(Long id);
     Optional<Users> findById(Long id);
     Optional<Users> findByNameContainingIgnoreCase(String name);
     List<Users> findAllByRoleEquals(Roles role);
