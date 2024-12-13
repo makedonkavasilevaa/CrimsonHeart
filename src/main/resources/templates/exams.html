@@ -20,7 +20,7 @@
 <div xmlns:th="http://www.thymeleaf.org">
     <section class="jumbotron text-center">
         <div class="container">
-            <h1 class="jumbotron-heading font-weight-bold" style="font-size: 3rem;">Patients</h1>
+            <h1 class="jumbotron-heading font-weight-bold" style="font-size: 3rem;">Exams</h1>
         </div>
     </section>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -70,46 +70,38 @@
 
     <div class="container mb-4">
         <div class="row">
-            <div class="col-12" th:if="${users.size() > 0}">
+            <div class="col-12" th:if="${events.size() > 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Date of birth</th>
-                            <th scope="col">EMBG</th>
-                            <th scope="col">Blood Type</th>
-                            <th scope="col">Is donor?</th>
-                            <th scope="col">Sex</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Email Address</th>
-                            <th scope="col">Home Address</th>
-                            <th scope="col">Works At</th>
+                            <th scope="col">Event name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Donation Type</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Date Of Event</th>
+                            <th scope="col">Time Of Event</th>
+                            <th scope="col">Organized by</th>
+                            <th scope="col">Managed by</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="user : ${users}" class="event">
-                            <td th:text="${user.getName()}"></td>
-                            <td th:text="${user.getSurname()}"></td>
-                            <td th:text="${user.getBirthday()}"></td>
-                            <td th:text="${user.getEmbg()}"></td>
-                            <td th:text="${user.getBloodType() != null}
-                            ? ${user.getBloodType().name()} : 'No Blood Type'"></td>
-                            <td>
-                                <input type="checkbox" th:checked="${user.isDonor()}"/>
-                            </td>
-                            <td th:text="${user.getSex() != null}
-                            ? ${user.getSex().name()} : 'No Sex'"></td>
-                            <td th:text="${user.getPhone()}"></td>
-                            <td th:text="${user.getEmail()}"></td>
-                            <td th:text="${user.getLocation() != null}
-                            ? ${user.getLocation().getAddress()} : 'No Address'"></td>
-                            <td th:text="${user.getWorksAt() != null}
-                            ? ${user.getWorksAt().getName()} : 'No Employer'"></td>
+                        <tr th:each="event : ${events}" class="event">
+                            <td th:text="${event.getName()}"></td>
+                            <td th:text="${event.getDescription()}"></td>
+                            <td th:text="${event.getDonationType().name()}"></td>
+                            <td th:text="${event.getLocation() != null}
+                            ? ${event.getLocation().getFullAddress()} : 'No Location'"></td>
+                            <td th:text="${event.getDateOfEvent() != null}
+                            ? ${event.getDateOfEvent()} : 'No Date'"></td>
+                            <td th:text="${event.getTimeOfEvent()}"></td>
+                            <td th:text="${event.getInstitution() != null}
+                            ? ${event.getInstitution().getName()} : 'No Institution'"></td>
+                            <td th:text="${event.getUser() != null}
+                            ? ${event.getUser().getName()} : 'No Manager'"></td>
                             <td class="text-right">
                                 <th:block>
-                                    <form th:action="@{'/users/delete/{id}' (id=${users.getId()})}"
+                                    <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -118,11 +110,10 @@
                                     </form>
                                 </th:block>
                                 <th:block>
-                                    <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}"
+                                    <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-trash">Edit</i>
                                     </a>
-
                                 </th:block>
                             </td>
                         </tr>
@@ -133,8 +124,8 @@
             <div class="col mb-3">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <a href="users/add-form" class="btn btn-block btn-dark add-event-btn">
-                            Add new User
+                        <a href="events/add-form" class="btn btn-block btn-dark add-event-btn">
+                            Add new event
                         </a>
                     </div>
                 </div>
