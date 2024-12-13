@@ -46,7 +46,7 @@ public class ExamController {
     }
 
     @GetMapping("/add-form")
-    public String getAddEventPage(Model model) {
+    public String getAddExamPage(Model model) {
 
         List<DonationEvent> events = this.donationEventService.listAll();
         List<Users> doctors = this.usersService.findByRole(Roles.DOCTOR);
@@ -63,27 +63,27 @@ public class ExamController {
 
 
     @PostMapping("/add")
-    public String saveEvent(@RequestParam(required = false) Long id,
-                            @RequestParam String name,
-                            @RequestParam String description,
-                            @RequestParam DonationType donationType,
-                            @RequestParam Long location,
-                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfEvent,
-                            @RequestParam String timeOfEvent,
-                            @RequestParam Long institution,
-                            @RequestParam Long user){
+    public String saveExam(@RequestParam(required = false) Long id,
+                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date performedOn,
+                            @RequestParam String bloodPresure,
+                            @RequestParam Float hemoglobin,
+                            @RequestParam Long donationEvent,
+                            @RequestParam Long doctor,
+                            @RequestParam Long nurse,
+                            @RequestParam Long patient,
+                            @RequestParam Boolean successfulExam){
         if (id != null) {
-            this.eventService.updateEvent(id, name, description, donationType, location, dateOfEvent, timeOfEvent, institution, user);
+            this.examService.update(id, performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
         }else
-            this.eventService.createEvent(name, description, donationType, location, dateOfEvent, timeOfEvent, institution, user);
-        return "redirect:/events";
+            this.examService.create(performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
+        return "redirect:/exams";
     }
 
 
     @PostMapping("/delete/{id}")
-    public String deleteEvent(@PathVariable Long id){
-        this.eventService.delete(id);
-        return "redirect:/events";
+    public String deleteExam(@PathVariable Long id){
+        this.examService.deleteById(id);
+        return "redirect:/exams";
     }
 
     @GetMapping("/edit/{eventId}")
