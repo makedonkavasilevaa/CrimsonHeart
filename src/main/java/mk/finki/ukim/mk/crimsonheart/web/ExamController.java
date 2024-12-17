@@ -19,12 +19,12 @@ import java.util.List;
 public class ExamController {
 
     private final ExamService examService;
-    private final DonationEventService donationEventService;
+    private final DonationEventService eventService;
     private final UsersService usersService;
 
-    public ExamController(ExamService examService, DonationEventService donationEventService, UsersService usersService) {
+    public ExamController(ExamService examService, DonationEventService eventService, UsersService usersService) {
         this.examService = examService;
-        this.donationEventService = donationEventService;
+        this.eventService = eventService;
         this.usersService = usersService;
     }
 
@@ -34,7 +34,7 @@ public class ExamController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<DonationEvent> events = this.donationEventService.listAll();
+        List<DonationEvent> events = this.eventService.listAll();
         List<Exam> exams = this.examService.listAll();
         List<Users> users = this.usersService.listAll();
 
@@ -48,7 +48,7 @@ public class ExamController {
     @GetMapping("/add-form")
     public String getAddExamPage(Model model) {
 
-        List<DonationEvent> events = this.donationEventService.listAll();
+        List<DonationEvent> events = this.eventService.listAll();
         List<Users> doctors = this.usersService.findByRole(Roles.DOCTOR);
         List<Users> nurses = this.usersService.findByRole(Roles.NURSE);
         List<Users> patients = this.usersService.findByRole(Roles.PATIENT);
@@ -86,23 +86,26 @@ public class ExamController {
         return "redirect:/exams";
     }
 
-    @GetMapping("/edit/{eventId}")
-    public String editEvent(@PathVariable Long eventId, Model model) {
-        if (this.eventService.findById(eventId) != null) {
-            DonationEvent event = this.eventService.findById(eventId);
-            List<Location> locations = this.locationService.listAll();
+    @GetMapping("/edit/{examId}")
+    public String editExam(@PathVariable Long examId, Model model) {
+        if (this.examService.findById(examId) != null) {
+            Exam exam = this.examService.findById(examId);
+            List<DonationEvent> events = this.eventService.listAll();
             List<DonationType> donationTypes = List.of(DonationType.values());
-            List<Institution> institutions = this.institutionService.listAll();
-            List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
+            List<Users> doctors = this.usersService.findByRole(Roles.DOCTOR);
+            List<Users> patients = this.usersService.findByRole(Roles.PATIENT);
+            List<Users> nurses = this.usersService.findByRole(Roles.NURSE);
 
-            model.addAttribute("locations", locations);
-            model.addAttribute("event", event);
+            model.addAttribute("exam", exam);
+            model.addAttribute("events", events);
             model.addAttribute("donationTypes", donationTypes);
-            model.addAttribute("institutions", institutions);
-            model.addAttribute("managers", managers);
-            return "add-event";
+            model.addAttribute("doctors", doctors);
+            model.addAttribute("patients", patients);
+            model.addAttribute("nurses", nurses);
+
+            return "add-patient-exam";
         }
-        return "redirect:/events?error=DonationEventNotFound";
+        return "redirect:/exams?error=ExamNotFound";
     }
 
 }
