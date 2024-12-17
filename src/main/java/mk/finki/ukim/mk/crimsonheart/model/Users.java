@@ -95,7 +95,7 @@ public class Users {
         this.worksAt = worksAt;
     }
 
-    public String getName() {
+    public String getNameForShow() {
         return name + " " + surname + " - " + role.name();
     }
 
