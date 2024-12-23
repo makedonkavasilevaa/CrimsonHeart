@@ -11,7 +11,11 @@ import jakarta.persistence.*;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +24,13 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "users")
 @ToString(exclude = {"doctorExams", "patientExams", "nurseExams", "location", "worksAt"}) // Prevent recursion in toString()
-public class Users {
+public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Roles role;
 
     @NonNull
@@ -44,6 +48,8 @@ public class Users {
     private Sex sex;
 
     String email;
+
+    String password;
 
     String phone;
 
@@ -79,6 +85,11 @@ public class Users {
     @JoinColumn(name = "works_at")
     private Institution worksAt;
 
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean isEnabled = true;
+
     public Users(Roles role, String name, String surname,Date birthday, Sex sex, String email, String phone, String embg, Location location, BloodType bloodType, boolean isDonor, Date lastDonation, Institution worksAt) {
         this.role = role;
         this.name = name;
@@ -97,6 +108,36 @@ public class Users {
 
     public String getNameForShow() {
         return name + " " + surname + " - " + role.name();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
 }

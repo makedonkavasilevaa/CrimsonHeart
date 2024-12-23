@@ -1,6 +1,8 @@
 package mk.finki.ukim.mk.crimsonheart.enums;
 
-public enum Roles {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Roles implements GrantedAuthority {
     SUPERADMIN,
     HOSPITALADMIN,
     REDCROSSADMIN,
@@ -11,5 +13,10 @@ public enum Roles {
     MANAGER,
     PATIENT,
     VOLUNTEER,
-    ORGANIZER
+    ORGANIZER;
+
+    @Override
+    public String getAuthority() {
+        return this.name();
+    }
 }

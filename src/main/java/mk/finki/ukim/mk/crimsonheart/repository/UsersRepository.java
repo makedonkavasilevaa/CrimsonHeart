@@ -24,4 +24,6 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     Optional<Users> findAllByIsDonorTrue();
     Optional<Users> findAllByLastDonationBeforeAndIsDonorTrue(Date lastDonation);
     Optional<Users> findAllByLastDonationBeforeAndIsDonorTrueAndBloodType(Date lastDonation, BloodType bloodType);
+    Optional<Users> findAllByEmail(String email);
+    Optional<Users> findAllByEmailAndPassword(String email, String password);
 }

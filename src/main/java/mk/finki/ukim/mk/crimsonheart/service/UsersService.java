@@ -4,12 +4,13 @@ import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface UsersService {
+public interface UsersService extends UserDetailsService {
 
     List<Users> listAll();
     Users findById(Long id);

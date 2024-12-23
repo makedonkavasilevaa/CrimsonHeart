@@ -11,6 +11,8 @@ import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.repository.*;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -145,5 +147,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Optional<Users> findAllByTimesRejected(Integer timesRejected) {
         return this.usersRepository.findAllByTimesRejectedLessThan(timesRejected);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usersRepository.findAllByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }
