@@ -1,8 +1,15 @@
 package mk.finki.ukim.mk.crimsonheart.web;
 
+import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
+import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import mk.finki.ukim.mk.crimsonheart.model.Institution;
+import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.service.AuthService;
+import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
+import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,42 +17,70 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.management.relation.Role;
+import java.util.Date;
+import java.util.List;
+
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
 
     private final UsersService userService;
+    private final LocationService locationService;
+    private final InstitutionService institutionService;
 
-    public RegisterController(UsersService userService) {
+    public RegisterController(UsersService userService, LocationService locationService, InstitutionService institutionService) {
         this.userService = userService;
+        this.locationService = locationService;
+        this.institutionService = institutionService;
     }
 
     @GetMapping
     public String getRegisterPage(@RequestParam(required = false) String error, Model model) {
+        List<Roles> roles = List.of(Roles.values());
+        List<BloodType> bloodTypes = List.of(BloodType.values());
+        List<Sex> sexes = List.of(Sex.values());
+        List<Location> locations = this.locationService.listAll();
+        List<Institution> institutions = this.institutionService.listAll();
+
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
+        model.addAttribute("roles", roles);
+        model.addAttribute("bloodTypes", bloodTypes);
+        model.addAttribute("sexes", sexes);
+        model.addAttribute("locations", locations);
+        model.addAttribute("institutions", institutions);
+
         return "register";
     }
 
-    //TODO: register a user
-//    @PostMapping
-//    public String register(@RequestParam String username,
-//                           @RequestParam String password,
-//                           @RequestParam String repeatedPassword,
-//                           @RequestParam String name,
-//                           @RequestParam String surname,
-//                           @RequestParam Roles role
-//    ) {
-//        try {
-//            this.userService.register(username, password, repeatedPassword, name, surname);
-//            return "redirect:/login";
-//        } catch (RuntimeException ex) {
-//            // Redirect to the register page with an error message
-//            return "redirect:/register?error=" + ex.getMessage();
-//        }
-//    }
+    @PostMapping
+    public String register(@RequestParam(required = false) Roles role,
+                           @RequestParam String name,
+                           @RequestParam String surname,
+                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday,
+                           @RequestParam Sex sex,
+                           @RequestParam String email,
+                           @RequestParam String phone,
+                           @RequestParam String embg,
+                           @RequestParam Long location,
+                           @RequestParam BloodType bloodType,
+                           @RequestParam Boolean isDonor,
+                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date lastDonation,
+                           @RequestParam(required = false) Long worksAt,
+                           @RequestParam String password,
+                           @RequestParam String repeatedPassword
+                           ) {
+        try {
+            this.userService.register(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation, worksAt, password, repeatedPassword);
+            return "redirect:/login";
+        } catch (RuntimeException ex) {
+            // Redirect to the register page with an error message
+            return "redirect:/register?error=" + ex.getMessage();
+        }
+    }
 
 }

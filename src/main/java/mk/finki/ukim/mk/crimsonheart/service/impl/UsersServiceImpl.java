@@ -1,11 +1,10 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
+import lombok.NonNull;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
-import mk.finki.ukim.mk.crimsonheart.exceptions.InstitutionNotFoundException;
-import mk.finki.ukim.mk.crimsonheart.exceptions.LocationNotFoundException;
-import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.*;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
@@ -13,6 +12,7 @@ import mk.finki.ukim.mk.crimsonheart.repository.*;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -26,11 +26,13 @@ public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final InstitutionRepository institutionRepository;
     private final LocationRepository locationRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsersServiceImpl(UsersRepository usersRepository, InstitutionRepository institutionRepository, LocationRepository locationRepository) {
+    public UsersServiceImpl(UsersRepository usersRepository, InstitutionRepository institutionRepository, LocationRepository locationRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.institutionRepository = institutionRepository;
         this.locationRepository = locationRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -50,8 +52,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void create(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt) {
-        Location location = this.locationRepository.findById(locationId).orElseThrow();
-        Institution institution = this.institutionRepository.findById(worksAt).orElseThrow();
+        Location location = this.locationRepository.findById(locationId).orElseThrow(() -> new LocationNotFoundException(locationId));
+        Institution institution = this.institutionRepository.findById(worksAt).orElseThrow( () -> new InstitutionNotFoundException(worksAt));
         if (embg.length() !=  13){
             throw new IllegalArgumentException("EMBG isn't in the correct format");
         }
@@ -147,6 +149,32 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Optional<Users> findAllByTimesRejected(Integer timesRejected) {
         return this.usersRepository.findAllByTimesRejectedLessThan(timesRejected);
+    }
+
+    @Override
+    public void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt, String password, String repeatedPassword) {
+
+        Location location = this.locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        Institution institution = this.institutionRepository.findById(worksAt).orElseThrow( () -> new InstitutionNotFoundException(worksAt));
+
+        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+            throw new InvalidArgumentsException();
+        }
+
+        if (!password.equals(repeatedPassword)) {
+            throw new PasswordsDoNotMatchException();
+        }
+
+        if (this.usersRepository.findAllByEmail(email).isPresent()) {
+            throw new UsernameAlreadyExistsException(email);
+        }
+        if (role == null || role.equals("")){
+            role = Roles.PATIENT;
+        }
+
+        Users user = new Users(role, name, surname, birthday, sex, email, password, phone,  embg, location, bloodType, isDonor, lastDonation, institution);
+
+        usersRepository.save(user);
     }
 
     @Override

@@ -25,4 +25,6 @@ public interface UsersService extends UserDetailsService {
     Optional<Users> findAllByBloodType(BloodType bloodType);
     Optional<Users> findAllByName(String name);
     Optional<Users> findAllByTimesRejected(Integer timesRejected);
+
+    void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt, String password, String repeatedPassword);
 }
