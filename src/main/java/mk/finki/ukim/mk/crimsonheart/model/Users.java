@@ -106,7 +106,7 @@ public class Users implements UserDetails {
         this.worksAt = worksAt;
     }
 
-    public Users(Roles role, @NonNull String name, @NonNull String surname, @NonNull Date birthday, Sex sex, String email, String password, String phone, @NonNull String embg, Location location, BloodType bloodType, boolean isDonor, Date lastDonation, Institution worksAt) {
+    public Users(Roles role, @NonNull String name, @NonNull String surname, @NonNull Date birthday, Sex sex, String email, String password, String phone, @NonNull String embg) {
         this.role = role;
         this.name = name;
         this.surname = surname;
@@ -116,11 +116,6 @@ public class Users implements UserDetails {
         this.password = password;
         this.phone = phone;
         this.embg = embg;
-        this.location = location;
-        this.bloodType = bloodType;
-        this.isDonor = isDonor;
-        this.lastDonation = lastDonation;
-        this.worksAt = worksAt;
     }
 
     public String getNameForShow() {

@@ -57,7 +57,7 @@ public class RegisterController {
         return "register";
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public String register(@RequestParam(required = false) Roles role,
                            @RequestParam String name,
                            @RequestParam String surname,
@@ -66,16 +66,11 @@ public class RegisterController {
                            @RequestParam String email,
                            @RequestParam String phone,
                            @RequestParam String embg,
-                           @RequestParam Long location,
-                           @RequestParam BloodType bloodType,
-                           @RequestParam Boolean isDonor,
-                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date lastDonation,
-                           @RequestParam(required = false) Long worksAt,
                            @RequestParam String password,
                            @RequestParam String repeatedPassword
                            ) {
         try {
-            this.userService.register(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation, worksAt, password, repeatedPassword);
+            this.userService.register(role, name, surname, birthday, sex, email, phone, embg, password, repeatedPassword);
             return "redirect:/login";
         } catch (RuntimeException ex) {
             // Redirect to the register page with an error message

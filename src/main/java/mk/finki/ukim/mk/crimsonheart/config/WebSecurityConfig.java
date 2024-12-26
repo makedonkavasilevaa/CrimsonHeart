@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/events/", "/assets/**", "/register")
+                        .requestMatchers("/", "/events", "/events/", "/assets/**", "/register", "/register/", "/register/add", "/login/log", "/login")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest()
@@ -62,33 +62,6 @@ public class WebSecurityConfig {
                 );
 
         return http.build();
-    }
-
-    // In Memory Authentication
-//    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.builder()
-                .username("elena.atanasoska")
-                .password(passwordEncoder.encode("ea"))
-                .roles("USER")
-                .build();
-        UserDetails user2 = User.builder()
-                .username("darko.sasanski")
-                .password(passwordEncoder.encode("ds"))
-                .roles("USER")
-                .build();
-        UserDetails user3 = User.builder()
-                .username("ana.todorovska")
-                .password(passwordEncoder.encode("at"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2, user3, admin);
     }
 
     @Bean

@@ -20,11 +20,11 @@
 <div xmlns:th="http://www.thymeleaf.org">
 
     <div class="container mb-4">
-        <form class="form-signin mt-xl-5" method="post" action="/register">
+        <form class="form-signin mt-xl-5" method="post" action="/register/add">
             <h2 class="form-signin-heading">Register</h2>
             <p>
-                <label for="username" class="sr-only">Username</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required=""
+                <label for="email" class="sr-only">Email Address</label>
+                <input type="text" id="email" name="email" class="form-control" placeholder="Email Address" required=""
                        autofocus="">
             </p>
             <p>
@@ -47,15 +47,35 @@
                 <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required=""
                        autofocus="">
             </p>
+            <p>
+                <label for="embg" class="sr-only">EMBG</label>
+                <input type="text" id="embg" name="embg" class="form-control" placeholder="EMBG" required=""
+                       autofocus="">
+            </p>
+            <div class="form-group">
+                <label>Sex</label>
+                <select name="sex" class="form-control">
+                    <option
+                            th:each="sex : ${sexes}"
+                            th:value="${sex.name()}"
+                            th:text="${sex.name()}">
+                    </option>
+                </select>
+            </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" name="role" type="radio" id="ROLE_ADMIN" value="ROLE_ADMIN">
-                <label class="form-check-label" for="ROLE_ADMIN">ROLE_ADMIN</label>
+            <div class="form-group">
+                <label for="birthday">Birthday</label>
+                <input type="date"
+                       class="form-control"
+                       id="birthday"
+                       name="birthday"
+                       required>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" name="role"  type="radio" id="ROLE_USER" value="ROLE_USER">
-                <label class="form-check-label" for="ROLE_USER">ROLE_USER</label>
-            </div>
+            <p>
+                <label for="phone" class="sr-only">Phone number</label>
+                <input type="text" id="phone" name="phone" class="form-control" placeholder="Phone number" required=""
+                       autofocus="">
+            </p>
 
             <th:block th:if="${hasError}">
                 <div th:text="${error}" class="text-danger"></div>

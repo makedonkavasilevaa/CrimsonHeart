@@ -152,10 +152,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, Long worksAt, String password, String repeatedPassword) {
-
-        Location location = this.locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
-        Institution institution = this.institutionRepository.findById(worksAt).orElseThrow( () -> new InstitutionNotFoundException(worksAt));
+    public void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, String password, String repeatedPassword) {
 
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             throw new InvalidArgumentsException();
@@ -172,7 +169,7 @@ public class UsersServiceImpl implements UsersService {
             role = Roles.PATIENT;
         }
 
-        Users user = new Users(role, name, surname, birthday, sex, email, password, phone,  embg, location, bloodType, isDonor, lastDonation, institution);
+        Users user = new Users(role, name, surname, birthday, sex, email, password, phone,  embg);
 
         usersRepository.save(user);
     }
