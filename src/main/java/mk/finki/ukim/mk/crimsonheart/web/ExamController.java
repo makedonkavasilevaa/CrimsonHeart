@@ -71,11 +71,12 @@ public class ExamController {
                             @RequestParam Long doctor,
                             @RequestParam Long nurse,
                             @RequestParam Long patient,
-                            @RequestParam Boolean successfulExam){
+                            @RequestParam Boolean successfulExam,
+                            @RequestParam String comment){
         if (id != null) {
-            this.examService.update(id, performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
+            this.examService.update(id, performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam, comment );
         }else
-            this.examService.create(performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
+            this.examService.create(performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam, comment );
         return "redirect:/exams";
     }
 

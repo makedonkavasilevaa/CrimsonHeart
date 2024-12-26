@@ -32,12 +32,12 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void create(Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam) {
+    public void create(Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam, String comment) {
         Users doctor = this.usersRepository.findById(doctorId).orElseThrow( () -> new UsersNotFoundException(doctorId));
         Users patient = this.usersRepository.findById(patientId).orElseThrow(() -> new UsersNotFoundException(patientId));
         Users nurse = this.usersRepository.findById(nurseID).orElseThrow( () -> new UsersNotFoundException(nurseID));
         DonationEvent donationEvent = this.eventRepository.findById(donationEventId).orElseThrow(() -> new DonationEventNotFoundException(donationEventId));
-        Exam exam = new Exam(performedOn, bloodPressure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam );
+        Exam exam = new Exam(performedOn, bloodPressure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam, comment );
 
         if (!successfulExam){
             patient.setTimesRejected(patient.getTimesRejected() + 1);
@@ -48,7 +48,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void update(Long examId, Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam) {
+    public void update(Long examId, Date performedOn, String bloodPressure, Float hemoglobin, Long donationEventId, Long doctorId, Long patientId, Long nurseID, boolean successfulExam, String comment) {
         Users doctor = this.usersRepository.findById(doctorId).orElseThrow( () -> new UsersNotFoundException(doctorId));
         Users patient = this.usersRepository.findById(patientId).orElseThrow(() -> new UsersNotFoundException(patientId));
         Users nurse = this.usersRepository.findById(nurseID).orElseThrow( () -> new UsersNotFoundException(nurseID));
@@ -62,6 +62,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setDoctor(doctor);
         exam.setPatient(patient);
         exam.setNurse(nurse);
+        exam.setComment(comment);
         if (!successfulExam){
             patient.setTimesRejected(patient.getTimesRejected() + 1);
             patient.setHasBeenRejected(true);

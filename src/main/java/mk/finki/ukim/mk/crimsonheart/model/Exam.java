@@ -44,7 +44,10 @@ public class Exam {
 
     boolean successfulExam;
 
-    public Exam(Date performedOn, String bloodPressure, Float hemoglobin, DonationEvent donationEvent, Users doctor, Users patient, Users nurse, boolean successfulExam) {
+    @Column(length = 254)
+    String comment;
+
+    public Exam(Date performedOn, String bloodPressure, Float hemoglobin, DonationEvent donationEvent, Users doctor, Users patient, Users nurse, boolean successfulExam, String comment) {
         this.performedOn = performedOn;
         this.bloodPressure = bloodPressure;
         this.hemoglobin = hemoglobin;
@@ -53,5 +56,6 @@ public class Exam {
         this.patient = patient;
         this.nurse = nurse;
         this.successfulExam = successfulExam;
+        this.comment = comment;
     }
 }
