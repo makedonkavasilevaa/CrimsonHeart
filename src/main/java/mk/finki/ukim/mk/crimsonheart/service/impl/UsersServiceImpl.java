@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 import lombok.NonNull;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
+import mk.finki.ukim.mk.crimsonheart.enums.EmploymentStatus;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
 import mk.finki.ukim.mk.crimsonheart.exceptions.*;
@@ -58,7 +59,7 @@ public class UsersServiceImpl implements UsersService {
             throw new IllegalArgumentException("EMBG isn't in the correct format");
         }
 
-        Users user = new Users(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation,institution);
+        Users user = new Users(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation, institution);
 
         this.usersRepository.save(user);
     }
@@ -89,6 +90,44 @@ public class UsersServiceImpl implements UsersService {
 
         this.usersRepository.save(user);
 
+    }
+
+    @Override
+    public void createPatient(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, EmploymentStatus employmentStatus) {
+        Location location = this.locationRepository.findById(locationId).orElseThrow(() -> new LocationNotFoundException(locationId));
+        if (embg.length() !=  13){
+            throw new IllegalArgumentException("EMBG isn't in the correct format");
+        }
+
+        Users user = new Users(role, name, surname, birthday, sex, email, phone, embg, location, bloodType, isDonor, lastDonation, employmentStatus);
+
+        this.usersRepository.save(user);
+    }
+
+    @Override
+    public void updatePatient(Long userId, Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, EmploymentStatus employmentStatus) {
+        Location location = this.locationRepository.findById(locationId).orElseThrow( () -> new LocationNotFoundException(locationId));
+        if (embg.length() !=  13){
+            throw new IllegalArgumentException("EMBG isn't in the correct format");
+        }
+
+        Users user = this.usersRepository.findById(userId).orElseThrow(() -> new UsersNotFoundException(userId));
+
+        user.setRole(role);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setBirthday(birthday);
+        user.setSex(sex);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setEmbg(embg);
+        user.setLocation(location);
+        user.setBloodType(bloodType);
+        user.setDonor(isDonor);
+        user.setLastDonation(lastDonation);
+        user.setEmploymentStatus(employmentStatus);
+
+        this.usersRepository.save(user);
     }
 
     @Override

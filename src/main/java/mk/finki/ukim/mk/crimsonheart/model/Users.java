@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
+import mk.finki.ukim.mk.crimsonheart.enums.EmploymentStatus;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 
 import jakarta.persistence.*;
@@ -63,6 +64,9 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private BloodType bloodType;
 
+    @Enumerated(EnumType.STRING)
+    private EmploymentStatus employmentStatus;
+
     @OneToMany(mappedBy = "doctor")
     private List<Exam> doctorExams;
 
@@ -89,6 +93,22 @@ public class Users implements UserDetails {
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
+
+    public Users(Roles role, String name, String surname,Date birthday, Sex sex, String email, String phone, String embg, Location location, BloodType bloodType, boolean isDonor, Date lastDonation, EmploymentStatus employmentStatus) {
+        this.role = role;
+        this.name = name;
+        this.surname = surname;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.email = email;
+        this.phone = phone;
+        this.embg = embg;
+        this.location = location;
+        this.bloodType = bloodType;
+        this.isDonor = isDonor;
+        this.lastDonation = lastDonation;
+        this.employmentStatus = employmentStatus;
+    }
 
     public Users(Roles role, String name, String surname,Date birthday, Sex sex, String email, String phone, String embg, Location location, BloodType bloodType, boolean isDonor, Date lastDonation, Institution worksAt) {
         this.role = role;

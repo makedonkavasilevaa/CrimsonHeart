@@ -85,7 +85,7 @@
                             <th scope="col">Phone</th>
                             <th scope="col">Email Address</th>
                             <th scope="col">Home Address</th>
-                            <th scope="col">Works At</th>
+                            <th scope="col">Employment</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -105,11 +105,11 @@
                             <td th:text="${user.getEmail()}"></td>
                             <td th:text="${user.getLocation() != null}
                             ? ${user.getLocation().getAddress()} : 'No Address'"></td>
-                            <td th:text="${user.getWorksAt() != null}
-                            ? ${user.getWorksAt().getName()} : 'No Employer'"></td>
+                            <td th:text="${user.getEmploymentStatus() != null}
+                            ? ${user.getEmploymentStatus().name()} : 'No Data'"></td>
                             <td class="text-right">
                                 <th:block>
-                                    <form th:action="@{'/users/delete/{id}' (id=${users.getId()})}"
+                                    <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -134,7 +134,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <a href="users/add-form" class="btn btn-block btn-dark add-event-btn">
-                            Add new User
+                            Add new Patient
                         </a>
                     </div>
                 </div>

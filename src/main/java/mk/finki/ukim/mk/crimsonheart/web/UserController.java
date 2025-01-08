@@ -1,9 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.web;
 
-import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
-import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
-import mk.finki.ukim.mk.crimsonheart.enums.Roles;
-import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import mk.finki.ukim.mk.crimsonheart.enums.*;
 import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
@@ -60,13 +57,15 @@ public class UserController {
         }
         List<Users> users = this.usersService.findByRole(Roles.PATIENT);
         List<Location> locations = this.locationService.listAll();
-        List<BloodType> bloodTypes = Arrays.stream(BloodType.values()).toList();
-        List<Sex> sexes = Arrays.stream(Sex.values()).toList();
+        List<BloodType> bloodTypes = List.of(BloodType.values());
+        List<Sex> sexes = List.of(Sex.values());
+        List<EmploymentStatus> employmentStatuses = List.of(EmploymentStatus.values());
         model.addAttribute("bodyContent", "locations");
         model.addAttribute("users", users);
         model.addAttribute("locations", locations);
         model.addAttribute("bloodTypes", bloodTypes);
         model.addAttribute("sexes", sexes);
+        model.addAttribute("status", employmentStatuses);
         return "patients";
     }
 
@@ -85,6 +84,26 @@ public class UserController {
         model.addAttribute("bloodTypes", bloodTypes);
 
         return "add-user";
+    }
+
+    @GetMapping("/add-patient")
+    public String getAddPatientPage(Model model) {
+        List<Location> locations = this.locationService.listAll();
+        List<Roles> roles = List.of(Roles.values());
+        List<BloodType> bloodTypes = List.of(BloodType.values());
+        List<Sex> sexes = List.of(Sex.values());
+        List<Institution> institutions = this.institutionService.listAll();
+        List<EmploymentStatus> employmentStatuses = List.of(EmploymentStatus.values());
+
+        model.addAttribute("locations", locations);
+        model.addAttribute("institutions", institutions);
+        model.addAttribute("roles", roles);
+        model.addAttribute("sexes", sexes);
+        model.addAttribute("bloodTypes", bloodTypes);
+        model.addAttribute("bloodTypes", bloodTypes);
+        model.addAttribute("status", employmentStatuses);
+
+        return "add-patient";
     }
 
 
@@ -107,6 +126,27 @@ public class UserController {
             this.usersService.update(id, role, name, surname, birthday, sex, email, phone, embg, locationId, bloodType, isDonor, lastDonation, worksAtId);
         }else
             this.usersService.create(role, name, surname, birthday, sex, email, phone, embg, locationId, bloodType, isDonor, lastDonation, worksAtId);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/add-patients")
+    public String savePatient(@RequestParam(required = false) Long id,
+                              @RequestParam String name,
+                              @RequestParam String surname,
+                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday,
+                              @RequestParam Sex sex,
+                              @RequestParam String email,
+                              @RequestParam String phone,
+                              @RequestParam String embg,
+                              @RequestParam Long locationId,
+                              @RequestParam BloodType bloodType,
+                              @RequestParam (defaultValue = "false") Boolean isDonor,
+                              @RequestParam(required = false) Date lastDonation,
+                              @RequestParam EmploymentStatus employmentStatus) {
+        if (id != null && id > 0) {
+            this.usersService.updatePatient(id, Roles.PATIENT, name, surname, birthday, sex, email, phone, embg, locationId, bloodType, isDonor, lastDonation, employmentStatus);
+        }else
+            this.usersService.createPatient(Roles.PATIENT, name, surname, birthday, sex, email, phone, embg, locationId, bloodType, isDonor, lastDonation, employmentStatus);
         return "redirect:/users";
     }
 
