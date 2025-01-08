@@ -24,7 +24,7 @@ public class LoginController {
         // Return the name of the Thymeleaf template that will be used to render the login page
         return "login";
     }
-    @PostMapping("/log")
+    @PostMapping()
     public String login(HttpServletRequest request, Model model) {
         Users user = null;
 
