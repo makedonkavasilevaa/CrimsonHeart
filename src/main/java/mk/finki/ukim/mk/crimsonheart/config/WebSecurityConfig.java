@@ -9,11 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -34,32 +31,27 @@ public class WebSecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers((headers) -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/events", "/events/", "/assets/**", "/register", "/register/", "/register/add", "/login/log", "/login")
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/", "/events", "/events/", "/assets/**", "/register", "/register/", "/register/add", "/login/log", "/login").permitAll()
+                        .requestMatchers("/admin/**").hasRole("SUPERADMIN")
                         .anyRequest()
                         .authenticated()
                 )
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/events", true)
+                        .defaultSuccessUrl("/events", true).permitAll()
                 )
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/login")
                 )
-                .exceptionHandling((ex) -> ex
-                        .accessDeniedPage("/access_denied")
-                );
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"));
 
         return http.build();
     }
