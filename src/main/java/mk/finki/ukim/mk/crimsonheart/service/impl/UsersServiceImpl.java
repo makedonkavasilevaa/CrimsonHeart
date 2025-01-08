@@ -169,7 +169,7 @@ public class UsersServiceImpl implements UsersService {
             role = Roles.PATIENT;
         }
 
-        Users user = new Users(role, name, surname, birthday, sex, email, password, phone,  embg);
+        Users user = new Users(role, name, surname, birthday, sex, email, passwordEncoder.encode(password), phone,  embg);
 
         usersRepository.save(user);
     }
