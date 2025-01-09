@@ -14,59 +14,142 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/e59232f0a1.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua&family=Inika&family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        /* Apply Roboto font to the entire body */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Apply Inknut Antiqua font to the title */
+        #title-header {
+            font-family: 'Inknut Antiqua', serif;
+        }
+
+        /* Apply Inika font to the navigation bar */
+        nav {
+            font-family: 'Inika', serif;
+        }
+
+        /* Header container style */
+        #header-container {
+            background-color: #701516;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            height: 150px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            position: relative;
+        }
+
+        /* Logo style */
+        #logo_heart {
+            height: 150px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        /* Title style */
+        #title-header {
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* User icon style */
+        #user-icon {
+            position: absolute;
+            right: 20%;
+            top: 80%;
+            transform: translateY(-50%);
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* Navigation bar container */
+        nav {
+            background-color: #222;
+            color: white;
+        }
+
+        /* Navigation list style */
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        /* Navigation list item style */
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        /* Navigation link style */
+        /* Navigation link style */
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 200;
+            font-size: 20px;
+            letter-spacing: 2px;
+            transition: transform .2s ease-in-out;  /* Apply transition for transform */
+            display: inline-block;  /* Ensure the element is block level to allow scaling */
+            margin: 0 auto;
+            width: auto;
+            height: auto;
+            transform-origin: center;  /* Set zoom origin */
+        }
+
+        /* Navigation link hover effect */
+        nav ul li a:hover {
+            text-decoration: underline;
+            color: white;
+            transform: scale(1.2);  /* Apply scale transformation */
+        }
+
+    </style>
 </head>
 <body>
 
 <div xmlns:th="http://www.thymeleaf.org">
-    <section class="jumbotron text-center">
-        <div class="container">
-            <h1 class="jumbotron-heading font-weight-bold" style="font-size: 3rem;">Patient Exam</h1>
+    <header>
+        <!-- Top Section with Logo and Title -->
+        <div id="header-container">
+            <img src="/images/human-heart-38.png" alt="Heart Logo" id="logo_heart">
+            <span id="title-header">CRIMSON HEART</span>
+            <a href="/login">
+                <img src="/images/output-onlinepngtools.png" alt="User Icon" id="user-icon">
+            </a>
         </div>
-    </section>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/events">Donation Events</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/institutions">Institutions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/exams">Exams</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/locations">Locations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users">Users</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Add Links Section (Styled like navbar items) -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/events/add-form">Add Event</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/locations/add-form">Add Location</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/institutions/add-form">Add Institution</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/exams/add-form">Add Exam</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/add-form">Add User</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+        <!-- Navigation Bar -->
+        <nav>
+            <div class="container">
+                <ul>
+                    <li>
+                        <a href="/events">Events</a>
+                    </li>
+                    <li>
+                        <a href="/institutions">Institutions</a>
+                    </li>
+                    <li>
+                        <a href="/exams">Exams</a>
+                    </li>
+                    <li>
+                        <a href="/users/patients">Patients</a>
+                    </li>
+                    <li>
+                        <a href="/locations">Location</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>
 
     <div class="container">
         <div class="row">

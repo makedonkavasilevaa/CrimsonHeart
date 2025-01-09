@@ -14,12 +14,139 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/e59232f0a1.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua&family=Inika&family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        /* Apply Roboto font to the entire body */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Apply Inknut Antiqua font to the title */
+        #title-header {
+            font-family: 'Inknut Antiqua', serif;
+        }
+
+        /* Apply Inika font to the navigation bar */
+        nav {
+            font-family: 'Inika', serif;
+        }
+
+        /* Header container style */
+        #header-container {
+            background-color: #701516;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            height: 150px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            position: relative;
+        }
+
+        /* Logo style */
+        #logo_heart {
+            height: 150px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        /* Title style */
+        #title-header {
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* User icon style */
+        #user-icon {
+            position: absolute;
+            right: 20%;
+            top: 80%;
+            transform: translateY(-50%);
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* Navigation bar container */
+        nav {
+            background-color: #222;
+            color: white;
+        }
+
+        /* Navigation list style */
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        /* Navigation list item style */
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        /* Navigation link style */
+        /* Navigation link style */
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 200;
+            font-size: 20px;
+            letter-spacing: 2px;
+            transition: transform .2s ease-in-out;  /* Apply transition for transform */
+            display: inline-block;  /* Ensure the element is block level to allow scaling */
+            margin: 0 auto;
+            width: auto;
+            height: auto;
+            transform-origin: center;  /* Set zoom origin */
+        }
+
+        /* Navigation link hover effect */
+        nav ul li a:hover {
+            text-decoration: underline;
+            color: white;
+            transform: scale(1.2);  /* Apply scale transformation */
+        }
+
+        #submit{
+            background: #701516;
+            color: white;
+            border: #701516;
+        }
+
+        #form-login{
+            text-align: center;
+            width: 60%;
+        }
+
+        #main-div{
+            text-align: -webkit-center;
+        }
+
+    </style>
 </head>
 <body>
 
-<div class="container" xmlns:th="http://www.thymeleaf.org">
-    <form class="form-signin mt-xl-5" method="post" action="/login">
-        <h2 class="form-signin-heading">Sign in</h2>
+<div xmlns:th="http://www.thymeleaf.org">
+    <header>
+        <!-- Top Section with Logo and Title -->
+        <div id="header-container">
+            <img src="/images/human-heart-38.png" alt="Heart Logo" id="logo_heart">
+            <span id="title-header">CRIMSON HEART</span>
+<!--            <a href="/login">-->
+<!--                <img src="/images/output-onlinepngtools.png" alt="User Icon" id="user-icon">-->
+<!--            </a>-->
+        </div>
+    </header>
+</div>
+
+<div id="main-div" class="container" xmlns:th="http://www.thymeleaf.org">
+    <form id="form-login" class="form-signin mt-xl-5" method="post" action="/login">
+        <h2 class="form-signin-heading">Login</h2>
         <p>
             <label for="username" class="sr-only">Username</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required=""
