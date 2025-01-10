@@ -29,12 +29,22 @@ public class ExamController {
     }
 
     @GetMapping("")
-    public String getExamsPage(@RequestParam(required = false) String error, Model model){
+    public String getExamsPage(@RequestParam(required = false) String error,
+                               @RequestParam(required = false) String name,
+                               @RequestParam(required = false) String event,
+                               Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<DonationEvent> events = this.eventService.listAll();
+
+        List<DonationEvent> events = null;
+
+        if (event != null && !event.isEmpty()){
+            events = this.eventService.searchEvents(event);
+        }else {
+            events = this.eventService.listAll();
+        }
         List<Exam> exams = this.examService.listAll();
         List<Users> users = this.usersService.listAll();
 

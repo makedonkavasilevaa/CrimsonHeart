@@ -17,5 +17,5 @@ public interface ExamService {
     List<Exam> listAll();
     Exam findById(Long id);
     void deleteById(Long id);
-    Optional<Exam> findByName(Roles role, String name);
+    List<Exam> findByName(Roles role, String name);
 }

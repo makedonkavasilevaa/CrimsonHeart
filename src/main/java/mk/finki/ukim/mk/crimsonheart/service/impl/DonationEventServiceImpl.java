@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DonationEventServiceImpl implements DonationEventService {
@@ -82,18 +81,18 @@ public class DonationEventServiceImpl implements DonationEventService {
     }
 
     @Override
-    public Optional<DonationEvent> searchEvents(String text) {
+    public List<DonationEvent> searchEvents(String text) {
         if (text != null || !text.isEmpty()) {
             return this.donationEventRepository.findAllByNameContainsIgnoreCase(text);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public Optional<DonationEvent> searchEventsByDonationType(DonationType donationType) {
+    public List<DonationEvent> searchEventsByDonationType(DonationType donationType) {
         if (donationType != null) {
             return this.donationEventRepository.findAllByDonationType(donationType);
         }
-        return Optional.empty();
+        return null;
     }
 }

@@ -151,6 +151,48 @@
     </header>
 </div>
 
+    <div class="container mt-4">
+        <form th:action="@{/products}" th:method="GET">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6 form-group">
+                    <label for="searchName" class="form-label">Search by Name</label>
+                    <input type="text" th:value="${name}" class="form-control" id="searchName"
+                           placeholder="Enter product name" name="name">
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select name="categoryId" id="categorySelect" class="form-control">
+                        <option value="">All categories</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.getId()}"
+                                th:text="${cat.getName()}"
+                                th:selected="${categoryId != null && categoryId == cat.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <label for="manufacturerSelect" class="form-label">Manufacturer</label>
+                    <select name="manufacturerId" id="manufacturerSelect" class="form-control">
+                        <option value="">All manufacturers</option>
+                        <option th:each="man : ${manufacturers}"
+                                th:value="${man.getId()}"
+                                th:text="${man.getName()}"
+                                th:selected="${manufacturerId != null && manufacturerId == man.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 mb-1">
+                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
     <div class="container mb-4">
         <div class="row">
             <div class="col-12" th:if="${events.size() > 0}">

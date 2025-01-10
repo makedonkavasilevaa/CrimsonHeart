@@ -86,7 +86,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Optional<Exam> findByName(Roles role, String name) {
+    public List<Exam> findByName(Roles role, String name) {
         if (role.equals(Roles.DOCTOR)) {
             return this.examRepository.findAllByDoctorName(name);
         }else if (role.equals(Roles.PATIENT)) {
