@@ -3,6 +3,7 @@ package mk.finki.ukim.mk.crimsonheart.web;
 import mk.finki.ukim.mk.crimsonheart.enums.BloodType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.enums.Sex;
+import mk.finki.ukim.mk.crimsonheart.exceptions.UsernameAlreadyExistsException;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.service.AuthService;

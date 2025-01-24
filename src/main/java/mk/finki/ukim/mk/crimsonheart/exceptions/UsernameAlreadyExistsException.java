@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
 public class UsernameAlreadyExistsException extends RuntimeException {
     public UsernameAlreadyExistsException(String username) {
-        super(String.format("User with username: %s already exists", username));
+        super("Credentials NOT correct");
     }
 }
