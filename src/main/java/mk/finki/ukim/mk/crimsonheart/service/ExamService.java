@@ -17,5 +17,12 @@ public interface ExamService {
     List<Exam> listAll();
     Exam findById(Long id);
     void deleteById(Long id);
-    List<Exam> findByName(Roles role, String name);
+    List<Exam> findByName(String name);
+    List<Exam> findByEvent(Long eventId);
+    List<Exam> findByPatientEmbg (String patientEmbg);
+    List<Exam> findByNameAndEvent(Long eventId, String name);
+    List<Exam> findByNameAndEmbg(String name, String embg);
+    List<Exam> findByPatientEmbgAndEvent(String embg, Long eventId);
+    List<Exam> findByNameAndPatientEmbgAndEvent(String name, String embg, Long eventId);
+
 }

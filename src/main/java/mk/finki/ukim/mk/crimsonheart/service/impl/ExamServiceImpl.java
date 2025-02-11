@@ -1,7 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
 
-import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.exceptions.DonationEventNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.exceptions.ExamNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -88,30 +86,65 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<Exam> findByName(Roles role, String name) {
+    public List<Exam> findByName(String name) {
         List<Exam> exams = new ArrayList<>();
-        if (role != null){
-            if (role.equals(Roles.DOCTOR)) {
-                exams = this.examRepository.findAllByDoctorName(name);
-            } else if (role.equals(Roles.PATIENT)) {
-                exams = this.examRepository.findAllByPatientName(name);
-            } else if (role.equals(Roles.NURSE)) {
-                exams = this.examRepository.findAllByNurseName(name);
-            }
-        }else if (role == null)
-            exams = this.examRepository.findAllByDoctorNameOrNurseNameOrPatientName(name, name, name);
+        if (name != null || name != "")
+            exams = this.examRepository.findAllByPatientNameContainsOrPatientSurnameContains(name, name);
         else
             exams = this.examRepository.findAll();
         return exams;
     }
 
     @Override
-    public List<Exam> findByEvent(DonationEvent donationEvent) {
-        return this.examRepository.findAllByDonationEvent(donationEvent);
+    public List<Exam> findByEvent(Long eventId) {
+        if (eventId != null){
+            DonationEvent event = eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+            return this.examRepository.findAllByDonationEvent(event);
+        }else
+            return this.examRepository.findAll();
     }
 
     @Override
-    public List<Exam> findByNameAndEvent(DonationEvent donationEvent, String name) {
-        return this.examRepository.findAllByDonationEventAndPatientNameContains(donationEvent, name);
+    public List<Exam> findByPatientEmbg(String patientEmbg) {
+        if (patientEmbg != null && patientEmbg != "" && patientEmbg.length() == 13){
+            return this.examRepository.findAllByPatientEmbg(patientEmbg);
+        }else
+            return this.examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> findByNameAndEvent(Long eventId, String name) {
+        if (eventId != null && name != null || name != ""){
+            DonationEvent event = eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+            return this.examRepository.findAllByDonationEventAndPatientNameContainsOrPatientSurnameContains(event, name, name);
+        }else
+            return this.examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> findByNameAndEmbg(String name, String embg) {
+
+        if (name != null && embg != null && embg.length() == 13){
+            return this.examRepository.findAllByPatientNameContainsOrPatientSurnameContainsAndPatientEmbg(name, name, embg);
+        }else
+            return this.examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> findByPatientEmbgAndEvent(String embg, Long eventId) {
+        if (embg != null && embg != "" && embg.length() == 13 && eventId != null){
+            DonationEvent event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+            return this.examRepository.findAllByPatientEmbgAndDonationEvent(embg, event);
+        }else
+          return this.examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> findByNameAndPatientEmbgAndEvent(String name, String embg, Long eventId) {
+        if (embg != null && embg != "" && embg.length() == 13 && eventId != null && name != null) {
+            DonationEvent event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+            return this.examRepository.findAllByPatientEmbgAndDonationEventAndPatientNameContainsOrPatientSurnameContains(embg, event, name, name);
+        }else
+            return this.examRepository.findAll();
     }
 }

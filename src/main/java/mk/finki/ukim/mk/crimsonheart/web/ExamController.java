@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,27 +33,44 @@ public class ExamController {
     @GetMapping("")
     public String getExamsPage(@RequestParam(required = false) String error,
                                @RequestParam(required = false) String name,
-                               @RequestParam(required = false) String event,
+                               @RequestParam(required = false) String embg,
+                               @RequestParam(required = false) Long eventId,
                                Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
-        List<DonationEvent> events = null;
+        List<Exam> exams = null;
 
-        if (event != null && !event.isEmpty()){
-            events = this.eventService.searchEvents(event);
-        }else {
-            events = this.eventService.listAll();
-        }
-        List<Exam> exams = this.examService.listAll();
+        if (name != null && !name.isEmpty() && embg == null && eventId == null) {
+            exams = this.examService.findByName(name);                 //By name
+        } else if (name == null && eventId == null && embg != null) {
+            exams = this.examService.findByPatientEmbg(embg);           //By embg
+        } else if (name == null && embg == null && eventId != null) {
+            exams = this.examService.findByEvent(eventId);              //By event
+        } else if (name != null && eventId != null && embg == null) {
+            exams = this.examService.findByNameAndEvent(eventId, name); //By name and event
+        } else if (name != null && eventId == null && embg != null) {
+            exams= this.examService.findByNameAndEmbg(name, embg);      //By name and embg
+        } else if (name == null && embg != null && eventId != null) {
+            exams = this.examService.findByPatientEmbgAndEvent(embg, eventId); // By embg and event
+        } else if (name != null && eventId != null && embg != null) {
+            exams = this.examService.findByNameAndPatientEmbgAndEvent(name, embg, eventId);  // By name, event and embg
+        } else
+            exams = this.examService.listAll();
+
+
+
         List<Users> users = this.usersService.listAll();
+        List<DonationEvent> events = this.eventService.listAll();
+        List<Roles> roles = List.of(Roles.values());
 
         model.addAttribute("bodyContent", "events");
         model.addAttribute("events", events);
         model.addAttribute("exams", exams);
         model.addAttribute("users", users);
+        model.addAttribute("roles", roles);
         return "exams";
     }
 
@@ -118,5 +137,7 @@ public class ExamController {
         }
         return "redirect:/exams?error=ExamNotFound";
     }
+
+
 
 }
