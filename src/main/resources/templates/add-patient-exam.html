@@ -263,12 +263,12 @@
 
                     <div class="form-group">
                         <label for="successfulExam">Was the exam successful?</label>
-                        <input type="hidden" name="successfulExam" value="false" />
                         <input type="checkbox"
                                class="form-check-input"
                                id="successfulExam"
                                name="successfulExam"
-                               th:checked="${exam != null and exam.isSuccessfulExam()}" />
+                               th:checked="${exam != null and exam.isSuccessfulExam()}"
+                               value="true" />
                     </div>
 
                     <div class="form-group">

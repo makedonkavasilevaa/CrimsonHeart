@@ -32,6 +32,10 @@
             font-family: 'Inika', serif;
         }
 
+        #submit{
+            background-color: #701516;
+        }
+
         /* Header container style */
         #header-container {
             background-color: #701516;
@@ -90,7 +94,6 @@
         }
 
         /* Navigation link style */
-        /* Navigation link style */
         nav ul li a {
             color: white;
             text-decoration: none;
@@ -111,6 +114,7 @@
             color: white;
             transform: scale(1.2);  /* Apply scale transformation */
         }
+
 
     </style>
 </head>
@@ -152,40 +156,46 @@
 </div>
 
     <div class="container mt-4">
-        <form th:action="@{/products}" th:method="GET">
+        <form th:action="@{/exams}" th:method="GET">
             <div class="row g-3 align-items-end">
                 <div class="col-md-6 form-group">
-                    <label for="searchName" class="form-label">Search by Name</label>
-                    <input type="text" th:value="${name}" class="form-control" id="searchName"
-                           placeholder="Enter product name" name="name">
+                    <label for="name" class="form-label">Search by Name</label>
+                    <input type="text" th:value="${name}" class="form-control" id="name"
+                           placeholder="Enter name" name="name">
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="embg" class="form-label">Search by EMBG</label>
+                    <input type="text" th:value="${embg}" class="form-control" id="embg"
+                           placeholder="Enter EMBG" name="embg">
                 </div>
 
                 <div class="col-md-3 form-group">
-                    <label for="categorySelect" class="form-label">Category</label>
-                    <select name="categoryId" id="categorySelect" class="form-control">
-                        <option value="">All categories</option>
-                        <option th:each="cat : ${categories}"
+                    <label for="event" class="form-label">Events</label>
+                    <select name="eventId" id="event" class="form-control">
+                        <option value="">All events</option>
+                        <option th:each="cat : ${events}"
                                 th:value="${cat.getId()}"
                                 th:text="${cat.getName()}"
-                                th:selected="${categoryId != null && categoryId == cat.getId()}">
+                                th:selected="${eventId != null && eventId == cat.getId()}">
                         </option>
                     </select>
                 </div>
 
                 <div class="col-md-3 form-group">
-                    <label for="manufacturerSelect" class="form-label">Manufacturer</label>
-                    <select name="manufacturerId" id="manufacturerSelect" class="form-control">
-                        <option value="">All manufacturers</option>
-                        <option th:each="man : ${manufacturers}"
-                                th:value="${man.getId()}"
-                                th:text="${man.getName()}"
-                                th:selected="${manufacturerId != null && manufacturerId == man.getId()}">
+                    <label for="role" class="form-label">Roles</label>
+                    <select name="role" id="role" class="form-control">
+                        <option value="">All roles</option>
+                        <option th:each="man : ${roles}"
+                                th:value="${man.name()}"
+                                th:text="${man.name()}"
+                                th:selected="${role != null && role == man.name()}">
                         </option>
                     </select>
                 </div>
 
                 <div class="col-12 mb-1">
-                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                    <button id="submit" class="btn btn-primary w-100" type="submit">Search</button>
                 </div>
             </div>
         </form>
@@ -195,38 +205,40 @@
 
     <div class="container mb-4">
         <div class="row">
-            <div class="col-12" th:if="${events.size() > 0}">
+            <div class="col-12" th:if="${exams.size() > 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Event name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Donation Type</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Date Of Event</th>
-                            <th scope="col">Time Of Event</th>
-                            <th scope="col">Organized by</th>
-                            <th scope="col">Managed by</th>
+                            <th scope="col">Performed on</th>
+                            <th scope="col">Patient name</th>
+                            <th scope="col">Patient EMBG</th>
+                            <th scope="col">Blood Pressure</th>
+                            <th scope="col">Hemoglobin</th>
+                            <th scope="col">Successful Exam?</th>
+                            <th scope="col">Doctor</th>
+                            <th scope="col">Nurse</th>
+                            <th scope="col">Additional comment</th>
+                            <th scope="col">Event</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="event : ${events}" class="event">
-                            <td th:text="${event.getName()}"></td>
-                            <td th:text="${event.getDescription()}"></td>
-                            <td th:text="${event.getDonationType().name()}"></td>
-                            <td th:text="${event.getLocation() != null}
-                            ? ${event.getLocation().getFullAddress()} : 'No Location'"></td>
-                            <td th:text="${event.getDateOfEvent() != null}
-                            ? ${event.getDateOfEvent()} : 'No Date'"></td>
-                            <td th:text="${event.getTimeOfEvent()}"></td>
-                            <td th:text="${event.getInstitution() != null}
-                            ? ${event.getInstitution().getName()} : 'No Institution'"></td>
-                            <td th:text="${event.getUser() != null}
-                            ? ${event.getUser().getName()} : 'No Manager'"></td>
+                        <tr th:each="exam : ${exams}" class="event">
+                            <td th:text="${exam.getPerformedOn()}"></td>
+                            <td th:text="${exam.getPatient().getName()} +' '+ ${exam.getPatient().getSurname()}"></td>
+                            <td th:text="${exam.getPatient().getEmbg()}"></td>
+                            <td th:text="${exam.getBloodPressure()}"></td>
+                            <td th:text="${exam.getHemoglobin()}"></td>
+                            <td th:text="${exam.isSuccessfulExam() ? 'Yes' : 'No'}"></td>
+                            <td th:text="${exam.getDoctor().getName()}"></td>
+                            <td th:text="${exam.getNurse().getName()}"></td>
+                            <td th:text="${exam.getComment() != null}
+                            ? ${exam.getComment()} : 'No Comment'"></td>
+                            <td th:text="${exam.getDonationEvent().getName()}"></td>
+
                             <td class="text-right">
                                 <th:block>
-                                    <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
+                                    <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -235,7 +247,7 @@
                                     </form>
                                 </th:block>
                                 <th:block>
-                                    <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
+                                    <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-pencil">Edit</i>
                                     </a>
@@ -250,7 +262,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <a href="events/add-form" class="btn btn-block btn-dark add-event-btn">
-                            Add new event
+                            Add new exam
                         </a>
                     </div>
                 </div>
