@@ -88,8 +88,16 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public List<Exam> findByName(String name) {
         List<Exam> exams = new ArrayList<>();
-        if (name != null || name != "")
-            exams = this.examRepository.findAllByPatientNameContainsOrPatientSurnameContains(name, name);
+        if (name != null || name != "") {
+            List<Users> patients = this.usersRepository.findByNameContainingIgnoreCase(name);
+            for (Users patient : patients) {
+                List<Exam> exam = this.examRepository.findAllByPatient(patient);
+                if (exam.size() > 1) {
+                    exams.addAll(exam);
+                }else
+                    exams.add(exam.get(0));
+            }
+        }
         else
             exams = this.examRepository.findAll();
         return exams;
@@ -106,8 +114,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public List<Exam> findByPatientEmbg(String patientEmbg) {
-        if (patientEmbg != null && patientEmbg != "" && patientEmbg.length() == 13){
-            return this.examRepository.findAllByPatientEmbg(patientEmbg);
+        if (patientEmbg.length() == 13){
+            Users patient = this.usersRepository.findAllByEmbg(patientEmbg);
+            return this.examRepository.findAllByPatient(patient);
         }else
             return this.examRepository.findAll();
     }
@@ -116,34 +125,36 @@ public class ExamServiceImpl implements ExamService {
     public List<Exam> findByNameAndEvent(Long eventId, String name) {
         if (eventId != null && name != null || name != ""){
             DonationEvent event = eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
-            return this.examRepository.findAllByDonationEventAndPatientNameContainsOrPatientSurnameContains(event, name, name);
+            return this.examRepository.findAllByDonationEventAndPatientNameContainingIgnoreCase(event, name);
         }else
             return this.examRepository.findAll();
     }
 
     @Override
     public List<Exam> findByNameAndEmbg(String name, String embg) {
-
-        if (name != null && embg != null && embg.length() == 13){
-            return this.examRepository.findAllByPatientNameContainsOrPatientSurnameContainsAndPatientEmbg(name, name, embg);
+        if (embg.length() == 13){
+            Users patient = this.usersRepository.findAllByEmbg(embg);
+            return this.examRepository.findAllByPatientNameContainingIgnoreCaseAndPatient(name, patient);
         }else
             return this.examRepository.findAll();
     }
 
     @Override
     public List<Exam> findByPatientEmbgAndEvent(String embg, Long eventId) {
-        if (embg != null && embg != "" && embg.length() == 13 && eventId != null){
+        if (embg.length() == 13){
+            Users patient = this.usersRepository.findAllByEmbg(embg);
             DonationEvent event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
-            return this.examRepository.findAllByPatientEmbgAndDonationEvent(embg, event);
+            return this.examRepository.findAllByPatientAndDonationEvent(patient, event);
         }else
           return this.examRepository.findAll();
     }
 
     @Override
     public List<Exam> findByNameAndPatientEmbgAndEvent(String name, String embg, Long eventId) {
-        if (embg != null && embg != "" && embg.length() == 13 && eventId != null && name != null) {
+        if (embg.length() == 13) {
+            Users patient = this.usersRepository.findAllByEmbg(embg);
             DonationEvent event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
-            return this.examRepository.findAllByPatientEmbgAndDonationEventAndPatientNameContainsOrPatientSurnameContains(embg, event, name, name);
+            return this.examRepository.findAllByPatientAndDonationEventAndPatientNameContainingIgnoreCase(patient, event, name);
         }else
             return this.examRepository.findAll();
     }

@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.crimsonheart.repository;
 
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Exam;
+import mk.finki.ukim.mk.crimsonheart.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,15 +14,12 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
 
     Optional<Exam> findById(Long id);
     void deleteById(Long id);
-    List<Exam> findAllByPatientNameContainsOrPatientSurnameContains(String patientName, String patientSurname);
-    List<Exam> findAllByDoctorName(String doctorName);
-    List<Exam> findAllByNurseName(String nurseName);
-    List<Exam> findAllByDoctorNameContainsOrNurseNameContainsOrPatientNameContains(String doctorName, String nurseName, String patientName);
-    List<Exam> findAllByDoctorSurnameContainsOrNurseSurnameContainsOrPatientSurnameContains(String doctorName, String nurseName, String patientName);
+    List<Exam> findAllByDoctor(Users doctor);
+    List<Exam> findAllByNurse(Users nurse);
     List<Exam> findAllByDonationEvent(DonationEvent donationEvent);
-    List<Exam> findAllByPatientEmbg(String patientEmbg);
-    List<Exam> findAllByDonationEventAndPatientNameContainsOrPatientSurnameContains(DonationEvent donationEvent, String patientName, String patientSurname);
-    List<Exam> findAllByPatientNameContainsOrPatientSurnameContainsAndPatientEmbg(String patientName,String patientSurname, String patientEmbg);
-    List<Exam> findAllByPatientEmbgAndDonationEvent(String patientEmbg, DonationEvent donationEvent);
-    List<Exam> findAllByPatientEmbgAndDonationEventAndPatientNameContainsOrPatientSurnameContains(String patientEmbg, DonationEvent donationEvent, String patientName, String patientSurname);
+    List<Exam> findAllByPatient(Users patient);
+    List<Exam> findAllByDonationEventAndPatientNameContainingIgnoreCase(DonationEvent donationEvent, String patientName);
+    List<Exam> findAllByPatientNameContainingIgnoreCaseAndPatient(String patientName, Users patient);
+    List<Exam> findAllByPatientAndDonationEvent(Users patient, DonationEvent donationEvent);
+    List<Exam> findAllByPatientAndDonationEventAndPatientNameContainingIgnoreCase(Users patient, DonationEvent donationEvent, String patientName);
 }

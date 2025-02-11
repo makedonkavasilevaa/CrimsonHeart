@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.List;
 
 public interface UsersService extends UserDetailsService {
 
@@ -21,13 +21,13 @@ public interface UsersService extends UserDetailsService {
     void createPatient(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, EmploymentStatus employmentStatus);
     void updatePatient(Long userId, Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, Long locationId, BloodType bloodType, boolean isDonor, Date lastDonation, EmploymentStatus employmentStatus);
     List<Users> findByRole(Roles role);
-    Optional<Users> findByEmbg(String embg);
-    Optional<Users> findAllByIsDonor();
-    Optional<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation);
-    Optional<Users> findAllByLastDonationBeforeAndIsDonorAndBloodType(Sex sex, Date lastDonation, BloodType bloodType);
-    Optional<Users> findAllByBloodType(BloodType bloodType);
-    Optional<Users> findAllByName(String name);
-    Optional<Users> findAllByTimesRejected(Integer timesRejected);
+    Users findByEmbg(String embg);
+    List<Users> findAllByIsDonor();
+    List<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation);
+    List<Users> findAllByLastDonationBeforeAndIsDonorAndBloodType(Sex sex, Date lastDonation, BloodType bloodType);
+    List<Users> findAllByBloodType(BloodType bloodType);
+    List<Users> findAllByName(String name);
+    List<Users> findAllByTimesRejected(Integer timesRejected);
 
     void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, String password, String repeatedPassword);
 }

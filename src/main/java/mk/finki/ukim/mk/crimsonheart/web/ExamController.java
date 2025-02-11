@@ -43,20 +43,23 @@ public class ExamController {
 
         List<Exam> exams = null;
 
-        if (name != null && !name.isEmpty() && embg == null && eventId == null) {
-            exams = this.examService.findByName(name);                 //By name
-        } else if (name == null && eventId == null && embg != null) {
-            exams = this.examService.findByPatientEmbg(embg);           //By embg
-        } else if (name == null && embg == null && eventId != null) {
-            exams = this.examService.findByEvent(eventId);              //By event
-        } else if (name != null && eventId != null && embg == null) {
-            exams = this.examService.findByNameAndEvent(eventId, name); //By name and event
-        } else if (name != null && eventId == null && embg != null) {
-            exams= this.examService.findByNameAndEmbg(name, embg);      //By name and embg
-        } else if (name == null && embg != null && eventId != null) {
-            exams = this.examService.findByPatientEmbgAndEvent(embg, eventId); // By embg and event
-        } else if (name != null && eventId != null && embg != null) {
-            exams = this.examService.findByNameAndPatientEmbgAndEvent(name, embg, eventId);  // By name, event and embg
+        if (name != null || embg != null || eventId != null) {
+            if (!name.isEmpty() && !name.equals("") && embg.isEmpty() && embg.equals("") && eventId == null) {
+                exams = this.examService.findByName(name);                 //By name
+            } else if (name.isEmpty() && name.equals("") && eventId == null && !embg.isEmpty() && !embg.equals("")) {
+                exams = this.examService.findByPatientEmbg(embg);           //By embg
+            } else if (name.isEmpty() && name.equals("") && embg.isEmpty() && embg.equals("") && eventId != null) {
+                exams = this.examService.findByEvent(eventId);              //By event
+            } else if (!name.isEmpty() && !name.equals("") && eventId != null && embg.isEmpty() && embg.equals("")) {
+                exams = this.examService.findByNameAndEvent(eventId, name); //By name and event
+            } else if (!name.isEmpty() && !name.equals("") && eventId == null && !embg.isEmpty() && !embg.equals("")) {
+                exams = this.examService.findByNameAndEmbg(name, embg);      //By name and embg
+            } else if (name.isEmpty() && name.equals("") && !embg.isEmpty() && !embg.equals("") && eventId != null) {
+                exams = this.examService.findByPatientEmbgAndEvent(embg, eventId); // By embg and event
+            } else if (!name.isEmpty() && !name.equals("") && eventId != null && !embg.isEmpty() && !embg.equals("")) {
+                exams = this.examService.findByNameAndPatientEmbgAndEvent(name, embg, eventId);// By name, event and embg
+                }
+            else exams = this.examService.listAll();
         } else
             exams = this.examService.listAll();
 

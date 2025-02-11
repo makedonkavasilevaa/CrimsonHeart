@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UsersServiceImpl implements UsersService {
@@ -136,7 +136,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findByEmbg(String embg) {
+    public Users findByEmbg(String embg) {
         if (embg.length() != 13){
             throw new IllegalArgumentException("EMBG isn't in the correct format");
         }
@@ -144,12 +144,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findAllByIsDonor() {
+    public List<Users> findAllByIsDonor() {
         return this.usersRepository.findAllByIsDonorTrue();
     }
 
     @Override
-    public Optional<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation) {
+    public List<Users> findAllByLastDonationBefore(Sex sex, Date lastDonation) {
         Calendar calendar = Calendar.getInstance();
         if (sex == Sex.MALE) {
             calendar.add(Calendar.MONTH, -3);
@@ -162,7 +162,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findAllByLastDonationBeforeAndIsDonorAndBloodType(Sex sex, Date lastDonation,BloodType bloodType) {
+    public List<Users> findAllByLastDonationBeforeAndIsDonorAndBloodType(Sex sex, Date lastDonation,BloodType bloodType) {
 
         Calendar calendar = Calendar.getInstance();
         if (sex == Sex.MALE) {
@@ -176,17 +176,17 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Optional<Users> findAllByBloodType(BloodType bloodType) {
+    public List<Users> findAllByBloodType(BloodType bloodType) {
         return this.usersRepository.findAllByBloodType(bloodType);
     }
 
     @Override
-    public Optional<Users> findAllByName(String name) {
+    public List<Users> findAllByName(String name) {
         return this.usersRepository.findByNameContainingIgnoreCase(name);
     }
 
     @Override
-    public Optional<Users> findAllByTimesRejected(Integer timesRejected) {
+    public List<Users> findAllByTimesRejected(Integer timesRejected) {
         return this.usersRepository.findAllByTimesRejectedLessThan(timesRejected);
     }
 
