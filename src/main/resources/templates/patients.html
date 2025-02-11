@@ -152,6 +152,43 @@
     </header>
 </div>
 
+
+<div class="container mt-4">
+    <form th:action="@{/users/patients}" th:method="GET">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-6 form-group">
+                <label for="name" class="form-label">Search by Name</label>
+                <input type="text" th:value="${name}" class="form-control" id="name"
+                       placeholder="Enter name" name="name">
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="embg" class="form-label">Search by EMBG</label>
+                <input type="text" th:value="${embg}" class="form-control" id="embg"
+                       placeholder="Enter EMBG" name="embg">
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="event" class="form-label">Events</label>
+                <select name="eventId" id="event" class="form-control">
+                    <option value="">All events</option>
+                    <option th:each="cat : ${events}"
+                            th:value="${cat.getId()}"
+                            th:text="${cat.getName()}"
+                            th:selected="${eventId != null && eventId == cat.getId()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-1">
+                <button id="submit" class="btn btn-primary w-100" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
 <div class="container mb-4">
     <div class="row">
         <div class="col-12" th:if="${users.size() > 0}">

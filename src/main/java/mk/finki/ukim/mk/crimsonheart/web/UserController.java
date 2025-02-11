@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -32,12 +33,26 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String getUsersPage(@RequestParam(required = false) String error, Model model){
+    public String getUsersPage(@RequestParam(required = false) String error,
+                               @RequestParam(required = false) String name,
+                               @RequestParam(required = false) String embg,
+                               @RequestParam(required = false) BloodType bloodType,
+                               @RequestParam(required = false) boolean isDonor,
+                               Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<Users> users = this.usersService.listAll();
+
+        List<Users> users = new ArrayList<>();
+
+        if (name != null || embg != null || bloodType != null || isDonor) {
+
+
+        }else
+            users = this.usersService.listAll();
+
+
         List<Location> locations = this.locationService.listAll();
         List<BloodType> bloodTypes = Arrays.stream(BloodType.values()).toList();
         List<Sex> sexes = Arrays.stream(Sex.values()).toList();
