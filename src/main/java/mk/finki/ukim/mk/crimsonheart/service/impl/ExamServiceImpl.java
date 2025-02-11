@@ -14,6 +14,7 @@ import mk.finki.ukim.mk.crimsonheart.repository.UsersRepository;
 import mk.finki.ukim.mk.crimsonheart.service.ExamService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +64,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setPatient(patient);
         exam.setNurse(nurse);
         exam.setComment(comment);
+        exam.setSuccessfulExam(successfulExam);
         if (!successfulExam){
             patient.setTimesRejected(patient.getTimesRejected() + 1);
             patient.setHasBeenRejected(true);
@@ -87,13 +89,29 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public List<Exam> findByName(Roles role, String name) {
-        if (role.equals(Roles.DOCTOR)) {
-            return this.examRepository.findAllByDoctorName(name);
-        }else if (role.equals(Roles.PATIENT)) {
-            return this.examRepository.findAllByPatientName(name);
-        } else if (role.equals(Roles.NURSE)) {
-            return this.examRepository.findAllByNurseName(name);
-        }else
-            return this.examRepository.findAllByDoctorNameOrNurseNameOrPatientName(name, name, name);
+        List<Exam> exams = new ArrayList<>();
+        if (role != null){
+            if (role.equals(Roles.DOCTOR)) {
+                exams = this.examRepository.findAllByDoctorName(name);
+            } else if (role.equals(Roles.PATIENT)) {
+                exams = this.examRepository.findAllByPatientName(name);
+            } else if (role.equals(Roles.NURSE)) {
+                exams = this.examRepository.findAllByNurseName(name);
+            }
+        }else if (role == null)
+            exams = this.examRepository.findAllByDoctorNameOrNurseNameOrPatientName(name, name, name);
+        else
+            exams = this.examRepository.findAll();
+        return exams;
+    }
+
+    @Override
+    public List<Exam> findByEvent(DonationEvent donationEvent) {
+        return this.examRepository.findAllByDonationEvent(donationEvent);
+    }
+
+    @Override
+    public List<Exam> findByNameAndEvent(DonationEvent donationEvent, String name) {
+        return this.examRepository.findAllByDonationEventAndPatientNameContains(donationEvent, name);
     }
 }
