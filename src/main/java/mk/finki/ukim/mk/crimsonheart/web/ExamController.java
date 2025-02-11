@@ -100,8 +100,11 @@ public class ExamController {
                             @RequestParam Long doctor,
                             @RequestParam Long nurse,
                             @RequestParam Long patient,
-                            @RequestParam Boolean successfulExam,
+                            @RequestParam(required = false) Boolean successfulExam,
                             @RequestParam String comment){
+        if (successfulExam == null){
+            successfulExam = false;
+        }
         if (id != null) {
             this.examService.update(id, performedOn, bloodPresure, hemoglobin, donationEvent, doctor, patient, nurse, successfulExam, comment );
         }else
