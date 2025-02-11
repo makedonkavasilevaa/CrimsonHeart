@@ -86,7 +86,7 @@ public class UserController {
         return "add-user";
     }
 
-    @GetMapping("/add-patient")
+    @GetMapping({"/add-patient", "/users/add-patient"})
     public String getAddPatientPage(Model model) {
         List<Location> locations = this.locationService.listAll();
         List<Roles> roles = List.of(Roles.values());
