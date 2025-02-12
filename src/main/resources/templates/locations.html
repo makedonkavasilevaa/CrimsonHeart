@@ -112,6 +112,11 @@
             transform: scale(1.2);  /* Apply scale transformation */
         }
 
+        #submit{
+            background: #701516;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -151,6 +156,35 @@
     </header>
 </div>
 
+<div class="container mt-4">
+    <form th:action="@{/locations}" th:method="GET">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-3 form-group">
+                <label for="address" class="form-label">Search by Address</label>
+                <input type="text" th:value="${address}" class="form-control" id="address"
+                       placeholder="Enter address" name="address">
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="city" class="form-label">City</label>
+                <select name="city" id="city" class="form-control">
+                    <option value="">All Cities</option>
+                    <option th:each="cat : ${cities}"
+                            th:value="${cat.name()}"
+                            th:text="${cat.name()}"
+                            th:selected="${city != null && city == cat.name()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-1">
+                <button id="submit" class="btn btn-primary w-100" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
     <div class="container mb-4">
         <div class="row">
             <div class="col-12" th:if="${locations.size() > 0}">
@@ -168,7 +202,7 @@
                         <tbody>
                         <tr th:each="location : ${locations}" class="location">
                             <td th:text="${location.getAddress()}"></td>
-                            <td th:text="${location.getCity().name()}"></td>>
+                            <td th:text="${location.getCity().name()}"></td>
                             <td th:text="${location.getState()}"></td>
                             <td th:text="${location.getZip()}"></td>
                             <td th:text="${location.getCountry()}"></td>

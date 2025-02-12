@@ -15,4 +15,5 @@ public interface LocationService {
     Location findById(Long id);
     Optional<Location> findByCity(CityEnum city);
     Optional<Location> findByAddress(String address);
+    List<Location> filterLocations(String address, CityEnum city);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,14 +21,27 @@ public class LocationController {
     }
 
     @GetMapping("")
-    public String getLocationsPage(@RequestParam(required = false) String error, Model model){
+    public String getLocationsPage(@RequestParam(required = false) String error,
+                                   @RequestParam(required = false) String address,
+                                   @RequestParam(required = false) CityEnum city,
+                                   Model model){
+
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<Location> locations = this.locationService.listAll();
+        List<Location> locations = new ArrayList<>();
+
+        if (address != null || city != null) {
+            locations = this.locationService.filterLocations(address, city);
+        }else
+            locations = this.locationService.listAll();
+
+        List<CityEnum> cities = List.of(CityEnum.values());
+
         model.addAttribute("bodyContent", "locations");
         model.addAttribute("locations", locations);
+        model.addAttribute("cities", cities);
         return "locations";
     }
 

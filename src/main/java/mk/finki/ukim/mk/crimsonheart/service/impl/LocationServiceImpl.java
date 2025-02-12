@@ -63,4 +63,9 @@ public class LocationServiceImpl implements LocationService {
     public Optional<Location> findByAddress(String address) {
         return this.locationRepository.findAllByAddressContainsIgnoreCase(address);
     }
+
+    @Override
+    public List<Location> filterLocations(String address, CityEnum city) {
+        return this.locationRepository.filterLocations(address, city);
+    }
 }
