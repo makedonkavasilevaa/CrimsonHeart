@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.service;
 
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 
@@ -15,4 +16,5 @@ public interface DonationEventService {
     void delete(Long id);
     List<DonationEvent> searchEvents(String text);
     List<DonationEvent> searchEventsByDonationType(DonationType donationType);
+    List<DonationEvent> filterEvents(String text, DonationType donationType, CityEnum city);
 }

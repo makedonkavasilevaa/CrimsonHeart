@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.web;
 
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,14 +37,29 @@ public class EventsController {
     }
 
     @GetMapping("")
-    public String getEventsPage(@RequestParam(required = false) String error, Model model){
+    public String getEventsPage(@RequestParam(required = false) String error,
+                                @RequestParam(required = false) String name,
+                                @RequestParam(required = false) DonationType donationType,
+                                @RequestParam(required = false) CityEnum city,
+                                Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<DonationEvent> events = this.eventService.listAll();
+
+        List<DonationEvent> events = new ArrayList<>();
+        if (name != null && !name.isEmpty() || donationType != null || city != null) {
+            events = this.eventService.filterEvents(name, donationType, city);
+        } else
+            events = this.eventService.listAll();
+
+        List<CityEnum> cities = List.of(CityEnum.values());
+        List<DonationType> types = List.of(DonationType.values());
+
         model.addAttribute("bodyContent", "events");
         model.addAttribute("events", events);
+        model.addAttribute("cities", cities);
+        model.addAttribute("types", types);
         return "events.html";
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DonationEventRepository extends JpaRepository<DonationEvent, Long> {
+public interface DonationEventRepository extends JpaRepository<DonationEvent, Long>, DonationEventCustomRepository {
 
     List<DonationEvent> findAllByNameContainsIgnoreCase(String name);
     List<DonationEvent> findAllByDonationType(DonationType donationType);

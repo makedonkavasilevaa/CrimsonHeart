@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.crimsonheart.service.impl;
 
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
 import mk.finki.ukim.mk.crimsonheart.exceptions.DonationEventNotFoundException;
 import mk.finki.ukim.mk.crimsonheart.exceptions.InstitutionNotFoundException;
@@ -94,5 +95,10 @@ public class DonationEventServiceImpl implements DonationEventService {
             return this.donationEventRepository.findAllByDonationType(donationType);
         }
         return null;
+    }
+
+    @Override
+    public List<DonationEvent> filterEvents(String text, DonationType donationType, CityEnum city) {
+        return this.donationEventRepository.filterEvents(text, donationType, city);
     }
 }
