@@ -57,4 +57,7 @@ public class DonationEvent {
         this.institution = institution;
         this.user = user;
     }
+
+    public DonationEvent(Date date, String bloodDrive, String locationA) {
+    }
 }
