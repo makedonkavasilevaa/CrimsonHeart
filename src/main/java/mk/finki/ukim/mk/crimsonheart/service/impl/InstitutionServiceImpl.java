@@ -77,4 +77,9 @@ public class InstitutionServiceImpl implements InstitutionService {
     public Optional<Institution> findAllByCity(CityEnum cityEnum) {
         return this.institutionRepository.findAllByLocationCity(cityEnum);
     }
+
+    @Override
+    public List<Institution> filterInstitution(String name, InstitutionsType type, String address, CityEnum city) {
+        return this.institutionRepository.filterInstitutions(name, type, address, city);
+    }
 }

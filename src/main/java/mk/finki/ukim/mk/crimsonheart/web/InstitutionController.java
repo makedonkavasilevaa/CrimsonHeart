@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,14 +27,30 @@ public class InstitutionController {
 
 
     @GetMapping("")
-    public String getInstitutionsPage(@RequestParam(required = false) String error, Model model){
+    public String getInstitutionsPage(@RequestParam(required = false) String error,
+                                      @RequestParam(required = false) InstitutionsType institutionsType,
+                                      @RequestParam(required = false) CityEnum city,
+                                      @RequestParam(required = false) String name,
+                                      @RequestParam(required = false) String address,
+                                      Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<Institution> institutions = this.institutionService.listAll();
+        List<Institution> institutions = new ArrayList<>();
+
+        if (institutionsType != null || city != null || name != null || address != null) {
+            institutions = this.institutionService.filterInstitution(name, institutionsType, address, city);
+        } else
+            institutions = this.institutionService.listAll();
+
+        List<InstitutionsType> types = List.of(InstitutionsType.values());
+        List<CityEnum> cities = List.of(CityEnum.values());
+
         model.addAttribute("bodyContent", "locations");
         model.addAttribute("institutions", institutions);
+        model.addAttribute("types", types);
+        model.addAttribute("cities", cities);
         return "institutions";
     }
 

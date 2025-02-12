@@ -18,4 +18,5 @@ public interface InstitutionService {
     Optional<Institution> findByName(String name);
     Optional<Institution> findByInstitutionType(InstitutionsType institutionsType);
     Optional<Institution> findAllByCity(CityEnum cityEnum);
+    List<Institution> filterInstitution (String name, InstitutionsType type, String address, CityEnum city);
 }

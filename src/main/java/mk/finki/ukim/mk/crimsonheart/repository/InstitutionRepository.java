@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface InstitutionRepository extends JpaRepository<Institution, Integer> {
+public interface InstitutionRepository extends JpaRepository<Institution, Integer>, InstitutionCustomRepository {
 
     Optional<Institution> findById(Long id);
     Optional<Institution> findAllByInstitutionsType(InstitutionsType institutionsType);
