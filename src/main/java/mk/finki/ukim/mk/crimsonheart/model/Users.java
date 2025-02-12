@@ -138,6 +138,9 @@ public class Users implements UserDetails {
         this.embg = embg;
     }
 
+    public Users(String s, String mail, Roles roles) {
+    }
+
     public String getNameForShow() {
         return name + " " + surname + " - " + role.name();
     }
