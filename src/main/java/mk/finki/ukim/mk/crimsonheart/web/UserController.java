@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -37,7 +38,7 @@ public class UserController {
                                @RequestParam(required = false) String name,
                                @RequestParam(required = false) String embg,
                                @RequestParam(required = false) BloodType bloodType,
-                               @RequestParam(required = false) boolean isDonor,
+                               @RequestParam(required = false) Roles roles,
                                Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
@@ -46,18 +47,20 @@ public class UserController {
 
         List<Users> users = new ArrayList<>();
 
-        if (name != null || embg != null || bloodType != null || isDonor) {
-
-
+        if (name != null || embg != null || bloodType != null || roles != null) {
+            users =  this.usersService.filterUsers(name, embg, roles, bloodType);
         }else
             users = this.usersService.listAll();
 
 
         List<Location> locations = this.locationService.listAll();
         List<BloodType> bloodTypes = Arrays.stream(BloodType.values()).toList();
+        List<Roles> role = Arrays.stream(Roles.values()).toList();
         List<Sex> sexes = Arrays.stream(Sex.values()).toList();
+
         model.addAttribute("bodyContent", "locations");
         model.addAttribute("users", users);
+        model.addAttribute("roles", role);
         model.addAttribute("locations", locations);
         model.addAttribute("bloodTypes", bloodTypes);
         model.addAttribute("sexes", sexes);
@@ -65,15 +68,28 @@ public class UserController {
     }
 
     @GetMapping("/patients")
-    public String getPatientsPage(@RequestParam(required = false) String error, Model model){
+    public String getPatientsPage(@RequestParam(required = false) String error,
+                                  @RequestParam(required = false) String name,
+                                  @RequestParam(required = false) String embg,
+                                  @RequestParam(required = false) BloodType bloodType,
+                                  Model model){
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<Users> users = this.usersService.findByRole(Roles.PATIENT);
+
+        List<Users> users = new ArrayList<>();
+
+        if (name != null || embg != null || bloodType != null) {
+            users =  this.usersService.filterUsers(name, embg, Roles.PATIENT, bloodType);
+        }else
+            users = this.usersService.findByRole(Roles.PATIENT);
+
+
         List<Location> locations = this.locationService.listAll();
         List<BloodType> bloodTypes = List.of(BloodType.values());
         List<Sex> sexes = List.of(Sex.values());
+
         List<EmploymentStatus> employmentStatuses = List.of(EmploymentStatus.values());
         model.addAttribute("bodyContent", "locations");
         model.addAttribute("users", users);

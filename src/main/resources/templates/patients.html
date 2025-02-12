@@ -113,6 +113,11 @@
             transform: scale(1.2);  /* Apply scale transformation */
         }
 
+        #submit {
+            background: #701516;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -157,7 +162,7 @@
     <form th:action="@{/users/patients}" th:method="GET">
         <div class="row g-3 align-items-end">
 
-            <div class="col-md-6 form-group">
+            <div class="col-md-3 form-group">
                 <label for="name" class="form-label">Search by Name</label>
                 <input type="text" th:value="${name}" class="form-control" id="name"
                        placeholder="Enter name" name="name">
@@ -170,13 +175,13 @@
             </div>
 
             <div class="col-md-3 form-group">
-                <label for="event" class="form-label">Events</label>
-                <select name="eventId" id="event" class="form-control">
-                    <option value="">All events</option>
-                    <option th:each="cat : ${events}"
-                            th:value="${cat.getId()}"
-                            th:text="${cat.getName()}"
-                            th:selected="${eventId != null && eventId == cat.getId()}">
+                <label for="bloodType" class="form-label">Blood Types</label>
+                <select name="bloodType" id="bloodType" class="form-control">
+                    <option value="">All Blood Types</option>
+                    <option th:each="cat : ${bloodTypes}"
+                            th:value="${cat.name()}"
+                            th:text="${cat.name()}"
+                            th:selected="${bloodType != null && bloodType == cat.name()}">
                     </option>
                 </select>
             </div>

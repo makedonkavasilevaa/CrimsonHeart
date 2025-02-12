@@ -191,6 +191,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public List<Users> filterUsers(String name, String embg, Roles roles, BloodType bloodType) {
+        return this.usersRepository.getUsersByFilter(roles, name, embg, bloodType);
+    }
+
+    @Override
     public void register(Roles role, String name, String surname, Date birthday, Sex sex, String email, String phone, String embg, String password, String repeatedPassword) {
 
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {

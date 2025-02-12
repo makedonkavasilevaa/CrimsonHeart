@@ -112,6 +112,11 @@
             transform: scale(1.2);  /* Apply scale transformation */
         }
 
+        #submit{
+            background: #701516;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -150,6 +155,54 @@
         </nav>
     </header>
 </div>
+
+<div class="container mt-4">
+    <form th:action="@{/users}" th:method="GET">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-3 form-group">
+                <label for="name" class="form-label">Search by Name</label>
+                <input type="text" th:value="${name}" class="form-control" id="name"
+                       placeholder="Enter name" name="name">
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="embg" class="form-label">Search by EMBG</label>
+                <input type="text" th:value="${embg}" class="form-control" id="embg"
+                       placeholder="Enter EMBG" name="embg">
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="bloodType" class="form-label">Blood Types</label>
+                <select name="bloodType" id="bloodType" class="form-control">
+                    <option value="">All Blood Types</option>
+                    <option th:each="cat : ${bloodTypes}"
+                            th:value="${cat.name()}"
+                            th:text="${cat.name()}"
+                            th:selected="${bloodType != null && bloodType == cat.name()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label for="roles" class="form-label">Roles</label>
+                <select name="roles" id="roles" class="form-control">
+                    <option value="">All Roles</option>
+                    <option th:each="cat : ${roles}"
+                            th:value="${cat.name()}"
+                            th:text="${cat.name()}"
+                            th:selected="${roles != null && roles == cat.name()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-1">
+                <button id="submit" class="btn btn-primary w-100" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 
     <div class="container mb-4">
         <div class="row">
