@@ -27,21 +27,18 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/events", "/events/", "/assets/**", "/register", "/register/", "/register/add", "/login/log", "/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("SUPERADMIN")
-                        .anyRequest()
-                        .authenticated()
+                .csrf(csrf -> csrf.disable()) // Disable CSRF (for now, as needed)
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/", "/events", "/assets/**", "/register", "/login", "/register/add", "/images/**").permitAll() // Allow access to static resources
+                        .requestMatchers("/admin/**").hasRole("SUPERADMIN") // Specific page access control
+                        .anyRequest().authenticated() // Ensure other pages require authentication
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/events", true).permitAll()
+                        .defaultSuccessUrl("/events", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
