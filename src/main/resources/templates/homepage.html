@@ -23,7 +23,7 @@
         }
 
         /* Apply Inknut Antiqua font to the title */
-        #title-header {
+        #title-header, #title {
             font-family: 'Inknut Antiqua', serif;
         }
 
@@ -122,6 +122,32 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        .event-description {
+            display: block;
+            max-height: 4em; /* Limit the height initially */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-description.expanded {
+            max-height: none; /* Allow the description to expand fully */
+        }
+
+        #slogan{
+            background: #701516;
+            color: white;
+            width: max-content;
+            font-size: 35px;
+            font-family: 'Inika';
+            align-content: center;
+            text-align: center;
+            padding: 5px 25px;
+        }
+
+        .centrirano {
+            text-align: -webkit-center;
+        }
+
 
     </style>
 </head>
@@ -162,22 +188,31 @@
     </header>
 </div>
 
-<div class="container">
-    <div class="row">
+<div class="container" style="padding-top: 20px;">
+    <div class="row centrirano">
         <div class="col">
-            1 of 2
+            <img src="/images/Blood-1.png" height="auto" width="auto">
+            <div id="slogan">
+                <span>Save Lives <br> Donate Blood</span>
+            </div>
         </div>
         <div class="col">
             <div class="container">
-                <div class="row">
+                <div class="row centrirano">
                     <div class="col-12 text-center">
-                        <h2>Future events</h2>
+                        <h2 id="title">Future events</h2>
                     </div>
                 </div>
                 <div class="row">
                     <div th:each="event : ${events}" class="col-md-6 mb-4">
                         <div class="event-card border text-center p-4 bg-light">
                             <span th:text="${event.getName()}">Event Name</span>
+
+                            <!-- Event Description (initially shortened) -->
+                            <span th:text="${event.getDescription()}" class="event-description">Event Description</span>
+
+<!--                            &lt;!&ndash; "Read more" link &ndash;&gt;-->
+<!--                            <button class="btn btn-link" onclick="toggleDescription(this)">Read More</button>-->
                         </div>
                     </div>
                 </div>
@@ -188,3 +223,17 @@
 
 </body>
 </html>
+
+<!--<script>-->
+<!--    function toggleDescription(button) {-->
+<!--        var description = button.previousElementSibling; // Get the description span-->
+<!--        description.classList.toggle("expanded"); // Toggle the expanded class-->
+
+<!--        // Toggle button text between "Read More" and "Read Less"-->
+<!--        if (description.classList.contains("expanded")) {-->
+<!--            button.innerHTML = "Read Less";-->
+<!--        } else {-->
+<!--            button.innerHTML = "Read More";-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->

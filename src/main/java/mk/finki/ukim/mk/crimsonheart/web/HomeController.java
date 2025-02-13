@@ -33,7 +33,7 @@ public class HomeController {
                 .collect(Collectors.toList());
 
         model.addAttribute("bodyContent", "events");
-        model.addAttribute("events", events);
+        model.addAttribute("events", latestEvents);
         return "homepage";
     }
 }
