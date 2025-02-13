@@ -3,6 +3,7 @@ package mk.finki.ukim.mk.crimsonheart.web;
 import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,8 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController {
 
-    private final LocationService locationService;
-
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
-    }
+    @Autowired
+    private LocationService locationService;
 
     @GetMapping("")
     public String getLocationsPage(@RequestParam(required = false) String error,

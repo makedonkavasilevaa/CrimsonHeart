@@ -3,6 +3,7 @@ package mk.finki.ukim.mk.crimsonheart.web;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final AuthService authService;
-    public LoginController(AuthService authService) {
-        this.authService = authService;
-    }
+    @Autowired
+    private AuthService authService;
 
     //@RequestMapping(method = RequestMethod.GET, value = "/login")
     @GetMapping

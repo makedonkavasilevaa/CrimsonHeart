@@ -6,6 +6,7 @@ import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,11 @@ import java.util.List;
 @RequestMapping("/institutions")
 public class InstitutionController {
 
-    private final LocationService locationService;
-    private final InstitutionService institutionService;
+    @Autowired
+    private LocationService locationService;
 
-    public InstitutionController(LocationService locationService, InstitutionService institutionService) {
-        this.locationService = locationService;
-        this.institutionService = institutionService;
-    }
+    @Autowired
+    private InstitutionService institutionService;
 
 
     @GetMapping("")

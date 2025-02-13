@@ -8,6 +8,7 @@ import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +24,14 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UsersService usersService;
-    private final LocationService locationService;
-    private final InstitutionService institutionService;
+    @Autowired
+    private UsersService usersService;
 
-    public UserController(UsersService usersService, LocationService locationService, InstitutionService institutionService) {
-        this.usersService = usersService;
-        this.locationService = locationService;
-        this.institutionService = institutionService;
-    }
+    @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private InstitutionService institutionService;
 
     @GetMapping("")
     public String getUsersPage(@RequestParam(required = false) String error,

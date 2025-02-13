@@ -11,6 +11,7 @@ import mk.finki.ukim.mk.crimsonheart.service.DonationEventService;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,17 +25,17 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventsController {
 
-    private final DonationEventService eventService;
-    private final LocationService locationService;
-    private final InstitutionService institutionService;
-    private final UsersService usersService;
+    @Autowired
+    private DonationEventService eventService;
 
-    public EventsController(DonationEventService donationEventService, LocationService locationService, InstitutionService institutionService, UsersService usersService) {
-        this.eventService = donationEventService;
-        this.locationService = locationService;
-        this.institutionService = institutionService;
-        this.usersService = usersService;
-    }
+    @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private InstitutionService institutionService;
+
+    @Autowired
+    private UsersService usersService;
 
     @GetMapping("")
     public String getEventsPage(@RequestParam(required = false) String error,

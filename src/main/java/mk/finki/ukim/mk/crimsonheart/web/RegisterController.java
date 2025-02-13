@@ -10,6 +10,7 @@ import mk.finki.ukim.mk.crimsonheart.service.AuthService;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,15 +27,14 @@ import java.util.List;
 @RequestMapping("/register")
 public class RegisterController {
 
-    private final UsersService userService;
-    private final LocationService locationService;
-    private final InstitutionService institutionService;
+    @Autowired
+    private UsersService userService;
 
-    public RegisterController(UsersService userService, LocationService locationService, InstitutionService institutionService) {
-        this.userService = userService;
-        this.locationService = locationService;
-        this.institutionService = institutionService;
-    }
+    @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private InstitutionService institutionService;
 
     @GetMapping
     public String getRegisterPage(@RequestParam(required = false) String error, Model model) {

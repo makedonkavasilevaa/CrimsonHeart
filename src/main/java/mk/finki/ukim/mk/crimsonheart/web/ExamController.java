@@ -6,6 +6,7 @@ import mk.finki.ukim.mk.crimsonheart.model.*;
 import mk.finki.ukim.mk.crimsonheart.service.DonationEventService;
 import mk.finki.ukim.mk.crimsonheart.service.ExamService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,15 +21,15 @@ import java.util.List;
 @RequestMapping("/exams")
 public class ExamController {
 
-    private final ExamService examService;
-    private final DonationEventService eventService;
-    private final UsersService usersService;
+    @Autowired
+    private ExamService examService;
 
-    public ExamController(ExamService examService, DonationEventService eventService, UsersService usersService) {
-        this.examService = examService;
-        this.eventService = eventService;
-        this.usersService = usersService;
-    }
+    @Autowired
+    private DonationEventService eventService;
+
+    @Autowired
+    private UsersService usersService;
+
 
     @GetMapping("")
     public String getExamsPage(@RequestParam(required = false) String error,
