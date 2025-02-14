@@ -23,12 +23,12 @@
         }
 
         /* Apply Inknut Antiqua font to the title */
-        #title-header, #title {
+        #title-header {
             font-family: 'Inknut Antiqua', serif;
         }
 
         /* Apply Inika font to the navigation bar */
-        nav {
+        nav, #title {
             font-family: 'Inika', serif;
         }
 
@@ -71,7 +71,6 @@
 
         /* Navigation bar container */
         nav {
-            background-color: #222;
             color: white;
         }
 
@@ -114,6 +113,8 @@
 
         .event-card {
             border-radius: 10px;
+            height: 200px;
+            width: 200px;
             transition: transform 0.3s ease;
         }
 
@@ -127,10 +128,12 @@
             max-height: 4em; /* Limit the height initially */
             overflow: hidden;
             text-overflow: ellipsis;
+            padding: 20px 0px;
         }
 
         .event-description.expanded {
             max-height: none; /* Allow the description to expand fully */
+            padding: 20px 0px;
         }
 
         #slogan{
@@ -146,6 +149,11 @@
 
         .centrirano {
             text-align: -webkit-center;
+        }
+
+        #card-title {
+            font-size: 20px;
+            font-weight: 600;
         }
 
 
@@ -164,7 +172,7 @@
             </a>
         </div>
         <!-- Navigation Bar -->
-        <nav>
+        <nav style="background-color: #222;">
             <div class="container">
                 <ul>
                     <li>
@@ -206,13 +214,11 @@
                 <div class="row">
                     <div th:each="event : ${events}" class="col-md-6 mb-4">
                         <div class="event-card border text-center p-4 bg-light">
-                            <span th:text="${event.getName()}">Event Name</span>
+                            <span  id="card-title" th:text="${event.getName()}">Event Name</span>
 
                             <!-- Event Description (initially shortened) -->
-                            <span th:text="${event.getDescription()}" class="event-description">Event Description</span>
+                            <span id="card-descr" th:text="${event.getDescription()}" class="event-description">Event Description</span>
 
-<!--                            &lt;!&ndash; "Read more" link &ndash;&gt;-->
-<!--                            <button class="btn btn-link" onclick="toggleDescription(this)">Read More</button>-->
                         </div>
                     </div>
                 </div>
@@ -221,19 +227,35 @@
     </div>
 </div>
 
+<!-- Footer -->
+<footer style="background-color: #701516; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav>
+            <div class="container">
+                <ul>
+                    <li>
+                        <a href="/events">Events</a>
+                    </li>
+                    <li>
+                        <a href="/institutions">Institutions</a>
+                    </li>
+                    <li>
+                        <a href="/exams">Exams</a>
+                    </li>
+                    <li>
+                        <a href="/users/patients">Patients</a>
+                    </li>
+                    <li>
+                        <a href="/locations">Location</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Footer Text -->
+        <span style="margin-top: 10px;">Developed by FINKI students</span>
+    </div>
+</footer>
 </body>
 </html>
-
-<!--<script>-->
-<!--    function toggleDescription(button) {-->
-<!--        var description = button.previousElementSibling; // Get the description span-->
-<!--        description.classList.toggle("expanded"); // Toggle the expanded class-->
-
-<!--        // Toggle button text between "Read More" and "Read Less"-->
-<!--        if (description.classList.contains("expanded")) {-->
-<!--            button.innerHTML = "Read Less";-->
-<!--        } else {-->
-<!--            button.innerHTML = "Read More";-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
