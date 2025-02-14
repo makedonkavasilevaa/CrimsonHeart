@@ -71,7 +71,6 @@
 
         /* Navigation bar container */
         nav {
-            background-color: #222;
             color: white;
         }
 
@@ -117,6 +116,13 @@
             color: white;
         }
 
+        #add-button {
+            ackground: #701516;
+            border-radius: 30px;
+            width: max-content;
+            padding: 10px 60px;
+        }
+
     </style>
 </head>
 <body>
@@ -132,7 +138,7 @@
             </a>
         </div>
         <!-- Navigation Bar -->
-        <nav>
+        <nav style="background-color: #222;">
             <div class="container">
                 <ul>
                     <li>
@@ -252,7 +258,7 @@
             <div class="col mb-3">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <a href="institutions/add-form" class="btn btn-block btn-dark add-event-btn">
+                        <a href="institutions/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
                             Add new Institution
                         </a>
                     </div>
@@ -261,5 +267,37 @@
         </div>
     </div>
 </div>
+
+<!-- Footer -->
+<footer style="background-color: #701516; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav>
+            <div class="container">
+                <ul>
+                    <li>
+                        <a href="/events">Events</a>
+                    </li>
+                    <li>
+                        <a href="/institutions">Institutions</a>
+                    </li>
+                    <li>
+                        <a href="/exams">Exams</a>
+                    </li>
+                    <li>
+                        <a href="/users/patients">Patients</a>
+                    </li>
+                    <li>
+                        <a href="/locations">Location</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Footer Text -->
+        <span style="margin-top: 10px;">Developed by FINKI students</span>
+    </div>
+</footer>
+
 </body>
 </html>
