@@ -24,6 +24,10 @@ public class InstitutionController {
     @Autowired
     private InstitutionService institutionService;
 
+    public InstitutionController(LocationService locationService, InstitutionService institutionService) {
+        this.locationService = locationService;
+        this.institutionService = institutionService;
+    }
 
     @GetMapping("")
     public String getInstitutionsPage(@RequestParam(required = false) String error,
