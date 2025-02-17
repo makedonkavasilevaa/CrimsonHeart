@@ -236,24 +236,27 @@
                             ? ${event.getInstitution().getName()} : 'No Institution'"></td>
                             <td th:text="${event.getUser() != null}
                             ? ${event.getUser().getName()} : 'No Manager'"></td>
+
                             <td class="text-right">
-                                <th:block>
+                                <!-- Delete Button -->
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                     <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}"
                                           th:method="DELETE">
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger delete-event">
-                                            <i class="fa fa-trash">Delete</i>
+                                        <button type="submit" class="btn btn-sm btn-danger delete-event">
+                                            <i class="fa fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </th:block>
-                                <th:block>
+
+                                <!-- Edit Button -->
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                     <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
-                                        <i class="fa fa-pencil">Edit</i>
+                                        <i class="fa fa-pencil"></i> Edit
                                     </a>
                                 </th:block>
 
-                                <!-- View Button -->
+                            <!-- View Button (Always Visible) -->
                                 <th:block>
                                     <a th:href="@{/events/viewEvent/{eventId}(eventId=${event.getId()})}"
                                        class="btn btn-sm btn-primary view-event">
@@ -269,9 +272,11 @@
             <div class="col mb-3">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <a href="events/add-form"  id="add-button" class="btn btn-block btn-dark add-event-btn">
-                            Add new event
-                        </a>
+                        <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <a href="events/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
+                                Add new event
+                            </a>
+                        </th:block>
                     </div>
                 </div>
             </div>
