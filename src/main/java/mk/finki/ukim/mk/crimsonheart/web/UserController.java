@@ -1,15 +1,22 @@
 package mk.finki.ukim.mk.crimsonheart.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.ukim.mk.crimsonheart.enums.*;
+import mk.finki.ukim.mk.crimsonheart.exceptions.PasswordsAreTheSameException;
+import mk.finki.ukim.mk.crimsonheart.exceptions.PasswordsDoNotMatchException;
 import mk.finki.ukim.mk.crimsonheart.exceptions.UsersNotFoundException;
+import mk.finki.ukim.mk.crimsonheart.model.Exam;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
+import mk.finki.ukim.mk.crimsonheart.service.ExamService;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +39,9 @@ public class UserController {
 
     @Autowired
     private InstitutionService institutionService;
+
+    @Autowired
+    private ExamService examService;
 
     @GetMapping("")
     public String getUsersPage(@RequestParam(required = false) String error,
@@ -65,6 +75,34 @@ public class UserController {
         model.addAttribute("bloodTypes", bloodTypes);
         model.addAttribute("sexes", sexes);
         return "users";
+    }
+
+    @GetMapping("/viewUser/{userId}")
+    public String getUserView(@PathVariable(required = true) Long userId,
+                             Model model){
+        Users user = this.usersService.findById(userId);
+
+        model.addAttribute("user", user);
+        return "userView";
+    };
+
+    @GetMapping("/profile")
+    public String getProfile(Model model) {
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        // Get the principal (the authenticated user)
+        Users user = (Users) authentication.getPrincipal();  // Cast principal to Users
+        List<Exam> exams = this.examService.findByPatientEmbg(user.getEmbg());
+
+
+        model.addAttribute("exams", exams);
+        model.addAttribute("user", user);
+        return "profile";
     }
 
     @GetMapping("/patients")
@@ -135,6 +173,36 @@ public class UserController {
         model.addAttribute("status", employmentStatuses);
 
         return "add-patient";
+    }
+
+    @GetMapping("/changePassword")
+    public String changePassword() {
+        return "changePassword";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(HttpServletRequest request, Model model){
+
+        String newPassword = request.getParameter("newPassword");
+        String newPasswordRepeat = request.getParameter("newPasswordRepeat");
+
+        try {
+            // Retrieve the authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return "redirect:/login";
+            }
+
+            // Get the principal (the authenticated user)
+            Users user = (Users) authentication.getPrincipal();  // Cast principal to Users
+
+            this.usersService.changePassword(user.getId(), newPassword, newPasswordRepeat);
+            return "redirect:/users/profile";
+        }catch (RuntimeException ex) {
+            // Redirect to the register page with an error message
+            return "redirect:/users/changePassword?error=" + ex.getMessage();
+        }
     }
 
 

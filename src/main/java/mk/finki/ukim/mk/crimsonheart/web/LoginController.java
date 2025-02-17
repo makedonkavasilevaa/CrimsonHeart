@@ -17,10 +17,8 @@ public class LoginController {
     @Autowired
     private AuthService authService;
 
-    //@RequestMapping(method = RequestMethod.GET, value = "/login")
     @GetMapping
     public String getLoginPage() {
-        // Return the name of the Thymeleaf template that will be used to render the login page
         return "login";
     }
     @PostMapping()
@@ -33,6 +31,11 @@ public class LoginController {
         try {
             user = authService.login(username, password);
             request.getSession().setAttribute("user", user);
+            // Store userId in session
+            request.getSession().setAttribute("userId", user.getId());
+
+            System.out.println("userID: "+request.getSession().getAttribute("userId"));
+            System.out.println("user: "+request.getSession().getAttribute("user"));
             // Redirect to the home page
             return "redirect:/events";
         } catch (RuntimeException ex) {

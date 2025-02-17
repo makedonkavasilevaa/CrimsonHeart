@@ -219,6 +219,33 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public void changePassword(Long userId, String newPassword, String repeatedPassword) {
+        if (userId == null || newPassword == null || newPassword.isEmpty() || repeatedPassword == null || repeatedPassword.isEmpty()) {
+            throw new InvalidArgumentsException();
+        }
+
+        Users user = this.usersRepository.findById(userId).orElseThrow(() -> new UsersNotFoundException(userId));
+
+        if (user != null) {
+            String storedPasswordHash = user.getPassword();
+
+            // Check if the old password matches the stored password
+            if (passwordEncoder.matches(newPassword, storedPasswordHash)) {
+                throw new PasswordsAreTheSameException();
+            }
+
+            // Ensure newPassword and repeatedPassword match
+            if (!newPassword.equals(repeatedPassword)) {
+                throw new PasswordsDoNotMatchException();
+            }
+
+            // Encode and save the new password
+            user.setPassword(passwordEncoder.encode(newPassword));
+            usersRepository.save(user);
+        }
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usersRepository.findAllByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }

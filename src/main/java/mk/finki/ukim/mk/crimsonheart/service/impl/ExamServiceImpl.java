@@ -116,7 +116,7 @@ public class ExamServiceImpl implements ExamService {
     public List<Exam> findByPatientEmbg(String patientEmbg) {
         if (patientEmbg.length() == 13){
             Users patient = this.usersRepository.findAllByEmbg(patientEmbg);
-            return this.examRepository.findAllByPatient(patient);
+            return this.examRepository.findExamsByEmbg(patient);
         }else
             return this.examRepository.findAll();
     }

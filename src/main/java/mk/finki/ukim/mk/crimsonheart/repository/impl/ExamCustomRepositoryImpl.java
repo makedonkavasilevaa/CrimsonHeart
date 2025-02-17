@@ -51,5 +51,30 @@ public class ExamCustomRepositoryImpl implements ExamCustomRepository {
         TypedQuery<Exam> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
+
+    @Override
+    public List<Exam> findExamsByEmbg(Users user) {
+        String embg = user.getEmbg();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
+
+        Root<Exam> root = criteriaQuery.from(Exam.class);
+        Join<Exam, DonationEvent> joinEvent = root.join("donationEvent", JoinType.INNER);
+        Join<Exam, Users> joinUser = root.join("patient", JoinType.INNER);
+
+
+        List<Predicate> restrictions = new ArrayList<>();
+
+
+        if (embg != null && !embg.isEmpty() && embg.length() == 13) {
+            restrictions.add(builder.like(joinUser.get("embg"), "%" + embg + "%"));
+        }
+
+        criteriaQuery.where(builder.and(restrictions.toArray(new Predicate[0])));
+
+        // Build and execute query
+        TypedQuery<Exam> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }
 
