@@ -135,10 +135,10 @@
                     <li>
                         <a href="/institutions">Institutions</a>
                     </li>
-                    <li>
+                    <li th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR')}">
                         <a href="/exams">Exams</a>
                     </li>
-                    <li>
+                    <li th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR' or userRole.role == 'NURSE' )}">
                         <a href="/users/patients">Patients</a>
                     </li>
                     <li>

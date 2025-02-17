@@ -148,10 +148,10 @@
                     <li>
                         <a href="/institutions">Institutions</a>
                     </li>
-                    <li>
+                    <li th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR')}">
                         <a href="/exams">Exams</a>
                     </li>
-                    <li>
+                    <li th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR' or userRole.role == 'NURSE' )}">
                         <a href="/users/patients">Patients</a>
                     </li>
                     <li>
@@ -226,7 +226,7 @@
                     </div>
                     <!-- Edit and Delete buttons -->
                     <div class="mt-4 text-right">
-                        <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'MANAGER' or userRole.role == 'ORGANIZER')}">
+                        <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR' or userRole.role == 'NURSE')}">
                             <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}" th:method="DELETE">
                                 <button type="submit" class="btn btn-sm btn-danger">
                                     <i class="fa fa-trash"></i> Delete
@@ -234,7 +234,7 @@
                             </form>
                         </th:block>
 
-                        <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'MANAGER' or userRole.role == 'ORGANIZER')}">
+                        <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'DOCTOR' or userRole.role == 'NURSE')}">
                             <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}" class="btn btn-sm btn-info ml-2">
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
