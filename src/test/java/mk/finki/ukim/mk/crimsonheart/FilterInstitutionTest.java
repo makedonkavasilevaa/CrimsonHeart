@@ -1,151 +1,80 @@
-package mk.finki.ukim.mk.crimsonheart.service.impl;
+package mk.finki.ukim.mk.crimsonheart;
 
-import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
-import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
-import mk.finki.ukim.mk.crimsonheart.model.Location;
+import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
+import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.repository.InstitutionRepository;
-import mk.finki.ukim.mk.crimsonheart.repository.LocationRepository;
+import mk.finki.ukim.mk.crimsonheart.service.impl.InstitutionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
+import util.SubmissionHelper;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
-public class InstitutionServiceTest {
+public class FilterInstitutionTest {
 
     @Mock
     private InstitutionRepository institutionRepository;
 
-    @Mock
-    private LocationRepository locationRepository;
-
     @InjectMocks
-    private InstitutionServiceImpl institutionService; // The service to be tested
+    private InstitutionServiceImpl institutionService;
 
-    private Location location;
-    private Institution institution;
+    private Institution institution1;
+    private Institution institution2;
 
     @BeforeEach
-    void setUp() {
-        // Set up a sample location and institution for the tests
-        location = new Location("123 Main St", CityEnum.SKOPJE, "Skopje", "1000", "North Macedonia");
-        institution = new Institution("Test Institution", "test@example.com", "123456789", InstitutionsType.HOSPITAL, location);
+    public void setUp() {
+        // Initialize mocks
+        MockitoAnnotations.openMocks(this);  // Ensure that Mockito initializes the mocks
+
+        // Set up the test data
+        institution1 = new Institution("Blood Bank 1", "123456789", "blood@bank.com", InstitutionsType.BLOOD_BANK, null);
+        institution1.setId(1L);
+        institution2 = new Institution("Red Cross 1", "987654321", "redcross@charity.com", InstitutionsType.RED_CROSS, null);
+        institution2.setId(2L);
     }
 
     @Test
-    void testFilterInstitutionByName() {
-        // Given
-        String name = "Test Institution";
-        List<Institution> filteredInstitutions = Arrays.asList(institution);
+    public void test_filter_institutions() {
+        // Start the test
+        SubmissionHelper.startTest("test-filter-institutions");
 
-        when(institutionRepository.findByNameContainingIgnoreCase(name)).thenReturn(filteredInstitutions);
+        // Filter by name (text filter)
+        when(institutionRepository.filterInstitutions("Blood Bank 1", InstitutionsType.BLOOD_BANK, "", CityEnum.SKOPJE)).thenReturn(Arrays.asList(institution1));
+        List<Institution> institutions = institutionService.filterInstitution("Blood Bank 1", InstitutionsType.BLOOD_BANK, "", CityEnum.SKOPJE);
+        assertEquals(1, institutions.size(), "Expected 1 institution with name containing 'Blood Bank 1'");
+        assertEquals("Blood Bank 1", institutions.get(0).getName(), "Expected institution name to be 'Blood Bank 1'");
 
-        // When
-        List<Institution> result = institutionService.filterInstitution(name, null, null, null);
+        // Reset the filter
+        when(institutionRepository.filterInstitutions("Red Cross 1", InstitutionsType.RED_CROSS, "", CityEnum.TETOVO)).thenReturn(Arrays.asList(institution2));
+        institutions = institutionService.filterInstitution("Red Cross 1", InstitutionsType.RED_CROSS, "", CityEnum.TETOVO);
+        assertEquals(1, institutions.size(), "Expected 1 institution with name containing 'Red Cross 1'");
+        assertEquals("Red Cross 1", institutions.get(0).getName(), "Expected institution name to be 'Red Cross 1'");
 
-        // Then
-        verify(institutionRepository).findByNameContainingIgnoreCase(name);
-        assertEquals(1, result.size()); // Ensure the correct number of results
-        assertEquals("Test Institution", result.get(0).getName()); // Ensure the correct institution is returned
-    }
+        // Filter by institution type (InstitutionsType.RED_CROSS)
+        when(institutionRepository.filterInstitutions("", InstitutionsType.RED_CROSS, "", CityEnum.TETOVO)).thenReturn(Arrays.asList(institution2));
+        institutions = institutionService.filterInstitution("", InstitutionsType.RED_CROSS, "", CityEnum.TETOVO);
+        assertEquals(1, institutions.size(), "Expected 1 institution of type RED_CROSS");
+        assertEquals("Red Cross 1", institutions.get(0).getName(), "Expected institution name to be 'Red Cross 1'");
 
-    @Test
-    void testFilterInstitutionByType() {
-        // Given
-        InstitutionsType type = InstitutionsType.HOSPITAL;
-        List<Institution> filteredInstitutions = Arrays.asList(institution);
+        // Filter by city (CityEnum.SKOPJE)
+        when(institutionRepository.filterInstitutions("", InstitutionsType.BLOOD_BANK, "", CityEnum.SKOPJE)).thenReturn(Arrays.asList(institution1));
+        institutions = institutionService.filterInstitution("", InstitutionsType.BLOOD_BANK, "", CityEnum.SKOPJE);
+        assertEquals(1, institutions.size(), "Expected 1 institution in SKOPJE");
+        assertEquals("Blood Bank 1", institutions.get(0).getName(), "Expected institution name to be 'Blood Bank 1'");
 
-        when(institutionRepository.findByType(type)).thenReturn(filteredInstitutions);
+        // Filter with no matches (non-existent institution)
+        when(institutionRepository.filterInstitutions("Non-existent Institution", InstitutionsType.HOSPITAL, "", CityEnum.SKOPJE)).thenReturn(Arrays.asList());
+        institutions = institutionService.filterInstitution("Non-existent Institution", InstitutionsType.HOSPITAL, "", CityEnum.SKOPJE);
+        assertEquals(0, institutions.size(), "Expected no institutions for 'Non-existent Institution'");
 
-        // When
-        List<Institution> result = institutionService.filterInstitution(null, type, null, null);
-
-        // Then
-        verify(institutionRepository).findByType(type);
-        assertEquals(1, result.size());
-        assertEquals(InstitutionsType.HOSPITAL, result.get(0).getType());
-    }
-
-    @Test
-    void testFilterInstitutionByCity() {
-        // Given
-        CityEnum city = CityEnum.SKOPJE;
-        List<Institution> filteredInstitutions = Arrays.asList(institution);
-
-        when(institutionRepository.findByLocationCity(city)).thenReturn(filteredInstitutions);
-
-        // When
-        List<Institution> result = institutionService.filterInstitution(null, null, null, city);
-
-        // Then
-        verify(institutionRepository).findByLocationCity(city);
-        assertEquals(1, result.size());
-        assertEquals(CityEnum.SKOPJE, result.get(0).getLocation().getCity());
-    }
-
-    @Test
-    void testFilterInstitutionByAddress() {
-        // Given
-        String address = "123 Main St";
-        List<Institution> filteredInstitutions = Arrays.asList(institution);
-
-        when(institutionRepository.findByLocationAddressContainingIgnoreCase(address)).thenReturn(filteredInstitutions);
-
-        // When
-        List<Institution> result = institutionService.filterInstitution(null, null, address, null);
-
-        // Then
-        verify(institutionRepository).findByLocationAddressContainingIgnoreCase(address);
-        assertEquals(1, result.size());
-        assertEquals("123 Main St", result.get(0).getLocation().getAddress());
-    }
-
-    @Test
-    void testFilterInstitutionByMultipleCriteria() {
-        // Given
-        String name = "Test Institution";
-        InstitutionsType type = InstitutionsType.HOSPITAL;
-        CityEnum city = CityEnum.SKOPJE;
-        String address = "123 Main St";
-        List<Institution> filteredInstitutions = Arrays.asList(institution);
-
-        when(institutionRepository.findByNameContainingIgnoreCaseAndTypeAndLocationCityAndLocationAddressContainingIgnoreCase(
-                name, type, city, address)).thenReturn(filteredInstitutions);
-
-        // When
-        List<Institution> result = institutionService.filterInstitution(name, type, address, city);
-
-        // Then
-        verify(institutionRepository).findByNameContainingIgnoreCaseAndTypeAndLocationCityAndLocationAddressContainingIgnoreCase(
-                name, type, city, address);
-        assertEquals(1, result.size());
-        assertEquals("Test Institution", result.get(0).getName());
-        assertEquals(InstitutionsType.HOSPITAL, result.get(0).getType());
-        assertEquals(CityEnum.SKOPJE, result.get(0).getLocation().getCity());
-        assertEquals("123 Main St", result.get(0).getLocation().getAddress());
-    }
-
-    @Test
-    void testFilterInstitution_NoResults() {
-        // Given
-        String nonExistingName = "Nonexistent Institution";
-        List<Institution> filteredInstitutions = Arrays.asList();
-
-        when(institutionRepository.findByNameContainingIgnoreCase(nonExistingName)).thenReturn(filteredInstitutions);
-
-        // When
-        List<Institution> result = institutionService.filterInstitution(nonExistingName, null, null, null);
-
-        // Then
-        assertTrue(result.isEmpty()); // Ensure no results are returned
+        // End the test
+        SubmissionHelper.endTest();
     }
 }
