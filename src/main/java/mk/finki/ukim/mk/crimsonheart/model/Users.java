@@ -68,13 +68,13 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Exam> doctorExams;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Exam> patientExams;
 
-    @OneToMany(mappedBy = "nurse")
+    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Exam> nurseExams;
 
     boolean hasBeenRejected = false;

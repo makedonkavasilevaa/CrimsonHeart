@@ -33,10 +33,10 @@ public class Institution {
     @OneToOne
     private Location location;
 
-    @OneToMany(mappedBy = "institution")
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<DonationEvent> donationEventEvents;
 
-    @OneToMany(mappedBy = "worksAt")
+    @OneToMany(mappedBy = "worksAt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Users> employees;
 
     public Institution(String name, String phone, String email, InstitutionsType institutionsType, Location location) {

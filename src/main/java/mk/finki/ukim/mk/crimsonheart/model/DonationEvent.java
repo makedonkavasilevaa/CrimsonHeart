@@ -44,7 +44,7 @@ public class DonationEvent {
 
     String timeOfEvent;
 
-    @OneToMany(mappedBy = "donationEvent")
+    @OneToMany(mappedBy = "donationEvent", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Exam> examList;
 
     public DonationEvent(String name, String description, DonationType donationType, Location location, Date dateOfEvent, String timeOfEvent, Institution institution, Users user) {

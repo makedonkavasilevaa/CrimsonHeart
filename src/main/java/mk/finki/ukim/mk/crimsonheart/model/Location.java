@@ -33,7 +33,7 @@ public class Location {
     @Column(nullable = false)
     String country = "North Macedonia";
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = false)
     List<DonationEvent> donationEvents;
 
     public String getFullAddress() {
