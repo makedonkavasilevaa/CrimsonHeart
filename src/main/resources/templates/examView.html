@@ -163,7 +163,72 @@
     </header>
 </div>
 
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Display exam details in a card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Exam Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Performed on:</strong></div>
+                        <div class="col-8" th:text="${exam.getPerformedOn()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Patient Name:</strong></div>
+                        <div class="col-8" th:text="${exam.getPatient().getName()} + ' ' + ${exam.getPatient().getSurname()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Patient EMBG:</strong></div>
+                        <div class="col-8" th:text="${exam.getPatient().getEmbg()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Blood Pressure:</strong></div>
+                        <div class="col-8" th:text="${exam.getBloodPressure()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Hemoglobin:</strong></div>
+                        <div class="col-8" th:text="${exam.getHemoglobin()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Successful Exam?</strong></div>
+                        <div class="col-8" th:text="${exam.isSuccessfulExam() ? 'Yes' : 'No'}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Doctor:</strong></div>
+                        <div class="col-8" th:text="${exam.getDoctor().getName()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Nurse:</strong></div>
+                        <div class="col-8" th:text="${exam.getNurse().getName()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Additional Comment:</strong></div>
+                        <div class="col-8" th:text="${exam.getComment() != null ? exam.getComment() : 'No Comment'}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Event:</strong></div>
+                        <div class="col-8" th:text="${exam.getDonationEvent().getName()}"></div>
+                    </div>
 
+                    <!-- Edit and Delete buttons -->
+                    <div class="mt-4 text-right">
+                        <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}" th:method="DELETE">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                        </form>
+                        <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}" class="btn btn-sm btn-info ml-2">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer style="background-color: #701516; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">

@@ -63,6 +63,15 @@ public class ExamController {
         return "exams";
     }
 
+    @GetMapping("/viewExam/{examId}")
+    public String getExamView(@PathVariable(required = true) Long examId,
+                              Model model){
+        Exam exam = examService.findById(examId);
+
+        model.addAttribute("exam", exam);
+        return "examView";
+    };
+
     @GetMapping("/add-form")
     public String getAddExamPage(Model model) {
 
