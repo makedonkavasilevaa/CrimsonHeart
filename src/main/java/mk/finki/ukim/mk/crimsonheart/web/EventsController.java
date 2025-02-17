@@ -102,6 +102,17 @@ public class EventsController {
         List<Institution> institutions = this.institutionService.listAll();
         List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
 
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
+
         model.addAttribute("locations", locations);
         model.addAttribute("donationTypes", donationTypes);
         model.addAttribute("institutions", institutions);
@@ -144,6 +155,17 @@ public class EventsController {
             List<DonationType> donationTypes = List.of(DonationType.values());
             List<Institution> institutions = this.institutionService.listAll();
             List<Users> managers = this.usersService.findByRole(Roles.MANAGER);
+
+            // Retrieve the authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()
+                    && !(authentication instanceof AnonymousAuthenticationToken)) {
+                Users user = (Users) authentication.getPrincipal();
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("user", null); // No logged-in user
+            }
 
             model.addAttribute("locations", locations);
             model.addAttribute("event", event);

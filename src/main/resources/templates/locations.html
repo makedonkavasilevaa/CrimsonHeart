@@ -156,6 +156,9 @@
                     <li>
                         <a href="/locations">Location</a>
                     </li>
+                    <li th:if="${user != null and user.role == 'SUPERADMIN'}">
+                        <a href="/users">Users</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -213,8 +216,9 @@
                             <td th:text="${location.getZip()}"></td>
                             <td th:text="${location.getCountry()}"></td>
                             <td class="text-right">
-                                <th:block>
-                                    <form th:action="@{'/locations/delete/{id}' (id=${location.getId()})}"
+
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                                <form th:action="@{'/locations/delete/{id}' (id=${location.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-event">
@@ -222,8 +226,9 @@
                                         </button>
                                     </form>
                                 </th:block>
-                                <th:block>
-                                    <a th:href="@{/locations/edit/{locationId}(locationId=${location.getId()})}"
+
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                                <a th:href="@{/locations/edit/{locationId}(locationId=${location.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-pencil">Edit</i>
                                     </a>
@@ -236,11 +241,13 @@
             </div>
             <div class="col mb-3">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="locations/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
-                            Add new Location
-                        </a>
-                    </div>
+                    <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                        <div class="col-sm-12 col-md-12">
+                            <a href="locations/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
+                                Add new Location
+                            </a>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>

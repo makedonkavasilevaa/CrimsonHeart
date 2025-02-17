@@ -149,6 +149,9 @@
                     <li>
                         <a href="/locations">Location</a>
                     </li>
+                    <li th:if="${userRole != null and userRole.role == 'SUPERADMIN'}">
+                        <a href="/users">Users</a>
+                    </li>
                 </ul>
             </div>
         </nav>

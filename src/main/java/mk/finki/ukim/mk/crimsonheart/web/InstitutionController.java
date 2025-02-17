@@ -4,9 +4,13 @@ import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.enums.InstitutionsType;
 import mk.finki.ukim.mk.crimsonheart.model.Institution;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
+import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +44,18 @@ public class InstitutionController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
+
         List<Institution> institutions = new ArrayList<>();
 
         if (institutionsType != null || city != null || name != null || address != null) {
@@ -61,6 +77,17 @@ public class InstitutionController {
     public String getAddInstitutionPage(Model model) {
         List<Location> locations = this.locationService.listAll();
         List<InstitutionsType> types = List.of(InstitutionsType.values());
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
 
         model.addAttribute("locations", locations);
         model.addAttribute("types", types);
@@ -96,6 +123,17 @@ public class InstitutionController {
             Institution institution = this.institutionService.findById(institutionId);
             List<Location> locations = this.locationService.listAll();
             List<InstitutionsType> types = List.of(InstitutionsType.values());
+
+            // Retrieve the authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()
+                    && !(authentication instanceof AnonymousAuthenticationToken)) {
+                Users user = (Users) authentication.getPrincipal();
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("user", null); // No logged-in user
+            }
 
             model.addAttribute("institution", institution);
             model.addAttribute("locations", locations);

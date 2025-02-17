@@ -150,6 +150,9 @@
                     <li>
                         <a href="/locations">Location</a>
                     </li>
+                    <li th:if="${userRole != null and userRole.role == 'SUPERADMIN'}">
+                        <a href="/users">Users</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -233,7 +236,7 @@
                         <td th:text="${user.getEmploymentStatus() != null}
                             ? ${user.getEmploymentStatus().name()} : 'No Data'"></td>
                         <td class="text-right">
-                            <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'MANAGER' or userRole.role == 'ORGANIZER')}">
                                 <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}"
                                       th:method="DELETE">
                                     <button type="submit"
@@ -242,7 +245,7 @@
                                     </button>
                                 </form>
                             </th:block>
-                            <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'MANAGER' or userRole.role == 'ORGANIZER')}">
                                 <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}"
                                    class="btn btn-sm btn-info edit-event">
                                     <i class="fa fa-pencil">Edit</i>
@@ -263,7 +266,7 @@
         </div>
         <div class="col mb-3">
             <div class="row">
-                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                <th:block th:if="${userRole != null and (userRole.role == 'SUPERADMIN' or userRole.role == 'MANAGER' or userRole.role == 'ORGANIZER')}">
                     <div class="col-sm-12 col-md-12">
                         <a href="users/add-patient" class="btn btn-block btn-dark add-event-btn">
                             Add new Patient

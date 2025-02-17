@@ -2,8 +2,12 @@ package mk.finki.ukim.mk.crimsonheart.web;
 
 import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.model.Location;
+import mk.finki.ukim.mk.crimsonheart.model.Users;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +32,18 @@ public class LocationController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
+
         List<Location> locations = new ArrayList<>();
 
         if (address != null || city != null) {
@@ -46,6 +62,17 @@ public class LocationController {
     @GetMapping("/add-form")
     public String getAddLocationPage(Model model) {
         List<CityEnum> cities = List.of(CityEnum.values());
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
 
         model.addAttribute("cities", cities);
 
@@ -79,6 +106,17 @@ public class LocationController {
         if (this.locationService.findById(locationId) != null) {
             Location location = this.locationService.findById(locationId);
             List<CityEnum> cities = List.of(CityEnum.values());
+
+            // Retrieve the authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()
+                    && !(authentication instanceof AnonymousAuthenticationToken)) {
+                Users user = (Users) authentication.getPrincipal();
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("user", null); // No logged-in user
+            }
 
             model.addAttribute("location", location);
             model.addAttribute("cities", cities);

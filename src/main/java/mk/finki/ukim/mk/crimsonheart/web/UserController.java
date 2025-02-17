@@ -139,6 +139,15 @@ public class UserController {
             model.addAttribute("error", error);
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users userRole = (Users) authentication.getPrincipal();
+            model.addAttribute("userRole", userRole);
+        } else {
+            model.addAttribute("userRole", null); // No logged-in user
+        }
+
         List<Users> users = new ArrayList<>();
 
         if (name != null || embg != null || bloodType != null) {
@@ -169,6 +178,15 @@ public class UserController {
         List<Sex> sexes = List.of(Sex.values());
         List<Institution> institutions = this.institutionService.listAll();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users userRole = (Users) authentication.getPrincipal();
+            model.addAttribute("userRole", userRole);
+        } else {
+            model.addAttribute("userRole", null); // No logged-in user
+        }
+
         model.addAttribute("locations", locations);
         model.addAttribute("institutions", institutions);
         model.addAttribute("roles", roles);
@@ -186,6 +204,15 @@ public class UserController {
         List<Sex> sexes = List.of(Sex.values());
         List<Institution> institutions = this.institutionService.listAll();
         List<EmploymentStatus> employmentStatuses = List.of(EmploymentStatus.values());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users userRole = (Users) authentication.getPrincipal();
+            model.addAttribute("userRole", userRole);
+        } else {
+            model.addAttribute("userRole", null); // No logged-in user
+        }
 
         model.addAttribute("locations", locations);
         model.addAttribute("institutions", institutions);
@@ -288,6 +315,15 @@ public class UserController {
             List<Location> locations = this.locationService.listAll();
             List<Institution> institutions = this.institutionService.listAll();
             List<Sex> sexes = List.of(Sex.values());
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()
+                    && !(authentication instanceof AnonymousAuthenticationToken)) {
+                Users userRole = (Users) authentication.getPrincipal();
+                model.addAttribute("userRole", userRole);
+            } else {
+                model.addAttribute("userRole", null); // No logged-in user
+            }
 
             model.addAttribute("user", user);
             model.addAttribute("bloodTypes", bloodTypes);
