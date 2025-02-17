@@ -151,11 +151,11 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public List<Exam> findByNameAndPatientEmbgAndEvent(String name, String embg, Long eventId) {
-        if (embg.length() == 13) {
-            Users patient = this.usersRepository.findAllByEmbg(embg);
-            DonationEvent event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
-            return this.examRepository.findAllByPatientAndDonationEventAndPatientNameContainingIgnoreCase(patient, event, name);
-        }else
-            return this.examRepository.findAll();
+
+        DonationEvent event = null;
+        if (eventId != null){
+            event = this.eventRepository.findById(eventId).orElseThrow(() -> new DonationEventNotFoundException(eventId));
+        }
+        return this.examRepository.filterExams(name, embg, event);
     }
 }

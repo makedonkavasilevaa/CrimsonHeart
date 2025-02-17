@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ExamRepository extends JpaRepository<Exam, Integer> {
+public interface ExamRepository extends JpaRepository<Exam, Integer>, ExamCustomRepository{
 
     Optional<Exam> findById(Long id);
     void deleteById(Long id);
