@@ -1,133 +1,73 @@
 package mk.finki.ukim.mk.crimsonheart;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import mk.finki.ukim.mk.crimsonheart.model.Location;
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
+import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.repository.LocationRepository;
 import mk.finki.ukim.mk.crimsonheart.service.impl.LocationServiceImpl;
-import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
+import util.SubmissionHelper;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
-public class LocationServiceTest {
+public class FilterLocationTest {
 
     @Mock
-    private LocationRepository locationRepository; // Mock the repository
+    private LocationRepository locationRepository;
 
     @InjectMocks
-    private LocationServiceImpl locationService; // Inject the mock repository into the service
+    private LocationServiceImpl locationService;
+
+    private Location location1;
+    private Location location2;
 
     @BeforeEach
-    void setUp() {
-        // No need for manual instantiation, @InjectMocks handles it
+    public void setUp() {
+        // Initialize mocks
+        MockitoAnnotations.openMocks(this);  // Ensure that Mockito initializes the mocks
+
+        // Set up the test data
+        location1 = new Location("123 Main St", CityEnum.SKOPJE, "Center", "1000", "North Macedonia");
+        location1.setId(1L);
+        location2 = new Location("456 Side St", CityEnum.TETOVO, "East", "2000", "North Macedonia");
+        location2.setId(2L);
     }
 
     @Test
-    void testFilterLocationsByAddress() {
-        // Given
-        String address = "123 Main St";
-        List<Location> filteredLocations = Arrays.asList(
-                new Location(address, CityEnum.SKOPJE, "Skopje", "1000", "North Macedonia")
-        );
+    public void test_filter_locations() {
+        // Start the test
+        SubmissionHelper.startTest("test-filter-locations");
 
-        // When
-        when(locationRepository.findByAddressContainingIgnoreCase(address)).thenReturn(filteredLocations);
+        // Filter by address (text filter)
+        when(locationRepository.filterLocations("123 Main St", CityEnum.SKOPJE)).thenReturn(Arrays.asList(location1));
+        List<Location> locations = locationService.filterLocations("123 Main St", CityEnum.SKOPJE);
+        assertEquals(1, locations.size(), "Expected 1 location with address containing '123 Main St'");
+        assertEquals("123 Main St", locations.get(0).getAddress(), "Expected location address to be '123 Main St'");
 
-        // Call service method to filter locations by address
-        List<Location> result = locationService.filterLocations(address, null, null);
+        // Reset the filter
+        when(locationRepository.filterLocations("456 Side St", CityEnum.TETOVO)).thenReturn(Arrays.asList(location2));
+        locations = locationService.filterLocations("456 Side St", CityEnum.TETOVO);
+        assertEquals(1, locations.size(), "Expected 1 location with address containing '456 Side St'");
+        assertEquals("456 Side St", locations.get(0).getAddress(), "Expected location address to be '456 Side St'");
 
-        // Then
-        verify(locationRepository).findByAddressContainingIgnoreCase(address); // Ensure repository was called
-        assertEquals(1, result.size()); // Ensure we got the expected number of locations
-        assertEquals(address, result.get(0).getAddress()); // Verify correct location was returned
-    }
+        // Filter by city (CityEnum.SKOPJE)
+        when(locationRepository.filterLocations("", CityEnum.SKOPJE)).thenReturn(Arrays.asList(location1));
+        locations = locationService.filterLocations("", CityEnum.SKOPJE);
+        assertEquals(1, locations.size(), "Expected 1 location in SKOPJE");
+        assertEquals("123 Main St", locations.get(0).getAddress(), "Expected location address to be '123 Main St'");
 
-    @Test
-    void testFilterLocationsByCity() {
-        // Given
-        CityEnum city = CityEnum.SKOPJE;
-        List<Location> filteredLocations = Arrays.asList(
-                new Location("123 Main St", city, "Skopje", "1000", "North Macedonia")
-        );
+        // Filter with no matches (non-existent location)
+        when(locationRepository.filterLocations("Non-existent Address", CityEnum.SKOPJE)).thenReturn(Arrays.asList());
+        locations = locationService.filterLocations("Non-existent Address", CityEnum.SKOPJE);
+        assertEquals(0, locations.size(), "Expected no locations for 'Non-existent Address'");
 
-        // When
-        when(locationRepository.findByCity(city)).thenReturn(filteredLocations);
-
-        // Call service method to filter locations by city
-        List<Location> result = locationService.filterLocations(null, city, null);
-
-        // Then
-        verify(locationRepository).findByCity(city); // Ensure repository was called
-        assertEquals(1, result.size()); // Ensure we got the expected number of locations
-        assertEquals(city, result.get(0).getCity()); // Verify correct city
-    }
-
-    @Test
-    void testFilterLocationsByZip() {
-        // Given
-        String zip = "1000";
-        List<Location> filteredLocations = Arrays.asList(
-                new Location("123 Main St", CityEnum.SKOPJE, "Skopje", zip, "North Macedonia")
-        );
-
-        // When
-        when(locationRepository.findByZip(zip)).thenReturn(filteredLocations);
-
-        // Call service method to filter locations by zip
-        List<Location> result = locationService.filterLocations(null, null, zip);
-
-        // Then
-        verify(locationRepository).findByZip(zip); // Ensure repository was called
-        assertEquals(1, result.size()); // Ensure we got the expected number of locations
-        assertEquals(zip, result.get(0).getZip()); // Verify correct zip
-    }
-
-    @Test
-    void testFilterLocations_NoResults() {
-        // Given
-        String nonExistingAddress = "Nonexistent Address";
-        List<Location> filteredLocations = Arrays.asList();
-
-        // When
-        when(locationRepository.findByAddressContainingIgnoreCase(nonExistingAddress)).thenReturn(filteredLocations);
-
-        // Call service method to filter locations by address
-        List<Location> result = locationService.filterLocations(nonExistingAddress, null, null);
-
-        // Then
-        assertTrue(result.isEmpty()); // Ensure no locations are returned
-    }
-
-    @Test
-    void testFilterLocations_AllFilters() {
-        // Given
-        String address = "Main St";
-        CityEnum city = CityEnum.SKOPJE;
-        String zip = "1000";
-        List<Location> filteredLocations = Arrays.asList(
-                new Location(address, city, "Skopje", zip, "North Macedonia")
-        );
-
-        // When
-        when(locationRepository.findByAddressContainingIgnoreCase(address)).thenReturn(filteredLocations);
-
-        // Call service method to filter locations by address, city, and zip
-        List<Location> result = locationService.filterLocations(address, city, zip);
-
-        // Then
-        verify(locationRepository).findByAddressContainingIgnoreCase(address); // Ensure repository was called
-        assertEquals(1, result.size()); // Ensure we got the expected number of locations
-        assertEquals(address, result.get(0).getAddress()); // Verify correct location was returned
-        assertEquals(city, result.get(0).getCity()); // Verify correct city
-        assertEquals(zip, result.get(0).getZip()); // Verify correct zip
+        // End the test
+        SubmissionHelper.endTest();
     }
 }
