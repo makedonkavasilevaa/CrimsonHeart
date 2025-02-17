@@ -80,6 +80,17 @@ public class EventsController {
                               Model model){
         DonationEvent event = this.eventService.findById(eventId);
 
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
+
         model.addAttribute("event", event);
         return "eventView";
     };

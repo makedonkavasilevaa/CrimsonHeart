@@ -205,14 +205,19 @@
                     </div>
 
                     <div class="mt-4 text-right">
-                        <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}" th:method="DELETE">
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-                        </form>
-                        <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}" class="btn btn-sm btn-info ml-2">
-                            <i class="fa fa-pencil"></i> Edit
-                        </a>
+                        <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}" th:method="DELETE">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </th:block>
+
+                        <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}" class="btn btn-sm btn-info ml-2">
+                                <i class="fa fa-pencil"></i> Edit
+                            </a>
+                        </th:block>
                     </div>
                 </div>
             </div>
