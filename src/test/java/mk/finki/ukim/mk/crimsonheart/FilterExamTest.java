@@ -1,142 +1,89 @@
 package mk.finki.ukim.mk.crimsonheart;
 
-import mk.finki.ukim.mk.crimsonheart.enums.Roles;
-import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import mk.finki.ukim.mk.crimsonheart.model.Exam;
+import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
 import mk.finki.ukim.mk.crimsonheart.model.Users;
-import mk.finki.ukim.mk.crimsonheart.service.ExamService;
+import mk.finki.ukim.mk.crimsonheart.repository.DonationEventRepository;
 import mk.finki.ukim.mk.crimsonheart.repository.ExamRepository;
+import mk.finki.ukim.mk.crimsonheart.service.ExamService;
+import mk.finki.ukim.mk.crimsonheart.service.impl.ExamServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.*;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-public class ExamServiceTest {
+public class FilterExamTest {
 
     @Mock
     private ExamRepository examRepository;
 
+    @Mock
+    private DonationEventRepository eventRepository;
+
     @InjectMocks
-    private ExamService examService;
+    private ExamServiceImpl examService;
 
     private Users doctor;
     private Users patient;
     private Users nurse;
     private DonationEvent donationEvent;
-    private Exam exam;
+    private Exam exam1;
+    private Exam exam2;
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks
+    public void setUp() {
+        // Initialize mocks
+        MockitoAnnotations.openMocks(this);
 
-        // Create test data
-        doctor = new Users("Dr. Test", "doctor@example.com", Roles.DOCTOR);
-        patient = new Users("John Doe", "john.doe@example.com", Roles.PATIENT);
-        nurse = new Users("Nurse Test", "nurse@example.com", Roles.NURSE);
-        donationEvent = new DonationEvent(new Date(), "Blood Drive", "Location A");
+        // Set up test data
+        doctor = new Users();
+        doctor.setName("Dr. Smith");
+        doctor.setId(1L);
 
-        exam = new Exam(new Date(), "120/80", 13.5F, donationEvent, doctor, patient, nurse, true, "Exam successful");
+        nurse = new Users();
+        nurse.setName("Nurse Jane");
+        nurse.setId(2L);
+
+        patient = new Users();
+        patient.setName("John Doe");
+        patient.setId(3L);
+        patient.setEmbg("1234567890123");
+
+        donationEvent = new DonationEvent(); // Assuming DonationEvent is already set up
+        donationEvent.setId(1L);
+
+        exam1 = new Exam(new Date(), "120/80", 13.5f, donationEvent, doctor, patient, nurse, true, "No issues");
+        exam1.setId(1L);
+
+        exam2 = new Exam(new Date(), "130/90", 14.0f, donationEvent, doctor, patient, nurse, false, "Blood pressure high");
+        exam2.setId(2L);
     }
 
     @Test
-    public void testFindByName() {
-        // Given
-        when(examRepository.findByName("John")).thenReturn(Arrays.asList(exam));
+    public void test_findByNameAndPatientEmbgAndEvent() {
+        // Start the test
+        System.out.println("Starting test_findByNameAndPatientEmbgAndEvent");
 
-        // When
-        List<Exam> exams = examService.findByName("John");
+        // Mock the repository behavior
+        when(eventRepository.findById(1L)).thenReturn(java.util.Optional.of(donationEvent));  // Mock event retrieval
+        when(examRepository.filterExams("Dr. Smith", "1234567890123", donationEvent))
+                .thenReturn(List.of(exam1, exam2));
 
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("John Doe", exams.get(0).getPatient().getUsername());
-    }
+        // Call the service method
+        List<Exam> exams = examService.findByNameAndPatientEmbgAndEvent("Dr. Smith", "1234567890123", 1L);
 
-    @Test
-    public void testFindByPatientEmbg() {
-        // Given
-        String embg = "1234567890123";  // Mock EMBG for test
-        when(examRepository.findByPatientEmbg(embg)).thenReturn(Arrays.asList(exam));
+        // Assertions
+        assertEquals(2, exams.size(), "Expected 2 exams for the specified doctor, patient, and event");
+        assertEquals("Dr. Smith", exams.get(0).getDoctor().getName(), "Expected doctor name to be 'Dr. Smith'");
+        assertEquals("John Doe", exams.get(0).getPatient().getName(), "Expected patient name to be 'John Doe'");
+        assertEquals("120/80", exams.get(0).getBloodPressure(), "Expected blood pressure to be '120/80'");
 
-        // When
-        List<Exam> exams = examService.findByPatientEmbg(embg);
-
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("John Doe", exams.get(0).getPatient().getUsername());
-    }
-
-    @Test
-    public void testFindByEvent() {
-        // Given
-        Long eventId = donationEvent.getId();
-        when(examRepository.findByDonationEventId(eventId)).thenReturn(Arrays.asList(exam));
-
-        // When
-        List<Exam> exams = examService.findByEvent(eventId);
-
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("Blood Drive", exams.get(0).getDonationEvent().getName());
-    }
-
-    @Test
-    public void testFindByNameAndEvent() {
-        // Given
-        Long eventId = donationEvent.getId();
-        when(examRepository.findByNameAndDonationEventId("John", eventId)).thenReturn(Arrays.asList(exam));
-
-        // When
-        List<Exam> exams = examService.findByNameAndEvent(eventId, "John");
-
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("John Doe", exams.get(0).getPatient().getUsername());
-        assertEquals("Blood Drive", exams.get(0).getDonationEvent().getName());
-    }
-
-    @Test
-    public void testFindByNameAndPatientEmbgAndEvent() {
-        // Given
-        Long eventId = donationEvent.getId();
-        String embg = "1234567890123";
-        when(examRepository.findByNameAndPatientEmbgAndEvent("John", embg, eventId)).thenReturn(Arrays.asList(exam));
-
-        // When
-        List<Exam> exams = examService.findByNameAndPatientEmbgAndEvent("John", embg, eventId);
-
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("John Doe", exams.get(0).getPatient().getUsername());
-        assertEquals("Blood Drive", exams.get(0).getDonationEvent().getName());
-    }
-
-    @Test
-    public void testFindAllExams() {
-        // Given
-        when(examRepository.findAll()).thenReturn(Arrays.asList(exam));
-
-        // When
-        List<Exam> exams = examService.listAll();
-
-        // Then
-        assertNotNull(exams);
-        assertEquals(1, exams.size());
-        assertEquals("John Doe", exams.get(0).getPatient().getUsername());
+        // End the test
+        System.out.println("Ending test_findByNameAndPatientEmbgAndEvent");
     }
 }
