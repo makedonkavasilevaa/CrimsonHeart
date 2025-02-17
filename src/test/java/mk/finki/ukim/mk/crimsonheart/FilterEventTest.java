@@ -1,137 +1,80 @@
 package mk.finki.ukim.mk.crimsonheart;
 
-import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
-import mk.finki.ukim.mk.crimsonheart.model.Institution;
-import mk.finki.ukim.mk.crimsonheart.model.Location;
-import mk.finki.ukim.mk.crimsonheart.model.Users;
-import mk.finki.ukim.mk.crimsonheart.repository.DonationEventRepository;
+import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
+import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.service.DonationEventService;
+import mk.finki.ukim.mk.crimsonheart.repository.DonationEventRepository;
+import mk.finki.ukim.mk.crimsonheart.service.impl.DonationEventServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.*;
+import util.SubmissionHelper;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-public class DonationEventServiceTest {
+public class FilterEventTest {
 
     @Mock
     private DonationEventRepository donationEventRepository;
 
     @InjectMocks
-    private DonationEventService donationEventService;
+    private DonationEventServiceImpl donationEventService;
 
-    private Institution institution;
-    private Users user;
-    private Location location;
-    private DonationEvent donationEvent;
-    private DonationEvent donationEvent2;
+    private DonationEvent event1;
+    private DonationEvent event2;
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks
+    public void setUp() {
+        // Initialize mocks
+        MockitoAnnotations.openMocks(this);  // Ensure that Mockito initializes the mocks
 
-        // Create test data
-        institution = new Institution("Institution A", "Address A");
-        user = new Users("Admin", "admin@example.com", null);  // Simplified user model
-        location = new Location("Location A", "Address A");
-
-        donationEvent = new DonationEvent("Blood Drive", "Blood donation event", DonationType.BLOOD, location, new Date(), "10:00", institution, user);
-        donationEvent2 = new DonationEvent("Plasma Drive", "Plasma donation event", DonationType.PLASMA, location, new Date(), "12:00", institution, user);
+        // Set up the test data
+        event1 = new DonationEvent("Blood Donation", "Description of blood donation", DonationType.HUMANITARIAN_EVENT, null, null, null, null, null);
+        event1.setId(1L);
+        event2 = new DonationEvent("Plasma Donation", "Description of plasma donation", DonationType.HOSPITAL, null, null, null, null, null);
+        event2.setId(2L);
     }
 
     @Test
-    public void testFindByName() {
-        // Given
-        when(donationEventRepository.findByName("Blood Drive")).thenReturn(Arrays.asList(donationEvent));
+    public void test_filter_events() {
+        // Start the test
+        SubmissionHelper.startTest("test-filter-events");
 
-        // When
-        List<DonationEvent> events = donationEventService.findByName("Blood Drive");
+        // Filter by name (text filter)
+        when(donationEventRepository.filterEvents("Blood", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE)).thenReturn(Arrays.asList(event1));
+        List<DonationEvent> events = donationEventService.filterEvents("Blood", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE);
+        assertEquals(1, events.size(), "Expected 1 event with name containing 'Blood'");
+        assertEquals("Blood Donation", events.get(0).getName(), "Expected event name to be 'Blood Donation'");
 
-        // Then
-        assertNotNull(events);
-        assertEquals(1, events.size());
-        assertEquals("Blood Drive", events.get(0).getName());
-    }
+        // Reset the filter
+        when(donationEventRepository.filterEvents("Plasma", DonationType.HOSPITAL, CityEnum.SKOPJE)).thenReturn(Arrays.asList(event2));
+        events = donationEventService.filterEvents("Plasma", DonationType.HOSPITAL, CityEnum.SKOPJE);
+        assertEquals(1, events.size(), "Expected 1 event with name containing 'Plasma'");
+        assertEquals("Plasma Donation", events.get(0).getName(), "Expected event name to be 'Plasma Donation'");
 
-    @Test
-    public void testFindByDonationType() {
-        // Given
-        when(donationEventRepository.findByDonationType(DonationType.BLOOD)).thenReturn(Arrays.asList(donationEvent));
+        // Filter by donation type (DonationType.HOSPITAL)
+        when(donationEventRepository.filterEvents("", DonationType.HOSPITAL, CityEnum.SKOPJE)).thenReturn(Arrays.asList(event2));
+        events = donationEventService.filterEvents("", DonationType.HOSPITAL, CityEnum.SKOPJE);
+        assertEquals(1, events.size(), "Expected 1 event of type Plasma");
+        assertEquals("Plasma Donation", events.get(0).getName(), "Expected event name to be 'Plasma Donation'");
 
-        // When
-        List<DonationEvent> events = donationEventService.findByDonationType(DonationType.BLOOD);
+        // Filter by city (CityEnum.SKOPJE)
+        when(donationEventRepository.filterEvents("", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE)).thenReturn(Arrays.asList(event1));
+        events = donationEventService.filterEvents("", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE);
+        assertEquals(1, events.size(), "Expected 1 event in SKOPJE");
+        assertEquals("Blood Donation", events.get(0).getName(), "Expected event name to be 'Blood Donation'");
 
-        // Then
-        assertNotNull(events);
-        assertEquals(1, events.size());
-        assertEquals(DonationType.BLOOD, events.get(0).getDonationType());
-    }
+        // Filter with no matches (non-existent event)
+        when(donationEventRepository.filterEvents("Non-existent Event", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE)).thenReturn(Arrays.asList());
+        events = donationEventService.filterEvents("Non-existent Event", DonationType.HUMANITARIAN_EVENT, CityEnum.SKOPJE);
+        assertEquals(0, events.size(), "Expected no events for 'Non-existent Event'");
 
-    @Test
-    public void testFindByLocation() {
-        // Given
-        when(donationEventRepository.findByLocation(location)).thenReturn(Arrays.asList(donationEvent, donationEvent2));
-
-        // When
-        List<DonationEvent> events = donationEventService.findByLocation(location);
-
-        // Then
-        assertNotNull(events);
-        assertEquals(2, events.size());
-        assertTrue(events.stream().anyMatch(e -> "Blood Drive".equals(e.getName())));
-        assertTrue(events.stream().anyMatch(e -> "Plasma Drive".equals(e.getName())));
-    }
-
-    @Test
-    public void testFindByDateOfEvent() {
-        // Given
-        Date date = new Date();
-        when(donationEventRepository.findByDateOfEvent(date)).thenReturn(Arrays.asList(donationEvent));
-
-        // When
-        List<DonationEvent> events = donationEventService.findByDateOfEvent(date);
-
-        // Then
-        assertNotNull(events);
-        assertEquals(1, events.size());
-        assertEquals(date, events.get(0).getDateOfEvent());
-    }
-
-    @Test
-    public void testFindByDescription() {
-        // Given
-        when(donationEventRepository.findByDescription("Blood donation event")).thenReturn(Arrays.asList(donationEvent));
-
-        // When
-        List<DonationEvent> events = donationEventService.findByDescription("Blood donation event");
-
-        // Then
-        assertNotNull(events);
-        assertEquals(1, events.size());
-        assertEquals("Blood donation event", events.get(0).getDescription());
-    }
-
-    @Test
-    public void testFindAllDonationEvents() {
-        // Given
-        when(donationEventRepository.findAll()).thenReturn(Arrays.asList(donationEvent, donationEvent2));
-
-        // When
-        List<DonationEvent> events = donationEventService.listAll();
-
-        // Then
-        assertNotNull(events);
-        assertEquals(2, events.size());
+        // End the test
+        SubmissionHelper.endTest();
     }
 }
