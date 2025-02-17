@@ -32,10 +32,6 @@
             font-family: 'Inika', serif;
         }
 
-        #submit{
-            background-color: #701516;
-        }
-
         /* Header container style */
         #header-container {
             background-color: #701516;
@@ -93,6 +89,7 @@
         }
 
         /* Navigation link style */
+        /* Navigation link style */
         nav ul li a {
             color: white;
             text-decoration: none;
@@ -114,6 +111,11 @@
             transform: scale(1.2);  /* Apply scale transformation */
         }
 
+        #submit{
+            background: #701516;
+            color: white;
+        }
+
         #add-button {
             ackground: #701516;
             border-radius: 30px;
@@ -131,6 +133,7 @@
         <div id="header-container">
             <img src="/images/human-heart-38.png" alt="Heart Logo" id="logo_heart">
             <span id="title-header">CRIMSON HEART</span>
+
             <a href="/login">
                 <img src="/images/output-onlinepngtools.png" alt="User Icon" id="user-icon">
             </a>
@@ -160,110 +163,7 @@
     </header>
 </div>
 
-    <div class="container mt-4">
-        <form th:action="@{/exams}" th:method="GET">
-            <div class="row g-3 align-items-end">
 
-                <div class="col-md-6 form-group">
-                    <label for="name" class="form-label">Search by Name</label>
-                    <input type="text" th:value="${name}" class="form-control" id="name"
-                           placeholder="Enter name" name="name">
-                </div>
-
-                <div class="col-md-3 form-group">
-                    <label for="embg" class="form-label">Search by EMBG</label>
-                    <input type="text" th:value="${embg}" class="form-control" id="embg"
-                           placeholder="Enter EMBG" name="embg">
-                </div>
-
-                <div class="col-md-3 form-group">
-                    <label for="event" class="form-label">Events</label>
-                    <select name="eventId" id="event" class="form-control">
-                        <option value="">All events</option>
-                        <option th:each="cat : ${events}"
-                                th:value="${cat.getId()}"
-                                th:text="${cat.getName()}"
-                                th:selected="${eventId != null && eventId == cat.getId()}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-12 mb-1">
-                    <button id="submit" class="btn btn-primary w-100" type="submit">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-
-
-    <div class="container mb-4">
-        <div class="row">
-            <div class="col-12" th:if="${exams.size() > 0}">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Performed on</th>
-                            <th scope="col">Patient name</th>
-                            <th scope="col">Patient EMBG</th>
-                            <th scope="col">Blood Pressure</th>
-                            <th scope="col">Hemoglobin</th>
-                            <th scope="col">Successful Exam?</th>
-                            <th scope="col">Doctor</th>
-                            <th scope="col">Nurse</th>
-                            <th scope="col">Additional comment</th>
-                            <th scope="col">Event</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="exam : ${exams}" class="event">
-                            <td th:text="${exam.getPerformedOn()}"></td>
-                            <td th:text="${exam.getPatient().getName()} +' '+ ${exam.getPatient().getSurname()}"></td>
-                            <td th:text="${exam.getPatient().getEmbg()}"></td>
-                            <td th:text="${exam.getBloodPressure()}"></td>
-                            <td th:text="${exam.getHemoglobin()}"></td>
-                            <td th:text="${exam.isSuccessfulExam() ? 'Yes' : 'No'}"></td>
-                            <td th:text="${exam.getDoctor().getName()}"></td>
-                            <td th:text="${exam.getNurse().getName()}"></td>
-                            <td th:text="${exam.getComment() != null}
-                            ? ${exam.getComment()} : 'No Comment'"></td>
-                            <td th:text="${exam.getDonationEvent().getName()}"></td>
-
-                            <td class="text-right">
-                                <th:block>
-                                    <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}"
-                                          th:method="DELETE">
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger delete-event">
-                                            <i class="fa fa-trash">Delete</i>
-                                        </button>
-                                    </form>
-                                </th:block>
-                                <th:block>
-                                    <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}"
-                                       class="btn btn-sm btn-info edit-event">
-                                        <i class="fa fa-pencil">Edit</i>
-                                    </a>
-                                </th:block>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <div class="row" style="padding-left: 40%; padding-top: 10px;">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="exams/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
-                            Add new exam
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Footer -->
 <footer style="background-color: #701516; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">

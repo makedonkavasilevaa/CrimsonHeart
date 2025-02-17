@@ -242,24 +242,35 @@
                             ? ${user.getLocation().getAddress()} : 'No Address'"></td>
                             <td th:text="${user.getWorksAt() != null}
                             ? ${user.getWorksAt().getName()} : 'No Employer'"></td>
+
                             <td class="text-right">
+                                <!-- Delete Button -->
                                 <th:block>
                                     <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}"
                                           th:method="DELETE">
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger delete-event">
-                                            <i class="fa fa-trash">Delete</i>
+                                        <button type="submit" class="btn btn-sm btn-danger delete-event">
+                                            <i class="fa fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </th:block>
+
+                                <!-- Edit Button -->
                                 <th:block>
                                     <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
-                                        <i class="fa fa-pencil">Edit</i>
+                                        <i class="fa fa-pencil"></i> Edit
                                     </a>
+                                </th:block>
 
+                                <!-- View Button -->
+                                <th:block>
+                                    <a th:href="@{/users/viewUser/{userId}(userId=${user.getId()})}"
+                                       class="btn btn-sm btn-primary view-event">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
                                 </th:block>
                             </td>
+
                         </tr>
                         </tbody>
                     </table>
