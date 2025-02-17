@@ -48,13 +48,14 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
+    @Column(unique = true)
     String email;
 
     String password;
 
     String phone;
 
-    @Column(length = 13)
+    @Column(length = 13, unique = true)
     @NonNull
     String embg;
 
