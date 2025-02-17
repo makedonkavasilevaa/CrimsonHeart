@@ -30,7 +30,8 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF (for now, as needed)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/events", "/assets/**", "/register", "/login", "/register/add", "/images/**").permitAll() // Allow access to static resources
+                        .requestMatchers("/", "/events","/events/viewEvent/**","/exams/viewExam/**", "/users/viewUser/**",
+                                "/assets/**", "/register", "/login", "/register/add", "/images/**").permitAll() // Allow access to static resources
                         .requestMatchers("/admin/**").hasRole("SUPERADMIN") // Specific page access control
                         .anyRequest().authenticated() // Ensure other pages require authentication
                 )
