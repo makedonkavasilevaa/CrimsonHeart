@@ -15,6 +15,7 @@ import mk.finki.ukim.mk.crimsonheart.service.LocationService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,16 @@ public class UserController {
         }else
             users = this.usersService.listAll();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users userRole = (Users) authentication.getPrincipal();
+            model.addAttribute("userRole", userRole);
+        } else {
+            model.addAttribute("userRole", null); // No logged-in user
+        }
+
 
         List<Location> locations = this.locationService.listAll();
         List<BloodType> bloodTypes = Arrays.stream(BloodType.values()).toList();
@@ -80,6 +91,18 @@ public class UserController {
     @GetMapping("/viewUser/{userId}")
     public String getUserView(@PathVariable(required = true) Long userId,
                              Model model){
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users userRole = (Users) authentication.getPrincipal();
+            model.addAttribute("userRole", userRole);
+        } else {
+            model.addAttribute("userRole", null); // No logged-in user
+        }
+
         Users user = this.usersService.findById(userId);
 
         model.addAttribute("user", user);

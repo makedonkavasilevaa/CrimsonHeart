@@ -233,7 +233,7 @@
                         <td th:text="${user.getEmploymentStatus() != null}
                             ? ${user.getEmploymentStatus().name()} : 'No Data'"></td>
                         <td class="text-right">
-                            <th:block>
+                            <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                 <form th:action="@{'/users/delete/{id}' (id=${user.getId()})}"
                                       th:method="DELETE">
                                     <button type="submit"
@@ -242,10 +242,17 @@
                                     </button>
                                 </form>
                             </th:block>
-                            <th:block>
+                            <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                 <a th:href="@{/users/edit/{userId}(userId=${user.getId()})}"
                                    class="btn btn-sm btn-info edit-event">
                                     <i class="fa fa-pencil">Edit</i>
+                                </a>
+                            </th:block>
+
+                            <th:block>
+                                <a th:href="@{/users/viewUser/{userId}(userId=${user.getId()})}"
+                                   class="btn btn-sm btn-primary view-event">
+                                    <i class="fa fa-eye"></i> View
                                 </a>
                             </th:block>
                         </td>
@@ -256,11 +263,13 @@
         </div>
         <div class="col mb-3">
             <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <a href="users/add-patient" class="btn btn-block btn-dark add-event-btn">
-                        Add new Patient
-                    </a>
-                </div>
+                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="users/add-patient" class="btn btn-block btn-dark add-event-btn">
+                            Add new Patient
+                        </a>
+                    </div>
+                </th:block>
             </div>
         </div>
     </div>
