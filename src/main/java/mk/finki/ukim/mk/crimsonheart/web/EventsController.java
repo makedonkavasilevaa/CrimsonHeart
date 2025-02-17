@@ -3,10 +3,7 @@ package mk.finki.ukim.mk.crimsonheart.web;
 import mk.finki.ukim.mk.crimsonheart.enums.CityEnum;
 import mk.finki.ukim.mk.crimsonheart.enums.DonationType;
 import mk.finki.ukim.mk.crimsonheart.enums.Roles;
-import mk.finki.ukim.mk.crimsonheart.model.DonationEvent;
-import mk.finki.ukim.mk.crimsonheart.model.Institution;
-import mk.finki.ukim.mk.crimsonheart.model.Location;
-import mk.finki.ukim.mk.crimsonheart.model.Users;
+import mk.finki.ukim.mk.crimsonheart.model.*;
 import mk.finki.ukim.mk.crimsonheart.service.DonationEventService;
 import mk.finki.ukim.mk.crimsonheart.service.InstitutionService;
 import mk.finki.ukim.mk.crimsonheart.service.LocationService;
@@ -64,6 +61,15 @@ public class EventsController {
         return "events.html";
     }
 
+    @GetMapping("/viewEvent/{eventId}")
+    public String getEventView(@PathVariable(required = true) Long eventId,
+                              Model model){
+        DonationEvent event = this.eventService.findById(eventId);
+
+        model.addAttribute("event", event);
+        return "eventView";
+    };
+
     @GetMapping("/add-form")
     public String getAddEventPage(Model model) {
         List<Location> locations = this.locationService.listAll();
@@ -101,6 +107,7 @@ public class EventsController {
     @PostMapping("/delete/{id}")
     public String deleteEvent(@PathVariable Long id){
         this.eventService.delete(id);
+
         return "redirect:/events";
     }
 

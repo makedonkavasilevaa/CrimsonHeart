@@ -252,6 +252,14 @@
                                         <i class="fa fa-pencil">Edit</i>
                                     </a>
                                 </th:block>
+
+                                <!-- View Button -->
+                                <th:block>
+                                    <a th:href="@{/events/viewEvent/{eventId}(eventId=${event.getId()})}"
+                                       class="btn btn-sm btn-primary view-event">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                </th:block>
                             </td>
                         </tr>
                         </tbody>

@@ -163,7 +163,62 @@
     </header>
 </div>
 
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Event Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Event Name:</strong></div>
+                        <div class="col-8" th:text="${event.getName()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Description:</strong></div>
+                        <div class="col-8" th:text="${event.getDescription()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Donation Type:</strong></div>
+                        <div class="col-8" th:text="${event.getDonationType().name()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Location:</strong></div>
+                        <div class="col-8" th:text="${event.getLocation() != null ? event.getLocation().getFullAddress() : 'No Location'}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Date of Event:</strong></div>
+                        <div class="col-8" th:text="${event.getDateOfEvent() != null ? event.getDateOfEvent() : 'No Date'}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Time of Event:</strong></div>
+                        <div class="col-8" th:text="${event.getTimeOfEvent()}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Organized by:</strong></div>
+                        <div class="col-8" th:text="${event.getInstitution() != null ? event.getInstitution().getName() : 'No Institution'}"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Managed by:</strong></div>
+                        <div class="col-8" th:text="${event.getUser() != null ? event.getUser().getName() : 'No Manager'}"></div>
+                    </div>
 
+                    <div class="mt-4 text-right">
+                        <form th:action="@{'/events/delete/{id}' (id=${event.getId()})}" th:method="DELETE">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                        </form>
+                        <a th:href="@{/events/edit/{eventId}(eventId=${event.getId()})}" class="btn btn-sm btn-info ml-2">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer style="background-color: #701516; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">
