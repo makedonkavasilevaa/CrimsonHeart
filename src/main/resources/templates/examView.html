@@ -215,14 +215,18 @@
 
                     <!-- Edit and Delete buttons -->
                     <div class="mt-4 text-right">
-                        <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}" th:method="DELETE">
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-                        </form>
-                        <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}" class="btn btn-sm btn-info ml-2">
-                            <i class="fa fa-pencil"></i> Edit
-                        </a>
+                        <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}" th:method="DELETE">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </th:block>
+                        <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                            <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}" class="btn btn-sm btn-info ml-2">
+                                <i class="fa fa-pencil"></i> Edit
+                            </a>
+                        </th:block>
                     </div>
                 </div>
             </div>

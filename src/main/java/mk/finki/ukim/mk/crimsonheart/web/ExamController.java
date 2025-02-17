@@ -8,6 +8,9 @@ import mk.finki.ukim.mk.crimsonheart.service.ExamService;
 import mk.finki.ukim.mk.crimsonheart.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +52,16 @@ public class ExamController {
         } else
             exams = this.examService.listAll();
 
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
 
         List<Users> users = this.usersService.listAll();
         List<DonationEvent> events = this.eventService.listAll();
@@ -66,6 +78,18 @@ public class ExamController {
     @GetMapping("/viewExam/{examId}")
     public String getExamView(@PathVariable(required = true) Long examId,
                               Model model){
+
+        // Retrieve the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = (Users) authentication.getPrincipal();
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null); // No logged-in user
+        }
+
         Exam exam = examService.findById(examId);
 
         model.addAttribute("exam", exam);

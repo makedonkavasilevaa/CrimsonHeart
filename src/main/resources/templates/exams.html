@@ -231,7 +231,7 @@
                             <td th:text="${exam.getDonationEvent().getName()}"></td>
 
                             <td class="text-right">
-                                <th:block>
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                     <form th:action="@{'/exams/delete/{id}' (id=${exam.getId()})}"
                                           th:method="DELETE">
                                         <button type="submit"
@@ -240,7 +240,7 @@
                                         </button>
                                     </form>
                                 </th:block>
-                                <th:block>
+                                <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
                                     <a th:href="@{/exams/edit/{examId}(examId=${exam.getId()})}"
                                        class="btn btn-sm btn-info edit-event">
                                         <i class="fa fa-pencil">Edit</i>
@@ -262,11 +262,13 @@
             </div>
             <div class="col mb-3">
                 <div class="row" style="padding-left: 40%; padding-top: 10px;">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="exams/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
-                            Add new exam
-                        </a>
-                    </div>
+                    <th:block th:if="${user != null and (user.role == 'SUPERADMIN' or user.role == 'MANAGER' or user.role == 'ORGANIZER')}">
+                        <div class="col-sm-12 col-md-12">
+                            <a href="exams/add-form" id="add-button" class="btn btn-block btn-dark add-event-btn">
+                                Add new exam
+                            </a>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>
